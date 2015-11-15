@@ -99,6 +99,7 @@ exports = module.exports = function (folder, blobStore, clone) {
 
     var opts = ['-o', outputDir, '-d', 'localhost']
     if (blobStore) {
+      console.log('custom blob-store', blobStore)
       opts.push('--blobstore=' + blobStore)
     }
 

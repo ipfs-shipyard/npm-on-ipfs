@@ -27,7 +27,7 @@ module.exports = Command.extend({
     if (ipfs) {
       console.log('ipfs mode on')
       blobStore = path.resolve(__dirname, '../src/ibs.js')
-      folder = 'registry'
+      folder = ''
       console.log(blobStore)
     }
     mirror(folder, blobStore, clone)

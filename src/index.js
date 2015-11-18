@@ -6,7 +6,7 @@ var path = require('path')
 var spawn = require('child_process').spawn
 var logger = require('davlog')
 
-exports = module.exports = function (folder, blobStore, clone) {
+exports = module.exports = function (outputDir, blobStore, clone, ipfs) {
   logger.init({name: 'registry-mirror'})
 
   var self = this
@@ -14,11 +14,20 @@ exports = module.exports = function (folder, blobStore, clone) {
   var cache = lru()
   // var port
 
-  var outputDir = folder
   logger.info('using output directory', outputDir)
 
+  var pathPrefix = outputDir
+  if (ipfs) {
+    pathPrefix = ''
+  }
+
   if (blobStore) {
-    fs = require(blobStore)
+    console.log('HERE')
+    fs = require(blobStore)(outputDir)
+
+    if (!clone) {
+      // TODO COPY IPNS MerkleDAG Node
+    }
   }
 
   // log each request, set server header
@@ -32,7 +41,8 @@ exports = module.exports = function (folder, blobStore, clone) {
   app.get('/', function (req, res) {
     res.type('json')
 
-    fs.createReadStream(path.join(outputDir, 'index.json')).pipe(res)
+    // fs.createReadStream('index.json').pipe(res)
+    fs.createReadStream(path.join(pathPrefix, 'index.json')).pipe(res)
   })
 
   // serve up tarballs
@@ -40,7 +50,9 @@ exports = module.exports = function (folder, blobStore, clone) {
     if (req.url.slice(-1) === '/') {
       return next() // ignore dirs
     }
-    var rs = fs.createReadStream(path.join(outputDir, req.url))
+    // var rs = fs.createReadStream(req.url)
+    var rs = fs.createReadStream(path.join(pathPrefix, req.url))
+
     rs.on('error', function (err) {
       if (err) {
         console.log(err)
@@ -60,7 +72,9 @@ exports = module.exports = function (folder, blobStore, clone) {
     }
 
     var file = ''
-    var rs = fs.createReadStream(path.join(outputDir, req.url, 'index.json'))
+    // var rs = fs.createReadStream(path.join(req.url, 'index.json'))
+    var rs = fs.createReadStream(path.join(pathPrefix, req.url, 'index.json'))
+
     rs.on('error', function (err) {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
       return
@@ -91,10 +105,10 @@ exports = module.exports = function (folder, blobStore, clone) {
     logger.info('listening on port', self.port)
 
     if (!clone) {
-      console.log('Not Cloning npm')
+      console.log('Cloning NPM OFF')
       return
     } else {
-      console.log('Cloning npm')
+      console.log('Cloning NPM ON')
     }
 
     var opts = ['-o', outputDir, '-d', 'localhost']
@@ -102,6 +116,8 @@ exports = module.exports = function (folder, blobStore, clone) {
       console.log('custom blob-store', blobStore)
       opts.push('--blobstore=' + blobStore)
     }
+
+    console.log('->', outputDir)
 
     var child = spawn(
       path.resolve(require.resolve('registry-static'), '../../bin/registry-static'),

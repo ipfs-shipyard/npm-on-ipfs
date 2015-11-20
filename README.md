@@ -29,10 +29,12 @@ daemon  Mirror npm registry
 `$ registry-mirror daemon`
 
 Options:
-- folder - Name of the directory where the registry gets downloaded to
-- blob-store - Custom blob-store support (must follow [abstract-blob-store]() interface)
-- clone - Download the entire npm (Otherwise it just tries to read)
-- ipfs - Use local IPFS Node (must support the files/mfs API, available from version 0.4.0 onwards)
+- `--folder` - Name of the directory where the registry gets downloaded to
+- `--blob-store` - Custom blob-store support (must follow [abstract-blob-store]() interface)
+- `--clone` - Download the entire npm (Otherwise it just tries to read)
+- `--ipfs` - Use local IPFS Node (must support the files/mfs API, available from version 0.4.0 onwards)
+- `--port` Listen on the specified port
+- `--host` Listen on the specified port
 
 # Acknowledgements
 

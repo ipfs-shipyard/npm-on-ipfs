@@ -6,7 +6,7 @@ var path = require('path')
 var spawn = require('child_process').spawn
 var logger = require('davlog')
 
-exports = module.exports = function (outputDir, blobStore, clone, ipfs) {
+exports = module.exports = function (config) {
   logger.init({name: 'registry-mirror'})
 
   var self = this
@@ -14,18 +14,18 @@ exports = module.exports = function (outputDir, blobStore, clone, ipfs) {
   var cache = lru()
   // var port
 
-  logger.info('using output directory', outputDir)
+  logger.info('using output directory', config.outputDir)
 
-  var pathPrefix = outputDir
-  if (ipfs) {
+  var pathPrefix = config.outputDir
+  if (config.ipfs) {
     pathPrefix = ''
   }
 
-  if (blobStore) {
+  if (config.blobStore) {
     console.log('HERE')
-    fs = require(blobStore)(outputDir)
+    fs = require(config.blobStore)(config.outputDir)
 
-    if (!clone) {
+    if (!config.clone) {
       // TODO COPY IPNS MerkleDAG Node
     }
   }
@@ -100,24 +100,25 @@ exports = module.exports = function (outputDir, blobStore, clone, ipfs) {
     })
   })
 
-  var server = app.listen(function () {
-    self.port = exports.port = server.address().port
-    logger.info('listening on port', self.port)
+  var server = self.server = app.listen(config.port, config.host, function () {
+    var address = server.address()
+    self.port = exports.port = address.port
+    logger.info('listening on ' + address.address + ':' + address.port)
 
-    if (!clone) {
+    if (!config.clone) {
       console.log('Cloning NPM OFF')
       return
     } else {
       console.log('Cloning NPM ON')
     }
 
-    var opts = ['-o', outputDir, '-d', 'localhost']
-    if (blobStore) {
-      console.log('custom blob-store', blobStore)
-      opts.push('--blobstore=' + blobStore)
+    var opts = ['-o', config.outputDir, '-d', 'localhost']
+    if (config.blobStore) {
+      console.log('custom blob-store', config.blobStore)
+      opts.push('--blobstore=' + config.blobStore)
     }
 
-    console.log('->', outputDir)
+    console.log('->', config.outputDir)
 
     var child = spawn(
       path.resolve(require.resolve('registry-static'), '../../bin/registry-static'),

@@ -1,0 +1,10 @@
+sudo: false
+language: node_js
+node_js:
+  - '4'
+  - '5'
+  - stable
+
+script:
+  - npm run lint
+  - npm test

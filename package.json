@@ -34,7 +34,7 @@
     "lru-cache": "^2.5.0",
     "registry-static": "github:diasdavid/registry-static",
     "ronin": "^0.3.11",
-    "st": "^0.5.3"
+    "st": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^2.2.1",

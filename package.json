@@ -30,7 +30,7 @@
   "dependencies": {
     "davlog": "0.0.2",
     "express": "^4.12.3",
-    "ipfs-blob-store": "^0.1.1",
+    "ipfs-blob-store": "^0.2.0",
     "lru-cache": "^2.5.0",
     "registry-static": "github:diasdavid/registry-static",
     "ronin": "^0.3.11",

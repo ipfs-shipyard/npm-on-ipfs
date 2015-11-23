@@ -12,7 +12,6 @@ exports = module.exports = function (config) {
   var self = this
   var app = express()
   var cache = lru()
-  // var port
 
   logger.info('using output directory', config.outputDir)
 
@@ -22,18 +21,21 @@ exports = module.exports = function (config) {
   }
 
   if (config.blobStore) {
-    console.log('HERE')
     fs = require(config.blobStore)(config.outputDir)
 
     if (!config.clone) {
       // TODO COPY IPNS MerkleDAG Node
+      // 1. Try to connect to Castor, if it can't, skip
+      // 2. Check if /npm-registry is already there, it it is, move it to
+      // /npm-registry-Date.now()
+      // 3. cp /npm-registry from castor
     }
   }
 
   // log each request, set server header
   app.use(function (req, res, cb) {
     logger.info(req.ip, req.method, req.path)
-    res.append('Server', 'reginabox')
+    res.append('Server', 'registry-mirror')
     cb()
   })
 
@@ -106,19 +108,15 @@ exports = module.exports = function (config) {
     logger.info('listening on ' + address.address + ':' + address.port)
 
     if (!config.clone) {
-      console.log('Cloning NPM OFF')
-      return
+      return logger.info('Cloning NPM OFF')
     } else {
-      console.log('Cloning NPM ON')
+      logger.info('Cloning NPM ON')
     }
 
     var opts = ['-o', config.outputDir, '-d', 'localhost']
     if (config.blobStore) {
-      console.log('custom blob-store', config.blobStore)
       opts.push('--blobstore=' + config.blobStore)
     }
-
-    console.log('->', config.outputDir)
 
     var child = spawn(
       path.resolve(require.resolve('registry-static'), '../../bin/registry-static'),

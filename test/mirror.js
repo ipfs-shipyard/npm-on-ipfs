@@ -73,7 +73,7 @@ describe('mirror', function () {
   it('should serve up main index.json', function (done) {
     request.get('http://127.0.0.1:' + port, {json: true}, function (err, res, body) {
       assert.ifError(err)
-      assert.equal(res.headers.server, 'reginabox')
+      assert.equal(res.headers.server, 'registry-mirror')
       assert.equal(res.statusCode, 200)
       assert.equal(body, 'Welcome\n')
       done()
@@ -83,7 +83,7 @@ describe('mirror', function () {
   it('should serve up static files from registry', function (done) {
     request.get('http://127.0.0.1:' + port + '/foobartestthing/thing.txt', function (err, res, body) {
       assert.ifError(err)
-      assert.equal(res.headers.server, 'reginabox')
+      assert.equal(res.headers.server, 'registry-mirror')
       assert.equal(res.statusCode, 200)
       assert.equal(body, 'test stuff\n')
       done()
@@ -93,7 +93,7 @@ describe('mirror', function () {
   it('should serve up package index.json, and modify the tarball', function (done) {
     request.get('http://127.0.0.1:' + port + '/foobartestthing/', {json: true}, function (err, res, body) {
       assert.ifError(err)
-      assert.equal(res.headers.server, 'reginabox')
+      assert.equal(res.headers.server, 'registry-mirror')
       assert.equal(res.statusCode, 200)
       assert.deepEqual(body, {testing: 'json'})
       done()

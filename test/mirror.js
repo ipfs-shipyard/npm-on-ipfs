@@ -40,7 +40,11 @@ describe('mirror', function () {
     })
     rimraf(path.join(regDir, 'foobartestthing'), function () {
       // process.argv[3] = 'test/registry'
-      mirror = require('../src/')('test/registry', null, true)
+      mirror = require('../src/')({
+        outputDir: 'test/registry',
+        blobStore: null,
+        clone: true
+      })
       ncp(path.join(__dirname, 'foobartestthing'), path.join(__dirname, 'registry', 'foobartestthing'), function () {
         setTimeout(function () {
           port = mirror.port
@@ -92,6 +96,35 @@ describe('mirror', function () {
       assert.equal(res.headers.server, 'reginabox')
       assert.equal(res.statusCode, 200)
       assert.deepEqual(body, {testing: 'json'})
+      done()
+    })
+  })
+
+  it('should listen on a specified port', function (done) {
+    var m = require('../src/')({
+      outputDir: 'test/registry',
+      blobStore: null,
+      clone: true,
+      port: 9999
+    })
+    m.server.on('listening', function () {
+      assert.equal(m.port, 9999)
+      m.close()
+      done()
+    })
+  })
+
+  it('should listen on a specified host', function (done) {
+    var m = require('../src/')({
+      outputDir: 'test/registry',
+      blobStore: null,
+      clone: true,
+      host: '127.0.0.1'
+    })
+
+    m.server.on('listening', function () {
+      assert.equal(m.server.address().address, '127.0.0.1')
+      m.close()
       done()
     })
   })

@@ -37,6 +37,8 @@
     "st": "^1.0.0"
   },
   "devDependencies": {
+    "eslint-config-standard-react": "^1.2.1",
+    "eslint-plugin-react": "^3.9.0",
     "mocha": "^2.2.1",
     "mockery": "^1.4.0",
     "ncp": "^2.0.0",

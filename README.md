@@ -36,6 +36,10 @@ Options:
 - `--port` Listen on the specified port
 - `--host` Listen on the specified port
 
+## Important
+
+If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
+
 # Acknowledgements
 
 This module takes a lot of inspiration from [reginabox](https://www.npmjs.com/package/reginabox). Big thank you to everyone that contributed with code or to the [discussion](https://github.com/ipfs/notes/issues/2) to make this happen.

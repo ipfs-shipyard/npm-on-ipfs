@@ -5,6 +5,7 @@ var url = require('url')
 var path = require('path')
 var spawn = require('child_process').spawn
 var logger = require('davlog')
+var ipfsAPI = require('ipfs-api')
 
 exports = module.exports = function (config) {
   logger.init({name: 'registry-mirror'})
@@ -24,11 +25,45 @@ exports = module.exports = function (config) {
     fs = require(config.blobStore)(config.outputDir)
 
     if (!config.clone) {
-      // TODO COPY IPNS MerkleDAG Node
-      // 1. Try to connect to Castor, if it can't, skip
-      // 2. Check if /npm-registry is already there, it it is, move it to
-      // /npm-registry-Date.now()
-      // 3. cp /npm-registry from castor
+      var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
+
+      var castorAddr = '/ip4/37.59.33.238/tcp/4001/ipfs/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z'
+      apiCtl.swarm.connect(castorAddr, function (err) {
+        if (err) {
+          return logger.info('Could not connect to Castor', err)
+        }
+
+        apiCtl.files.stat('/npm-registry', function (err) {
+          if (err && err.code === 0) {
+            return copyNpmRegistry()
+          }
+
+          apiCtl.files.mv(['/npm-registry', '/npm-registry' + Date.now().toString()], function (err) {
+            if (err) {
+              return console.log('a', err)
+            }
+
+            copyNpmRegistry()
+          })
+
+          function copyNpmRegistry () {
+            console.log('ipns')
+            apiCtl.name.resolve('/ipns/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z', function (err, res) {
+              if (err) {
+                return console.log('b', err)
+              }
+
+              console.log('cp', res.Path)
+              apiCtl.files.cp([res.Path, '/npm-registry'], function (err) {
+                if (err) {
+                  return console.log('c', err)
+                }
+                logger.info('Updated directory listing, good to go :)')
+              })
+            })
+          }
+        })
+      })
     }
   }
 

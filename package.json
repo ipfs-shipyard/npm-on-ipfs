@@ -34,7 +34,8 @@
     "lru-cache": "^2.5.0",
     "registry-static": "github:diasdavid/registry-static",
     "ronin": "^0.3.11",
-    "st": "^1.0.0"
+    "st": "^1.0.0",
+    "ipfs-api": "github:ipfs/js-ipfs-api#ba85b3b"
   },
   "devDependencies": {
     "eslint-config-standard-react": "^1.2.1",

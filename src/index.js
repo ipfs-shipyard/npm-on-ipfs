@@ -3,13 +3,11 @@ var lru = require('lru-cache')
 var fs = require('fs')
 var url = require('url')
 var path = require('path')
-var spawn = require('child_process').spawn
-var logger = require('davlog')
+var logger = require('./logger')
 var ipfsAPI = require('ipfs-api')
+var cloneNpm = require('./clone-npm')
 
 exports = module.exports = function (config) {
-  logger.init({name: 'registry-mirror'})
-
   var self = this
   var app = express()
   var cache = lru()
@@ -140,30 +138,13 @@ exports = module.exports = function (config) {
   var server = self.server = app.listen(config.port, config.host, function () {
     var address = server.address()
     self.port = exports.port = address.port
-    logger.info('listening on ' + address.address + ':' + address.port)
 
-    if (!config.clone) {
-      return logger.info('Cloning NPM OFF')
-    } else {
-      logger.info('Cloning NPM ON')
-    }
-
-    var opts = ['-o', config.outputDir, '-d', 'localhost']
-    if (config.blobStore) {
-      opts.push('--blobstore=' + config.blobStore)
-    }
-
-    var child = spawn(
-      path.resolve(require.resolve('registry-static'), '../../bin/registry-static'),
-      opts,
-      {stdio: 'inherit'}
-    )
-    process.on('SIGINT', function () {
-      child.kill('SIGINT')
-      process.kill()
-    })
-    logger.info('starting registry-static')
+    logger.info('listening:' + address.address + ':' + address.port)
   })
+
+  if (config.clone) {
+    cloneNpm(config)
+  }
 
   self.close = function () {
     server.close()

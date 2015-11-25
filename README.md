@@ -7,10 +7,19 @@ registry-mirror
 
 # Quick setup (probably all that you need)
 
-Make sure to have IPFS dev0.4.0 installed and running
+## Install IPFS dev0.4.0
 
 ```bash
-$ ipfs version                                     
+$ go get -u github.com/ipfs/go-ipfs
+$ cd $GOPATH/src/github.com/ipfs/go-ipfs
+$ git checkout dev0.4.0
+$ go install ./cmd/ipfs
+```
+
+## Run IPFS daemon
+
+```bash
+$ ipfs version
 ipfs version 0.4.0-dev
 $ ipfs daemon
 Initializing daemon...
@@ -25,9 +34,17 @@ Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
 Daemon is ready
 ```
 
-Install registry-mirror `npm i registry-mirror -g` and run it with the --ipfs flag. Wait for the "Updated directory listing" log.
+## Install registry-mirror
 
+```bash
+$ npm i registry-mirror -g
 ```
+
+## Run registry-mirror
+
+Wait for the `Updated directory listing` log.
+
+```bash
 $ registry-mirror daemon --ipfs
 IPFS mode ON
 registry-mirror [info] using output directory /npm-registry/
@@ -36,15 +53,21 @@ registry-mirror [info] Cloning NPM OFF
 registry-mirror [info] Updated directory listing, good to go :)
 ```
 
-Set up your npm to use the newly spawn npm on IPFS registry through `npm config set registry http://localhost:50321`. (Note that port may vary, you can set up the port with --port=<port>)
+Port `50321` is default and can be set with `--port`.
+
+## Configure npm
+
+Set up your npm to use `registry-mirror` with the default port through:
+
+```bash
+$ npm config set registry http://localhost:50321
+```
+
+If you picked another `--port` you need to adjust accordingly.
 
 Good to npm install away! :)
 
 # Usage
-
-## Install
-
-`npm i registry-mirror -g`
 
 ## CLI
 

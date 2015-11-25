@@ -14,13 +14,13 @@ $ go get -u github.com/ipfs/go-ipfs
 $ cd $GOPATH/src/github.com/ipfs/go-ipfs
 $ git checkout dev0.4.0
 $ go install ./cmd/ipfs
+$ ipfs version
+ipfs version 0.4.0-dev
 ```
 
 ## Run IPFS daemon
 
 ```bash
-$ ipfs version
-ipfs version 0.4.0-dev
 $ ipfs daemon
 Initializing daemon...
 Swarm listening on /ip4/127.0.0.1/tcp/4001

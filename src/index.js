@@ -4,8 +4,8 @@ var fs = require('fs')
 var url = require('url')
 var path = require('path')
 var logger = require('./logger')
-var ipfsAPI = require('ipfs-api')
 var cloneNpm = require('./clone-npm')
+var fetchIPNS = require('./fetch-ipns')
 
 exports = module.exports = function (config) {
   var self = this
@@ -21,49 +21,10 @@ exports = module.exports = function (config) {
 
   if (config.blobStore) {
     fs = require(config.blobStore)(config.outputDir)
-
-    if (!config.clone) {
-      var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
-
-      var castorAddr = '/ip4/37.59.33.238/tcp/4001/ipfs/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z'
-      apiCtl.swarm.connect(castorAddr, function (err) {
-        if (err) {
-          return logger.info('Could not connect to Castor', err)
-        }
-
-        apiCtl.files.stat('/npm-registry', function (err) {
-          if (err && err.code === 0) {
-            return copyNpmRegistry()
-          }
-
-          apiCtl.files.mv(['/npm-registry', '/npm-registry' + Date.now().toString()], function (err) {
-            if (err) {
-              return console.log('a', err)
-            }
-
-            copyNpmRegistry()
-          })
-
-          function copyNpmRegistry () {
-            console.log('ipns')
-            apiCtl.name.resolve('/ipns/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z', function (err, res) {
-              if (err) {
-                return console.log('b', err)
-              }
-
-              console.log('cp', res.Path)
-              apiCtl.files.cp([res.Path, '/npm-registry'], function (err) {
-                if (err) {
-                  return console.log('c', err)
-                }
-                logger.info('Updated directory listing, good to go :)')
-              })
-            })
-          }
-        })
-      })
-    }
   }
+
+  // Update our /npm-registry MerkleDAG Node if needed
+  fetchIPNS(config)
 
   // log each request, set server header
   app.use(function (req, res, cb) {

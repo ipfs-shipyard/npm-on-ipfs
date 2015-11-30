@@ -16,7 +16,10 @@ module.exports = Command.extend({
 
   run: function (update, name) {
     if (update) {
-      fetchIPNS({ blobStore: true }, function () {
+      fetchIPNS({ blobStore: true }, function (err) {
+        if (err) {
+          logger.err('Failed to update /npm-registry mDAG node', err)
+        }
         ls()
       })
     } else {

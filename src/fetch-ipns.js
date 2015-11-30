@@ -4,14 +4,20 @@ var ipfsAPI = require('ipfs-api')
 exports = module.exports = fetchIPNS
 
 function fetchIPNS (config, callback) {
+  if (!callback) {
+    callback = function (err) {
+      if (err) {
+        logger.err(err)
+      }
+    }
+  }
+
   if (!config.clone && config.blobStore) {
     var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
 
     var castorAddr = '/ip4/37.59.33.238/tcp/4001/ipfs/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z'
     apiCtl.swarm.connect(castorAddr, function (err) {
-      if (err) {
-        return logger.err('Could not connect to Castor', err)
-      }
+      if (err) { return callback(err) }
 
       apiCtl.files.stat('/npm-registry', function (err) {
         if (err && err.code === 0) {
@@ -19,28 +25,19 @@ function fetchIPNS (config, callback) {
         }
 
         apiCtl.files.mv(['/npm-registry', '/npm-registry' + Date.now().toString()], function (err) {
-          if (err) {
-            return logger.err('Failed to backup current /npm-registry', err)
-          }
+          if (err) { return callback(err) }
 
           copyNpmRegistry()
         })
 
         function copyNpmRegistry () {
           apiCtl.name.resolve('/ipns/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z', function (err, res) {
-            if (err) {
-              return logger.err('Could not resolve IPNS name', err)
-            }
+            if (err) { return callback(err) }
 
-            logger.info('New /npm-registry mDAG node:', res.Path)
+            // logger.info('New /npm-registry mDAG node:', res.Path)
             apiCtl.files.cp([res.Path, '/npm-registry'], function (err) {
-              if (err) {
-                return logger.err('Failed to clone /npm-registry mDAG node', err)
-              }
-              logger.info('Updated directory listing, good to go :)')
-              if (callback) {
-                callback()
-              }
+              if (err) { return callback(err) }
+              callback(null, res.Path)
             })
           })
         }

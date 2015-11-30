@@ -22,17 +22,18 @@ module.exports = Command.extend({
     } else {
       ls()
     }
-
-    function ls () {
-      var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
-      apiCtl.files.ls('/npm-registry', function (err, res) {
-        if (err) {
-          return logger.err(err)
-        }
-        res.Entries.forEach(function (module) {
-          console.log(module.Name, '\t', module.Hash)
-        })
-      })
-    }
   }
 })
+
+function ls () {
+  var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
+  apiCtl.files.ls('/npm-registry', function (err, res) {
+    if (err) {
+      return logger.err(err)
+    }
+    res.Entries.forEach(function (module) {
+      console.log(module.Name, '\t', module.Hash)
+    })
+  })
+}
+

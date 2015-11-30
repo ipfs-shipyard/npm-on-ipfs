@@ -10,7 +10,7 @@ function fetchIPNS (config) {
     var castorAddr = '/ip4/37.59.33.238/tcp/4001/ipfs/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z'
     apiCtl.swarm.connect(castorAddr, function (err) {
       if (err) {
-        return logger.info('Could not connect to Castor', err)
+        return logger.err('Could not connect to Castor', err)
       }
 
       apiCtl.files.stat('/npm-registry', function (err) {
@@ -20,7 +20,7 @@ function fetchIPNS (config) {
 
         apiCtl.files.mv(['/npm-registry', '/npm-registry' + Date.now().toString()], function (err) {
           if (err) {
-            return console.log('a', err)
+            return logger.err('Failed to backup current /npm-registry', err)
           }
 
           copyNpmRegistry()
@@ -29,13 +29,13 @@ function fetchIPNS (config) {
         function copyNpmRegistry () {
           apiCtl.name.resolve('/ipns/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z', function (err, res) {
             if (err) {
-              return console.log('b', err)
+              return logger.err('Could not resolve IPNS name', err)
             }
 
             logger.info('New /npm-registry mDAG node:', res.Path)
             apiCtl.files.cp([res.Path, '/npm-registry'], function (err) {
               if (err) {
-                return console.log('c', err)
+                return logger.err('Failed to clone /npm-registry mDAG node', err)
               }
               logger.info('Updated directory listing, good to go :)')
             })

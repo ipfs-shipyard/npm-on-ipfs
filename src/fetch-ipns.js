@@ -3,7 +3,7 @@ var ipfsAPI = require('ipfs-api')
 
 exports = module.exports = fetchIPNS
 
-function fetchIPNS (config) {
+function fetchIPNS (config, callback) {
   if (!config.clone && config.blobStore) {
     var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
 
@@ -38,6 +38,9 @@ function fetchIPNS (config) {
                 return logger.err('Failed to clone /npm-registry mDAG node', err)
               }
               logger.info('Updated directory listing, good to go :)')
+              if (callback) {
+                callback()
+              }
             })
           })
         }

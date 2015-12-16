@@ -1,7 +1,7 @@
 var Command = require('ronin').Command
-var fetchIPNS = require('../src/fetch-ipns')
+var fetchIPNS = require('../../fetch-ipns')
 var ipfsAPI = require('ipfs-api')
-var logger = require('../src/logger')
+var logger = require('../../logger')
 
 module.exports = Command.extend({
   desc: 'Check modules available in the mirror',

@@ -1,5 +1,5 @@
 var Command = require('ronin').Command
-var mirror = require('./../src')
+var mirror = require('./../../')
 var path = require('path')
 
 module.exports = Command.extend({
@@ -33,7 +33,7 @@ module.exports = Command.extend({
   run: function (folder, blobStore, clone, ipfs, port, host, name) {
     if (ipfs) {
       console.log('IPFS mode ON')
-      blobStore = path.resolve(__dirname, '../src/ibs.js')
+      blobStore = path.resolve(__dirname, '../../ibs.js')
       folder = '/npm-registry/'
     }
     mirror({

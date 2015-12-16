@@ -48,7 +48,7 @@ function serveNPM (config) {
 
     rs.on('error', function (err) {
       if (err) {
-        console.log(err)
+
       }
       return next()
     })

@@ -19,7 +19,7 @@ module.exports = Command.extend({
     },
     ipfs: {
       type: 'boolean',
-      default: false
+      default: true
     },
     port: {
       type: 'number'

@@ -45,7 +45,7 @@ $ npm i registry-mirror -g
 Wait for the `Updated directory listing` log.
 
 ```bash
-$ registry-mirror daemon --ipfs
+$ registry-mirror daemon
 IPFS mode ON
 registry-mirror [info] using output directory /npm-registry/
 registry-mirror [info] listening on 127.0.0.1:50321
@@ -90,7 +90,7 @@ Options:
 - `--folder` - Name of the directory where the registry gets downloaded to
 - `--blob-store` - Custom blob-store support (must follow [abstract-blob-store]() interface)
 - `--clone` - Download the entire npm (Otherwise it just tries to read)
-- `--ipfs` - Use local IPFS Node (must support the files/mfs API, available from version 0.4.0 onwards)
+- `--ipfs=false` - To not use local IPFS Node (must support the files/mfs API, available from version 0.4.0 onwards)
 - `--port` Listen on the specified port
 - `--host` Listen on the specified port
 

@@ -54,7 +54,6 @@ function copyNpmRegistry (ctl, ipns, callback) {
   function cp () {
     ctl.name.resolve(ipns, function (err, res) {
       if (err) {
-        console.log('hello')
         return callback(err)
       }
 

@@ -1,6 +1,6 @@
 {
   "name": "registry-mirror",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Set up a NPM registry mirror, using your favourite storage, including IPFS! :D",
   "main": "src/index.js",
   "bin": {

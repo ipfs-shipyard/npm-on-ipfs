@@ -7,7 +7,7 @@ exports = module.exports = fetchIPNS
 var updaterNodes = {
   castor: {
     addr: '/ip4/37.59.33.238/tcp/4001/ipfs/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z',
-    ipns: '/ipns/qmdnc4b89dxveiudkrn5bwdksapcmekgmjmkrsduna7x9z'
+    ipns: '/ipns/QmdNc4B89DxVeiuDKRN5bWdKsAPCmekgmJMkRSdUNa7x9z'
   }
 }
 
@@ -54,6 +54,7 @@ function copyNpmRegistry (ctl, ipns, callback) {
   function cp () {
     ctl.name.resolve(ipns, function (err, res) {
       if (err) {
+        console.log('hello')
         return callback(err)
       }
 

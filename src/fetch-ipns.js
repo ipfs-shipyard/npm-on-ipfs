@@ -73,7 +73,7 @@ function copyNpmRegistry (ctl, ipns, callback) {
             if (err) {
               return callback(err)
             }
-            callback(null, '/ipfs/' + res.Key)
+            callback(null, '/ipfs/' + res.Path)
           })
         })
       })

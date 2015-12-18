@@ -61,9 +61,21 @@ function copyNpmRegistry (ctl, ipns, callback) {
         return callback(err)
       }
 
-      ctl.files.cp([res.Path, '/npm-registry'], function (err) {
-        if (err) { return callback(err) }
-        callback(null, res.Path)
+      ctl.cat(res.Path, function (err, stream) {
+        if (err) {
+          return callback(err)
+        }
+        ctl.block.put(stream, function (err, res) {
+          if (err) {
+            return callback(err)
+          }
+          ctl.files.cp(['/ipfs/' + res.Key, '/npm-registry'], function (err) {
+            if (err) {
+              return callback(err)
+            }
+            callback(null, '/ipfs/' + res.Key)
+          })
+        })
       })
     })
   }

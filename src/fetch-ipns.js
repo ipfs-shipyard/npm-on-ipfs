@@ -1,5 +1,6 @@
 const debug = require('debug')
 const log = debug('registry-mirror')
+const async = require('async')
 log.error = debug('registry-mirror:error')
 const ipfsAPI = require('ipfs-api')
 
@@ -26,46 +27,32 @@ exports = module.exports = (config, callback) => {
 
 exports.copyNpmRegistry = copyNpmRegistry
 function copyNpmRegistry (ctl, ipns, callback) {
-  mv()
-
-  function mv () {
-    ctl.files.stat('/npm-registry', (err) => {
-      if (err && err.code === 0) {
-        return cp()
-      }
-
-      ctl.files.mv(['/npm-registry', '/npm-registry' + Date.now().toString()], (err) => {
-        if (err) {
-          return callback(err)
-        }
-        cp()
+  async.waterfall([
+    (cb) => {
+      ctl.name.resolve(ipns, (err, res) => {
+        console.log(err, res)
+        cb(err, res.Path)
       })
-    })
-  }
-
-  function cp () {
-    ctl.name.resolve(ipns, (err, res) => {
-      if (err) {
-        return callback(err)
-      }
-
-      ctl.cat(res.Path, (err, stream) => {
-        if (err) {
-          return callback(err)
-        }
-        ctl.block.put(stream, (err, res) => {
-          if (err) {
-            return callback(err)
-          }
-          ctl.files.cp(['/ipfs/' + res.Key, '/npm-registry'], (err) => {
-            if (err) {
-              return callback(err)
-            }
-            callback(null, '/ipfs/' + res.Path)
-          })
-        })
+    },
+    ctl.cat,
+    (stream, cb) => {
+      ctl.block.put(stream, (err, res) => {
+        cb(err, '/ipfs/' + res.Key)
       })
-    })
-  }
+    },
+    (ipfsHash, cb) => {
+      ctl.files.mv(['/npm-registry', '/npm-registry.bak-' + Date.now().toString()], (err) => {
+        cb(err, ipfsHash)
+      })
+    },
+    (ipfsHash, cb) => {
+      console.log(ipfsHash)
+      ctl.files.cp([ipfsHash, '/npm-registry'], (err) => {
+        cb(err, ipfsHash)
+      })
+    }
+  ], (err, ipfsHash) => {
+    callback(err, ipfsHash)
+  })
 }
 

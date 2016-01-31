@@ -25,9 +25,10 @@ module.exports = Command.extend({
     }
     function result (err, res) {
       if (err) {
+        console.log(err)
         return log.err('Failed: ', err)
       }
-      log('Updated local registry list copy:', res)
+      console.log('updated local registry list copy to:', res)
     }
   }
 })

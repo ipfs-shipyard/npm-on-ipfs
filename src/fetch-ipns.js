@@ -30,7 +30,6 @@ function copyNpmRegistry (ctl, ipns, callback) {
   async.waterfall([
     (cb) => {
       ctl.name.resolve(ipns, (err, res) => {
-        console.log(err, res)
         cb(err, res.Path)
       })
     },
@@ -46,7 +45,6 @@ function copyNpmRegistry (ctl, ipns, callback) {
       })
     },
     (ipfsHash, cb) => {
-      console.log(ipfsHash)
       ctl.files.cp([ipfsHash, '/npm-registry'], (err) => {
         cb(err, ipfsHash)
       })

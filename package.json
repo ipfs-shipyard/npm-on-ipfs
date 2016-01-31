@@ -1,13 +1,13 @@
 {
   "name": "registry-mirror",
   "version": "0.3.3",
-  "description": "Set up a NPM registry mirror, using your favourite storage, including IPFS! :D",
+  "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
   "main": "src/index.js",
   "bin": {
     "registry-mirror": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha tests/test-*.js",
     "lint": "standard"
   },
   "pre-commit": [
@@ -39,15 +39,16 @@
     "st": "^1.0.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint-config-standard-react": "^1.2.1",
     "eslint-plugin-react": "^3.9.0",
-    "mocha": "^2.2.1",
-    "mockery": "^1.4.0",
+    "ipfsd-ctl": "^0.8.1",
+    "mocha": "^2.4.5",
     "ncp": "^2.0.0",
-    "nock": "^1.2.1",
     "pre-commit": "^1.1.2",
     "request": "^2.54.0",
     "rimraf": "^2.3.2",
-    "standard": "^5.3.1"
+    "standard": "^5.3.1",
+    "wreck": "^7.0.0"
   }
 }

@@ -13,7 +13,7 @@ exports = module.exports = (config) => {
       return log.err('Failed to update mDAG node', err)
     }
 
-    log('Updated /npm-registry to:', hash)
+    console.log('Updated /npm-registry to:', hash)
   })
 
   // Clone the entire NPM (and keep cloning)

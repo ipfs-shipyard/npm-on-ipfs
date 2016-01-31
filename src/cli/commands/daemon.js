@@ -17,10 +17,6 @@ module.exports = Command.extend({
       type: 'boolean',
       default: false
     },
-    ipfs: {
-      type: 'boolean',
-      default: true
-    },
     port: {
       type: 'number'
     },
@@ -30,17 +26,13 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (folder, blobStore, clone, ipfs, port, host, name) {
-    if (ipfs) {
-      console.log('IPFS mode ON')
-      blobStore = path.resolve(__dirname, '../../ibs.js')
-      folder = '/npm-registry/'
-    }
+  run: function (folder, blobStore, clone, port, host, name) {
+    blobStore = path.resolve(__dirname, '../../ibs.js')
+
     mirror({
-      outputDir: folder,
+      outputDir: '/npm-registry/',
       blobStore: blobStore,
       clone: clone,
-      ipfs: ipfs,
       port: port,
       host: host
     })

@@ -1,0 +1,10 @@
+=============== Jan 31, 2016 (WET) ===============
+22:27:39.756909 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:27:39.757084 db@open opening
+22:27:39.757151 journal@recovery F·1
+22:27:39.758990 journal@recovery recovering @1
+22:27:39.759375 mem@flush created L0@2 N·2 S·211B "/lo..oot,v2":"/lo..ins,v1"
+22:27:39.761675 db@janitor F·3 G·0
+22:27:39.761694 db@open done T·4.599234ms
+22:27:39.776027 db@close closing
+22:27:39.776104 db@close done T·64.374µs

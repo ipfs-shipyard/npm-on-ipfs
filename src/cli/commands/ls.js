@@ -1,7 +1,9 @@
 var Command = require('ronin').Command
 var fetchIPNS = require('../../fetch-ipns')
 var ipfsAPI = require('ipfs-api')
-var logger = require('../../logger')
+var debug = require('debug')
+var log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
 
 module.exports = Command.extend({
   desc: 'Check modules available in the mirror',
@@ -18,7 +20,7 @@ module.exports = Command.extend({
     if (update) {
       fetchIPNS({ blobStore: true }, function (err) {
         if (err) {
-          logger.err('Failed to update /npm-registry mDAG node', err)
+          log.err('Failed to update /npm-registry mDAG node', err)
         }
         ls()
       })
@@ -32,7 +34,7 @@ function ls () {
   var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
   apiCtl.files.ls('/npm-registry', function (err, res) {
     if (err) {
-      return logger.err(err)
+      return log.err(err)
     }
     res.Entries.forEach(function (module) {
       console.log(module.Name, '\t', module.Hash)

@@ -1,19 +1,22 @@
 registry-mirror
 ===============
 
-[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io) [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs) [![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard) [![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
+[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
+[![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+[![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
 
-> Set up a NPM registry mirror, using your favourite storage, including IPFS! :D
+> registry-mirror sets a mirror the the whole NPM registry, using IPFS for the discovery and transport of modules.
 
 # Quick setup (probably all that you need)
 
 ## Install IPFS dev0.4.0
 
+To install IPFS dev0.4.0, you will need go installed, to install go in your machine, go to https://golang.org/dl and then run:
+
 ```bash
 $ go get -u github.com/ipfs/go-ipfs
-$ cd $GOPATH/src/github.com/ipfs/go-ipfs
-$ git checkout dev0.4.0
-$ go install ./cmd/ipfs
 $ ipfs version
 ipfs version 0.4.0-dev
 ```

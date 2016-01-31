@@ -2,30 +2,28 @@ var express = require('express')
 var lru = require('lru-cache')
 var fs = require('fs')
 var url = require('url')
-var path = require('path')
-var logger = require('./logger')
+var debug = require('debug')
+var log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
+const ipfsBlobStore = require('ipfs-blob-store')
 
 exports = module.exports = serveNPM
 
-function serveNPM (config) {
+function serveNPM (config, callback) {
   var self = this
   var app = express()
   var cache = lru()
 
-  logger.info('output dir:', config.outputDir)
+  var store = ipfsBlobStore({
+    baseDir: config.blobStore && config.blobStore.baseDir || '/npm-registry',
+    port: config.blobStore && config.blobStore.port || 5001,
+    host: config.blobStore && config.blobStore.host || '127.0.0.1'
+  })
 
-  var pathPrefix = config.outputDir
-  if (config.ipfs) {
-    pathPrefix = ''
-  }
-
-  if (config.blobStore) {
-    fs = require(config.blobStore)(config.outputDir)
-  }
+  fs = store
 
   // log each request, set server header
   app.use(function (req, res, cb) {
-    logger.info(req.ip, req.method, req.path)
     res.append('Server', 'registry-mirror')
     cb()
   })
@@ -33,9 +31,7 @@ function serveNPM (config) {
   // serve up main index (no caching)
   app.get('/', function (req, res) {
     res.type('json')
-
-    // fs.createReadStream('index.json').pipe(res)
-    fs.createReadStream(path.join(pathPrefix, 'index.json')).pipe(res)
+    fs.createReadStream('/-/index.json').pipe(res)
   })
 
   // serve up tarballs
@@ -43,13 +39,11 @@ function serveNPM (config) {
     if (req.url.slice(-1) === '/') {
       return next() // ignore dirs
     }
-    // var rs = fs.createReadStream(req.url)
-    var rs = fs.createReadStream(path.join(pathPrefix, req.url))
+
+    var rs = fs.createReadStream(req.url)
 
     rs.on('error', function (err) {
-      if (err) {
-
-      }
+      if (err) {}
       return next()
     })
     rs.pipe(res)
@@ -65,8 +59,7 @@ function serveNPM (config) {
     }
 
     var file = ''
-    // var rs = fs.createReadStream(path.join(req.url, 'index.json'))
-    var rs = fs.createReadStream(path.join(pathPrefix, req.url, 'index.json'))
+    var rs = fs.createReadStream(req.url + '/index.json')
 
     rs.on('error', function (err) {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
@@ -93,16 +86,13 @@ function serveNPM (config) {
     })
   })
 
-  var server = self.server = app.listen(config.port, config.host, function () {
-    var address = server.address()
-    self.port = exports.port = address.port
+  self.server = app.listen(config.port, config.host, function () {
+    var addr = self.server.address()
+    self.port = addr.port
 
-    logger.info('listening:' + address.address + ':' + address.port)
+    console.log('Serving npm on:' + addr.address + ':' + addr.port)
+    if (callback) { callback() }
   })
-
-  self.close = function () {
-    server.close()
-  }
 
   return self
 }

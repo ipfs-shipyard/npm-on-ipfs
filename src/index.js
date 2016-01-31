@@ -1,16 +1,19 @@
-var cloneNpm = require('./clone-npm')
-var fetchIPNS = require('./fetch-ipns')
-var serveNPM = require('./serve-npm')
-var logger = require('./logger')
+const cloneNpm = require('./clone-npm')
+const fetchIPNS = require('./fetch-ipns')
+const serveNPM = require('./serve-npm')
+const debug = require('debug')
+const log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
 
-exports = module.exports = function (config) {
+exports = module.exports = (config) => {
   // Update our /npm-registry MerkleDAG Node if needed
-  fetchIPNS(config, function (err, hash) {
+
+  fetchIPNS(config, (err, hash) => {
     if (err) {
-      return logger.err('Failed to update mDAG node', err)
+      return log.err('Failed to update mDAG node', err)
     }
 
-    logger.info('Updated /npm-registry to:', hash)
+    log('Updated /npm-registry to:', hash)
   })
 
   // Clone the entire NPM (and keep cloning)

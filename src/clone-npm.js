@@ -1,30 +1,24 @@
-var spawn = require('child_process').spawn
-var path = require('path')
-var logger = require('./logger')
+const spawn = require('child_process').spawn
+const path = require('path')
+const debug = require('debug')
+const log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
 
-exports = module.exports = clone
+module.exports = (config) => {
+  const opts = [
+    '-o', config.outputDir,
+    '-d', 'localhost'
+  ]
 
-function clone (config) {
-  var opts = ['-o', config.outputDir, '-d', 'localhost']
+  if (config.blobStore) { opts.push('--blobstore=' + config.blobStore) }
 
-  // add a custom blob-store
-  if (config.blobStore) {
-    opts.push('--blobstore=' + config.blobStore)
-  }
+  const rspath = path.resolve(require.resolve('registry-static'), '../../bin/registry-static')
+  const child = spawn(rspath, opts, { stdio: 'inherit' })
 
-  var child = spawn(
-    path.resolve(
-      require.resolve('registry-static'), '../../bin/registry-static'),
-      opts,
-    {
-      stdio: 'inherit'
-    }
-  )
-
-  process.on('SIGINT', function () {
+  process.on('SIGINT', () => {
     child.kill('SIGINT')
     process.kill()
   })
 
-  logger.info('Cloning NPM from https://registry.npmjs.org')
+  log('cloning NPM from https://registry.npmjs.org')
 }

@@ -3,7 +3,9 @@ var lru = require('lru-cache')
 var fs = require('fs')
 var url = require('url')
 var path = require('path')
-var logger = require('./logger')
+var debug = require('debug')
+var log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
 
 exports = module.exports = serveNPM
 
@@ -12,7 +14,7 @@ function serveNPM (config) {
   var app = express()
   var cache = lru()
 
-  logger.info('output dir:', config.outputDir)
+  log('output dir:', config.outputDir)
 
   var pathPrefix = config.outputDir
   if (config.ipfs) {
@@ -25,7 +27,7 @@ function serveNPM (config) {
 
   // log each request, set server header
   app.use(function (req, res, cb) {
-    logger.info(req.ip, req.method, req.path)
+    log(req.ip, req.method, req.path)
     res.append('Server', 'registry-mirror')
     cb()
   })
@@ -97,7 +99,7 @@ function serveNPM (config) {
     var address = server.address()
     self.port = exports.port = address.port
 
-    logger.info('listening:' + address.address + ':' + address.port)
+    log('listening:' + address.address + ':' + address.port)
   })
 
   self.close = function () {

@@ -28,11 +28,10 @@
   },
   "homepage": "https://github.com/diasdavid/registry-mirror#readme",
   "dependencies": {
-    "davlog": "0.0.2",
     "debug": "^2.2.0",
     "express": "^4.12.3",
-    "ipfs-api": "github:ipfs/js-ipfs-api#ba85b3b",
-    "ipfs-blob-store": "^0.2.2",
+    "ipfs-api": "github:ipfs/js-ipfs-api#2938470",
+    "ipfs-blob-store": "^0.3.0",
     "lru-cache": "^2.5.0",
     "registry-static": "github:diasdavid/registry-static",
     "ronin": "^0.3.11",

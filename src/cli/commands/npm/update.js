@@ -1,7 +1,9 @@
 var Command = require('ronin').Command
 var fetchIPNS = require('../../../fetch-ipns')
-var logger = require('../../../logger')
 var ipfsAPI = require('ipfs-api')
+var debug = require('debug')
+var log = debug('registry-mirror')
+log.err = debug('registry-mirror:error')
 
 module.exports = Command.extend({
   desc: 'Update your npm list of modules from IPNS',
@@ -23,9 +25,9 @@ module.exports = Command.extend({
     }
     function result (err, res) {
       if (err) {
-        return logger.error('Failed: ', err)
+        return log.err('Failed: ', err)
       }
-      logger.info('Updated local registry list copy:', res)
+      log('Updated local registry list copy:', res)
     }
   }
 })

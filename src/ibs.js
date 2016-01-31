@@ -1,5 +1,8 @@
+var ipfsBlobStore = require('ipfs-blob-store')
+
 module.exports = function (baseDir) {
-  var mfs = require('ipfs-blob-store')()
-  mfs.baseDir = baseDir
-  return mfs
+  return ipfsBlobStore({
+    baseDir: baseDir,
+    flush: false
+  })
 }

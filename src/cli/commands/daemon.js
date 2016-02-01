@@ -23,10 +23,13 @@ module.exports = Command.extend({
     host: {
       type: 'string',
       default: 'localhost'
+    },
+    'log-root': {
+      type: 'string'
     }
   },
 
-  run: function (folder, blobStore, clone, port, host, name) {
+  run: function (folder, blobStore, clone, port, host, logRoot) {
     blobStore = path.resolve(__dirname, '../../ibs.js')
 
     mirror({
@@ -34,7 +37,8 @@ module.exports = Command.extend({
       blobStore: blobStore,
       clone: clone,
       port: port,
-      host: host
+      host: host,
+      logRootPath: logRoot
     })
   }
 })

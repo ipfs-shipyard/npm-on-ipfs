@@ -1,18 +1,11 @@
 var Command = require('ronin').Command
-var mirror = require('./../../')
-var path = require('path')
+var regmirror = require('./../../index.js')
+var async = require('async')
 
 module.exports = Command.extend({
   desc: 'Mirror npm registry',
 
   options: {
-    folder: {
-      type: 'string',
-      default: path.join(process.cwd(), 'registry')
-    },
-    'blob-store': {
-      type: 'string'
-    },
     clone: {
       type: 'boolean',
       default: false
@@ -29,16 +22,19 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (folder, blobStore, clone, port, host, logRoot) {
-    blobStore = path.resolve(__dirname, '../../ibs.js')
+  run: function (clone, port, host, logRoot) {
+    if (clone) {
+      regmirror.clone()
+    }
 
-    mirror({
-      outputDir: '/npm-registry/',
-      blobStore: blobStore,
-      clone: clone,
-      port: port,
-      host: host,
-      logRootPath: logRoot
+    async.series([
+      regmirror.registryCache.connect,
+      regmirror.registryCache.cacheRegistry
+    ], (err, results) => {
+      if (err) {
+        return console.log(err)
+      }
+      console.log('latest registry ->', results[1])
     })
   }
 })

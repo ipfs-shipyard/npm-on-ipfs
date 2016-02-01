@@ -1,5 +1,5 @@
 var Command = require('ronin').Command
-var fetchIPNS = require('../../fetch-ipns')
+var fetchIPNS = require('../../index.js').registryCache
 var ipfsAPI = require('ipfs-api')
 var debug = require('debug')
 var log = debug('registry-mirror')

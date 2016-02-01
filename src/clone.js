@@ -4,13 +4,12 @@ const debug = require('debug')
 const log = debug('registry-mirror')
 log.err = debug('registry-mirror:error')
 
-module.exports = (config) => {
+module.exports = () => {
   const opts = [
-    '-o', config.outputDir,
-    '-d', 'localhost'
+    '-o', '/npm-registry/',
+    '-d', 'localhost',
+    '--blobstore=' + path.resolve(__dirname, 'ibs.js')
   ]
-
-  if (config.blobStore) { opts.push('--blobstore=' + config.blobStore) }
 
   const rspath = path.resolve(require.resolve('registry-static'), '../../bin/registry-static')
   const child = spawn(rspath, opts, { stdio: 'inherit' })

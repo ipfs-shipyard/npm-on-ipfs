@@ -1,5 +1,5 @@
 var Command = require('ronin').Command
-var regmirror = require('./../../index.js')
+var rm = require('./../../index.js')
 var async = require('async')
 
 module.exports = Command.extend({
@@ -23,18 +23,27 @@ module.exports = Command.extend({
   },
 
   run: function (clone, port, host, logRoot) {
-    if (clone) {
-      regmirror.clone()
-    }
-
     async.series([
-      regmirror.registryCache.connect,
-      regmirror.registryCache.cacheRegistry
+      rm.registryCache.connect,
+      rm.registryCache.cacheRegistry,
+      (callback) => {
+        if (clone) {
+          rm.clone()
+        }
+        callback()
+      },
+      (callback) => {
+        rm.mirror(callback)
+      },
+      (callback) => {
+        // TODO logRoot
+        callback()
+      }
     ], (err, results) => {
       if (err) {
         return console.log(err)
       }
-      console.log('latest registry ->', results[1])
+      console.log('Updated registry cache to:', results[1])
     })
   }
 })

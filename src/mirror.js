@@ -10,6 +10,10 @@ const ipfsBlobStore = require('ipfs-blob-store')
 exports = module.exports = serveNPM
 
 function serveNPM (config, callback) {
+  if (typeof config === 'function') {
+    callback = config
+    config = {}
+  }
   var self = this
   var app = express()
   var cache = lru()
@@ -91,7 +95,7 @@ function serveNPM (config, callback) {
     self.port = addr.port
 
     console.log('Serving npm on:' + addr.address + ':' + addr.port)
-    if (callback) { callback() }
+    callback()
   })
 
   return self

@@ -9,19 +9,13 @@ exports = module.exports
 exports.connect = (callback) => {
   // TODO support connection to more than one node
   // TODO check which nodes are missing from the list first
-  const updaterNodes = {
-    biham: '/ip4/188.40.114.11/tcp/4001/ipfs/QmZY7MtK8ZbG1suwrxc7xEYZ2hQLf1dAWPRHhjxC8rjq8E'
-  }
-
-  config.apiCtl.swarm.connect(updaterNodes.biham, callback)
+  config.apiCtl.swarm.connect(config.nodes.biham, callback)
 }
 
 exports.cacheRegistry = (callback) => {
-  var registry = '/ipns/QmZY7MtK8ZbG1suwrxc7xEYZ2hQLf1dAWPRHhjxC8rjq8E'
-
   async.waterfall([
     (cb) => {
-      config.apiCtl.name.resolve(registry, (err, res) => {
+      config.apiCtl.name.resolve(config.registryHash, (err, res) => {
         cb(err, res.Path)
       })
     },
@@ -46,3 +40,28 @@ exports.cacheRegistry = (callback) => {
   })
 }
 
+exports.publish = () => {
+  config.apiCtl.files.stat('/npm-registry', function (err, res) {
+    if (err) {
+      return log.err('stat', err)
+    }
+    config.apiCtl.block.get(res.Hash, function (err, stream) {
+      if (err) {
+        return log.err('block get', err)
+      }
+      config.apiCtl.add(stream, function (err, res) {
+        if (err) {
+          return log.err('add', err)
+        }
+        config.apiCtl.name.publish('/ipfs/' + res[0].Hash, function (err, res) {
+          if (err) {
+            return log.err('name publish', err)
+          }
+          console.log('Published:')
+          console.log('IPNS: ', '/ipns/' + res.Name)
+          console.log('IPFS: ', res.Value)
+        })
+      })
+    })
+  })
+}

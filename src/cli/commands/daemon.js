@@ -1,6 +1,7 @@
 var Command = require('ronin').Command
 var rm = require('./../../index.js')
 var async = require('async')
+var config = require('./../../config.js')
 
 module.exports = Command.extend({
   desc: 'Mirror npm registry',
@@ -33,6 +34,8 @@ module.exports = Command.extend({
         callback()
       },
       (callback) => {
+        if (port) { config.mirror.port = port }
+        if (host) { config.mirror.host = host }
         rm.mirror(callback)
       },
       (callback) => {
@@ -40,9 +43,7 @@ module.exports = Command.extend({
         callback()
       }
     ], (err, results) => {
-      if (err) {
-        return console.log(err)
-      }
+      if (err) { return console.log(err) }
       console.log('Updated registry cache to:', results[1])
     })
   }

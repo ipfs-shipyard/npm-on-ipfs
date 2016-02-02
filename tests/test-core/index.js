@@ -12,8 +12,6 @@ describe('core', () => {
   const repoTests = process.cwd() + '/tests/t-run-' + Date.now()
 
   before(function (done) {
-    console.log('===> make sure to be running a IPFS 0.4.0')
-    console.log('===> cp $GOPATH/bin/ipfs node_modules/go-ipfs/bin/ipfs')
     this.timeout(500000)
     ncp(repoExample, repoTests, (err) => {
       expect(err).to.not.exist
@@ -24,7 +22,6 @@ describe('core', () => {
         expect(err).to.not.exist
         node.startDaemon((err) => {
           expect(err).to.not.exist
-          console.log('daemon is running')
           done()
         })
       })

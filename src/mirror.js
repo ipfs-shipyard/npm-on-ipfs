@@ -1,41 +1,29 @@
 var express = require('express')
 var lru = require('lru-cache')
-var fs = require('fs')
 var url = require('url')
 var debug = require('debug')
 var log = debug('registry-mirror')
 log.err = debug('registry-mirror:error')
-const ipfsBlobStore = require('ipfs-blob-store')
+const ibs = require('ipfs-blob-store')
+var config = require('./config.js')
 
 exports = module.exports = serveNPM
 
-function serveNPM (config, callback) {
-  if (typeof config === 'function') {
-    callback = config
-    config = {}
-  }
+function serveNPM (callback) {
   var self = this
   var app = express()
   var cache = lru()
 
-  var store = ipfsBlobStore({
-    baseDir: config.blobStore && config.blobStore.baseDir || '/npm-registry',
-    port: config.blobStore && config.blobStore.port || 5001,
-    host: config.blobStore && config.blobStore.host || '127.0.0.1'
-  })
-
-  fs = store
-
-  // log each request, set server header
-  app.use(function (req, res, cb) {
-    res.append('Server', 'registry-mirror')
-    cb()
+  var store = ibs({
+    baseDir: config.blobStore.baseDir,
+    port: config.blobStore.port,
+    host: config.blobStore.host
   })
 
   // serve up main index (no caching)
   app.get('/', function (req, res) {
     res.type('json')
-    fs.createReadStream('/-/index.json').pipe(res)
+    store.createReadStream('/-/index.json').pipe(res)
   })
 
   // serve up tarballs
@@ -44,7 +32,7 @@ function serveNPM (config, callback) {
       return next() // ignore dirs
     }
 
-    var rs = fs.createReadStream(req.url)
+    var rs = store.createReadStream(req.url)
 
     rs.on('error', function (err) {
       if (err) {}
@@ -63,7 +51,7 @@ function serveNPM (config, callback) {
     }
 
     var file = ''
-    var rs = fs.createReadStream(req.url + '/index.json')
+    var rs = store.createReadStream(req.url + '/index.json')
 
     rs.on('error', function (err) {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
@@ -90,11 +78,12 @@ function serveNPM (config, callback) {
     })
   })
 
-  self.server = app.listen(config.port, config.host, function () {
+  self.server = app.listen(config.mirror.port, config.mirror.host, function () {
     var addr = self.server.address()
     self.port = addr.port
 
-    console.log('Serving npm on:' + addr.address + ':' + addr.port)
+    console.log('mirror is running')
+    console.log('use npm with --registry=' + addr.address + ':' + addr.port)
     callback()
   })
 

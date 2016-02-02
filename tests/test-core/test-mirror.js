@@ -5,6 +5,7 @@
 const expect = require('chai').expect
 const mirror = require('../../src').mirror
 const wreck = require('wreck')
+const config = require('./../../src/config.js')
 
 describe('mirror', () => {
   const url = 'http://127.0.0.1:' + 9040 + '/'
@@ -12,18 +13,9 @@ describe('mirror', () => {
   it('start serving npm from IPFS', function (done) {
     this.timeout(50000)
 
-    var options = {
-      blobStore: {
-        baseDir: '/npm-registry',
-        host: '127.0.0.1',
-        port: 5001
-      },
-      port: 9040
-    }
+    config.mirror.port = 9040
 
-    mirror(options, () => {
-      done()
-    })
+    mirror(done)
   })
 
   it('index.json', (done) => {

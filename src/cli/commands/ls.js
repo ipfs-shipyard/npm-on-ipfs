@@ -1,5 +1,5 @@
 var Command = require('ronin').Command
-var rm = require('../../../index.js')
+var rm = require('./../../index.js')
 var async = require('async')
 var debug = require('debug')
 var log = debug('registry-mirror')
@@ -27,8 +27,8 @@ module.exports = Command.extend({
     async.series(series, (err, results) => {
       if (err) { return console.log(err) }
 
-      results.entries.foreach(function (module) {
-        console.log(module.name, '\t', module.hash)
+      results[0].Entries.forEach(function (module) {
+        console.log(module.Name, '\t', module.Hash)
       })
 
       console.log('Updated registry cache to:', results[1])

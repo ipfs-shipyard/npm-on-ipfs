@@ -1,6 +1,6 @@
 var Command = require('ronin').Command
-var fetchIPNS = require('../../fetch-ipns')
-var ipfsAPI = require('ipfs-api')
+var rm = require('./../../index.js')
+var async = require('async')
 var debug = require('debug')
 var log = debug('registry-mirror')
 log.err = debug('registry-mirror:error')
@@ -16,29 +16,22 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (update, name) {
+  run: function (update) {
+    const series = []
     if (update) {
-      fetchIPNS({ blobStore: true }, function (err) {
-        if (err) {
-          log.err('Failed to update /npm-registry mDAG node', err)
-        }
-        ls()
-      })
-    } else {
-      ls()
+      series.push(rm.registryCache.connect)
+      series.push(rm.registryCache.cacheRegistry)
     }
+    series.push(rm.ls)
+
+    async.series(series, (err, results) => {
+      if (err) { return console.log(err) }
+
+      results[0].Entries.forEach((module) => {
+        console.log(module.Name, '\t', module.Hash)
+      })
+
+      console.log('Updated registry cache to:', results[1])
+    })
   }
 })
-
-function ls () {
-  var apiCtl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
-  apiCtl.files.ls('/npm-registry', function (err, res) {
-    if (err) {
-      return log.err(err)
-    }
-    res.Entries.forEach(function (module) {
-      console.log(module.Name, '\t', module.Hash)
-    })
-  })
-}
-

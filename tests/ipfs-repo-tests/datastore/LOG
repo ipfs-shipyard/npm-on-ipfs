@@ -1,8 +1,8 @@
-=============== Jan 31, 2016 (WET) ===============
-22:27:41.840020 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-22:27:41.840237 db@open opening
-22:27:41.840327 journal@recovery F·1
-22:27:41.840516 journal@recovery recovering @3
-22:27:41.841134 mem@flush created L0@5 N·4 S·1KiB "/ip..#\xc9\xf0,v5":"/pk..#\xc9\xf0,v6"
-22:27:41.841916 db@janitor F·4 G·0
-22:27:41.841931 db@open done T·1.680989ms
+=============== Feb 1, 2016 (WET) ===============
+16:25:41.560540 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:25:41.560695 db@open opening
+16:25:41.560735 journal@recovery F·1
+16:25:41.561069 journal@recovery recovering @8
+16:25:41.562318 mem@flush created L0@10 N·9 S·515B "/lo..oot,v17":"/lo..oot,v9"
+16:25:41.563465 db@janitor F·5 G·0
+16:25:41.563483 db@open done T·2.779069ms

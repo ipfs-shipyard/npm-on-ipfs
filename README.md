@@ -43,13 +43,12 @@ Daemon is ready
 $ npm i registry-mirror -g
 ```
 
-## Run registry-mirror
+# Usage
 
 Wait for the `Updated directory listing` log.
 
 ```bash
 $ registry-mirror daemon
-IPFS mode ON
 registry-mirror [info] using output directory /npm-registry/
 registry-mirror [info] listening on 127.0.0.1:50321
 registry-mirror [info] Cloning NPM OFF
@@ -80,26 +79,51 @@ Usage: registry-mirror COMMAND [OPTIONS]
 
 Available commands:
 
-daemon  Mirror npm registry
+daemon       Mirror npm registry
+ls           Check modules available in the mirror
+npm publish  Publish an IPNS record with your current npm list
+npm update   Update your npm list of modules from IPNS
 ```
 
 ## Commands
 
 ### daemon
 
+> starts the registry-mirror daemon
+
 `$ registry-mirror daemon`
 
 Options:
-- `--folder` - Name of the directory where the registry gets downloaded to
-- `--blob-store` - Custom blob-store support (must follow [abstract-blob-store]() interface)
 - `--clone` - Download the entire npm (Otherwise it just tries to read)
-- `--ipfs=false` - To not use local IPFS Node (must support the files/mfs API, available from version 0.4.0 onwards)
-- `--port` Listen on the specified port
-- `--host` Listen on the specified port
+- `--port=<port>` Listen on the specified port
+- `--host=<host>` Listen on the specified port
+
+### ls
+
+> lists all the modules available on the IPFS accessible registry and their respective hashes
+
+`$ registry-mirror ls`
+
+### npm update
+
+> update your local registry cache
+
+`$ registry npm update`
+
+### npm publish
+
+> publish the version of the cache you have from npm
+
+`$ registry npm publish`
 
 ## Important
 
 If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
+
+# Development
+
+In order to run the tests, you have to have an IPFS 0.4.0 available for them, to do so:
+`cp $GOPATH/bin/ipfs node_modules/go-ipfs/bin/ipfs`
 
 # Acknowledgements
 

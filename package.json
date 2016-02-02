@@ -7,7 +7,7 @@
     "registry-mirror": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha tests/test-*.js",
+    "test": "mocha tests/test-*/index.js",
     "lint": "standard"
   },
   "pre-commit": [

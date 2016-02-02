@@ -1,18 +1,12 @@
 var Command = require('ronin').Command
-var mirror = require('./../../')
-var path = require('path')
+var rm = require('./../../index.js')
+var async = require('async')
+var config = require('./../../config.js')
 
 module.exports = Command.extend({
   desc: 'Mirror npm registry',
 
   options: {
-    folder: {
-      type: 'string',
-      default: path.join(process.cwd(), 'registry')
-    },
-    'blob-store': {
-      type: 'string'
-    },
     clone: {
       type: 'boolean',
       default: false
@@ -29,16 +23,28 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (folder, blobStore, clone, port, host, logRoot) {
-    blobStore = path.resolve(__dirname, '../../ibs.js')
-
-    mirror({
-      outputDir: '/npm-registry/',
-      blobStore: blobStore,
-      clone: clone,
-      port: port,
-      host: host,
-      logRootPath: logRoot
+  run: function (clone, port, host, logRoot) {
+    async.series([
+      rm.registryCache.connect,
+      rm.registryCache.cacheRegistry,
+      (callback) => {
+        if (clone) {
+          rm.clone()
+        }
+        callback()
+      },
+      (callback) => {
+        if (port) { config.mirror.port = port }
+        if (host) { config.mirror.host = host }
+        rm.mirror(callback)
+      },
+      (callback) => {
+        // TODO logRoot
+        callback()
+      }
+    ], (err, results) => {
+      if (err) { return console.log(err) }
+      console.log('Updated registry cache to:', results[1])
     })
   }
 })

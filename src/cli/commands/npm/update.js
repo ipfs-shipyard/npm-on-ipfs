@@ -1,6 +1,6 @@
 var Command = require('ronin').Command
-var fetchIPNS = require('../../../fetch-ipns')
-var ipfsAPI = require('ipfs-api')
+var rm = require('../../../index.js')
+var async = require('async')
 var debug = require('debug')
 var log = debug('registry-mirror')
 log.err = debug('registry-mirror:error')
@@ -15,20 +15,14 @@ module.exports = Command.extend({
   },
 
   run: function (ipns, name) {
-    if (ipns) {
-      var ctl = ipfsAPI('/ip4/127.0.0.1/tcp/5001')
-      fetchIPNS.copyNpmRegistry(ctl, ipns, result)
-    } else {
-      fetchIPNS({
-        blobStore: true // so that it knows it has to copy
-      }, result)
-    }
-    function result (err, res) {
+    async.series([
+      rm.registryCache.connect,
+      rm.registryCache.cacheRegistry
+    ], (err, results) => {
       if (err) {
-        console.log(err)
-        return log.err('Failed: ', err)
+        return console.log(err)
       }
-      console.log('updated local registry list copy to:', res)
-    }
+      console.log('Updated registry cache to:', results[1])
+    })
   }
 })

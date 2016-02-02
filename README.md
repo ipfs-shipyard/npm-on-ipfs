@@ -75,7 +75,7 @@ Good to npm install away! :)
 
 ```bash
 $ registry-mirror
-Usage: bin.js COMMAND [OPTIONS]
+Usage: registry-mirror COMMAND [OPTIONS]
 
 Available commands:
 

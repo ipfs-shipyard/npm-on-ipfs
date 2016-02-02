@@ -27,7 +27,7 @@ module.exports = Command.extend({
     async.series(series, (err, results) => {
       if (err) { return console.log(err) }
 
-      results[0].Entries.forEach(function (module) {
+      results[0].Entries.forEach((module) => {
         console.log(module.Name, '\t', module.Hash)
       })
 

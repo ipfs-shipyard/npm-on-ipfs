@@ -1,5 +1,4 @@
-var config = require('./config')
+const config = require('./config')
+const api = config.apiCtl
 
-module.exports = (callback) => {
-  config.apiCtl.files.ls('/npm-registry', callback)
-}
+module.exports = api.files.ls.bind(api.files, config.blobStore.baseDir)

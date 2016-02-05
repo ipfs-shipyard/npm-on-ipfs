@@ -18,21 +18,10 @@ describe('mirror', () => {
     mirror(done)
   })
 
-  it('index.json', (done) => {
-    wreck.get(url, function (err, res, payload) {
-      expect(err).to.not.exist
-      expect(res.statusCode).to.equal(200)
-      done()
-    })
-  })
-
   it('get module utf7', (done) => {
     // requests that cli makes:
-    // 127.0.0.1 GET /utf7
-    //   reads: /npm-registry/utf7
-    //   reads: /npm-registry/utf7/index.json
-    // 127.0.0.1 GET /utf7/-/utf7-1.0.0.tgz
-    //   reads: /npm-registry/utf7/-/utf7-1.0.0.tgz
+    // npm http request GET http://localhost:9876/utf7
+    // npm http fetch GET http://localhost:9876/utf7/-/utf7-1.0.0.tgz
     wreck.get(url + 'utf7', function (err, res, payload) {
       expect(err).to.not.exist
       expect(res.statusCode).to.equal(200)

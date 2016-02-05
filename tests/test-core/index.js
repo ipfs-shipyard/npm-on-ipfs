@@ -37,4 +37,7 @@ describe('core', () => {
   })
 
   require('./test-mirror.js')
+  require('./test-files.js')
+  require('./test-util.js')
+  require('./test-verify.js')
 })

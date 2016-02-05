@@ -6,6 +6,7 @@ registry-mirror
 [![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 [![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
+![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
 
 > registry-mirror sets a mirror the the whole NPM registry, using IPFS for the discovery and transport of modules.
 

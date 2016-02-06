@@ -14,11 +14,7 @@ function serveNPM (callback) {
   var app = express()
   var cache = lru()
 
-  var store = ibs({
-    baseDir: config.blobStore.baseDir,
-    port: config.blobStore.port,
-    host: config.blobStore.host
-  })
+  var store = ibs(config.blobStore)
 
   // serve up main index (no caching)
   app.get('/', function (req, res) {

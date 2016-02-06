@@ -16,7 +16,7 @@ exports.connect = (callback) => {
 exports.cacheRegistry = (callback) => {
   async.waterfall([
     (cb) => {
-      api.name.resolve(config.registryHash, (err, res) => {
+      api.name.resolve(config.registryRecord, (err, res) => {
         cb(err, res.Path)
       })
     },
@@ -28,7 +28,8 @@ exports.cacheRegistry = (callback) => {
     },
     (ipfsHash, cb) => {
       api.files.mv(['/npm-registry', '/npm-registry.bak-' + Date.now().toString()], (err) => {
-        cb(err, ipfsHash)
+        if (err) { /* happens if /npm-registry did not exist yet, it is ok */ }
+        cb(null, ipfsHash)
       })
     },
     (ipfsHash, cb) => {

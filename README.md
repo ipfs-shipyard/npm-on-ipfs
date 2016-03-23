@@ -1,14 +1,22 @@
 registry-mirror
 ===============
 
+![](/img/ip-npm-small.png)
+
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
 [![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
-[![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
 ![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
+<!-- While 0.4.0 doesn't get released [![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror) -->
 
 > registry-mirror sets a mirror the the whole NPM registry, using IPFS for the discovery and transport of modules.
+
+# Resources
+
+- [Demo video](https://vimeo.com/147968322)
+- [Lengthy introduction in a blog post](http://blog.daviddias.me/2015/12/08/stellar-module-management)
+- [Node.js Interactive Talk - Stellar Module Management](https://www.youtube.com/watch?v=-S-Tc7Gl8FM)
 
 # Quick setup (probably all that you need)
 

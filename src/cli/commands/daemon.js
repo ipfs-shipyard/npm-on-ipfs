@@ -25,8 +25,8 @@ module.exports = Command.extend({
 
   run: function (clone, port, host, logRoot) {
     async.series([
-      // rm.registryCache.connect,
-      // rm.registryCache.cacheRegistry,
+      rm.registryCache.connect,
+      rm.registryCache.cacheRegistry,
       (callback) => {
         if (clone) {
           rm.clone()

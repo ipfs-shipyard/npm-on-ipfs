@@ -1,6 +1,6 @@
 {
   "name": "registry-mirror",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
   "main": "src/index.js",
   "bin": {
@@ -35,7 +35,7 @@
     "express": "^4.12.3",
     "follow-registry": "^2.0.0",
     "http-https": "^1.0.0",
-    "ipfs-api": "github:ipfs/js-ipfs-api#1fd9749",
+    "ipfs-api": "github:ipfs/js-ipfs-api#f3e2d42",
     "ipfs-blob-store": "^0.4.0",
     "lru-cache": "^2.5.0",
     "patch-package-json": "0.0.4",

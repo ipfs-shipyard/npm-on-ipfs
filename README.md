@@ -129,11 +129,6 @@ Options:
 
 If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
 
-# Development
-
-In order to run the tests, you have to have an IPFS 0.4.0 available for them, to do so:
-`cp $GOPATH/bin/ipfs node_modules/go-ipfs/bin/ipfs`
-
 # Acknowledgements
 
 This module takes a lot of inspiration from [reginabox](https://www.npmjs.com/package/reginabox). Big thank you to everyone that contributed with code or to the [discussion](https://github.com/ipfs/notes/issues/2) to make this happen.

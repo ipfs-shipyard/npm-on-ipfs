@@ -1,7 +1,7 @@
 const debug = require('debug')
 const log = debug('registry-mirror')
 const async = require('async')
-log.error = debug('registry-mirror:error')
+log.err = debug('registry-mirror:error')
 const config = require('./config')
 const api = config.apiCtl
 

@@ -35,13 +35,13 @@
     "express": "^4.12.3",
     "follow-registry": "^2.0.0",
     "http-https": "^1.0.0",
-    "ipfs-api": "github:ipfs/js-ipfs-api#f3e2d42",
     "ipfs-blob-store": "^0.4.0",
     "lru-cache": "^2.5.0",
     "patch-package-json": "0.0.4",
     "ronin": "^0.3.11",
     "st": "^1.0.0",
-    "timethat": "0.0.3"
+    "timethat": "0.0.3",
+    "ipfs-api": "^3.0.2"
   },
   "devDependencies": {
     "abstract-blob-store": "^3.2.0",

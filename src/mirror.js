@@ -79,7 +79,7 @@ function serveNPM (callback) {
     self.port = addr.port
 
     console.log('mirror is running')
-    console.log('use npm with --registry=' + addr.address + ':' + addr.port)
+    console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
     callback()
   })
 

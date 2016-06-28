@@ -1,10 +1,11 @@
 {
-  "name": "registry-mirror",
+  "name": "ipfs-npm",
   "version": "0.6.3",
   "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
   "main": "src/index.js",
   "bin": {
-    "registry-mirror": "src/cli/bin.js"
+    "ipfs-npm": "src/cli/bin.js",
+    "ipnpm": "src/cli/bin.js"
   },
   "scripts": {
     "test": "mocha tests/test-*/index.js",
@@ -17,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diasdavid/registry-mirror.git"
+    "url": "git+https://github.com/diasdavid/ipfs-npm.git"
   },
   "keywords": [
     "IPFS"
@@ -25,9 +26,9 @@
   "author": "David Dias <daviddias@ipfs.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/diasdavid/registry-mirror/issues"
+    "url": "https://github.com/diasdavid/ipfs-npm/issues"
   },
-  "homepage": "https://github.com/diasdavid/registry-mirror#readme",
+  "homepage": "https://github.com/diasdavid/ipfs-npm#readme",
   "dependencies": {
     "async": "^1.5.2",
     "debug": "^2.2.0",

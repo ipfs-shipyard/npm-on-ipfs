@@ -1,8 +1,9 @@
 #! /usr/bin/env node
+'use strict'
 
-var ronin = require('ronin')
+const ronin = require('ronin')
 
-var cli = ronin(__dirname)
+const cli = ronin(__dirname)
 
 cli.run()
 

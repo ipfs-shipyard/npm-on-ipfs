@@ -2,8 +2,8 @@ const ipfsAPI = require('ipfs-api')
 const debug = require('debug')
 const path = require('path')
 const os = require('os')
-const log = debug('mirror')
-log.err = debug('mirror:err')
+const log = debug('ipnpm')
+log.err = debug('ipnpm:err')
 
 const tmp = os.tmpdir()
 

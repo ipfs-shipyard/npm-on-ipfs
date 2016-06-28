@@ -1,50 +1,36 @@
-var Command = require('ronin').Command
-var rm = require('./../../index.js')
-var async = require('async')
-var config = require('./../../config.js')
+const Command = require('ronin').Command
+// const npmIPFS = require('./../../ipfs-npm')
+// const config = npmIPFS.config
+// const log = config.log
 
 module.exports = Command.extend({
-  desc: 'Mirror npm registry',
+  desc: 'creates a registry endpoint for the npm cli to interact with',
 
   options: {
-    clone: {
-      type: 'boolean',
-      default: false
-    },
     port: {
       type: 'number'
     },
     host: {
       type: 'string',
       default: 'localhost'
-    },
-    'log-root': {
-      type: 'string'
     }
   },
 
-  run: function (clone, port, host, logRoot) {
-    async.series([
-      rm.registryCache.connect,
-      rm.registryCache.cacheRegistry,
-      (callback) => {
-        if (clone) {
-          rm.clone()
-        }
-        callback()
-      },
-      (callback) => {
-        if (port) { config.mirror.port = port }
-        if (host) { config.mirror.host = host }
-        rm.mirror(callback)
-      },
-      (callback) => {
-        // TODO logRoot
-        callback()
+  run: function (port, host, logRoot) {
+    console.log('Not implemented yet')
+    /*
+    if (port) {
+      config.mirror.port = port
+    }
+    if (host) {
+      config.mirror.host = host
+    }
+    npmIPFS.mirror((err) => {
+      if (err) {
+        throw err
       }
-    ], (err, results) => {
-      if (err) { return console.log(err) }
-      console.log('Updated registry cache to:', results[1])
+      console.log('ipnpm daemon running on:', config.mirror.host, config.mirror.port)
     })
+    */
   }
 })

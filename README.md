@@ -46,6 +46,7 @@ This command will try to find an IPFS node on the default (`IPFS_PATH`), if none
 
 **options:**
   - `seq-number` - Select the mirror sequence number to start from. Defaults to last, if none, 0.
+  - `flush` - Write the modules to disk as soon as they are written into IPFS. Defaults to `true`
   - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
   - `log` - Sets the log level, default is `module`. Other options are: `[all, module]`. e.g `ipnpm registry clone --log=all`.
 
@@ -63,7 +64,7 @@ This command will try to find an IPFS node on the default (`IPFS_PATH`), if none
 **options:**
   - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
 
-#### `ipnpm daemon` - Starts an ipfs-npm daemon, so that we can point our npm cli to it
+#### `ipnpm daemon` - Starts an ipfs-npm daemon, so that we can point our npm cli to ithttps://www.youtube.com/watch?v=zGjj6Wg8SJA&feature=youtu.be
 
 This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 

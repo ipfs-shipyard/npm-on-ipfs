@@ -1,10 +1,9 @@
-tests/t-run*
+test/t-run*
+
 # Logs
 logs
 *.log
 
-
-registry
 # Runtime data
 pids
 *.pid

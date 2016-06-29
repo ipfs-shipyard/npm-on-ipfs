@@ -10,7 +10,7 @@ npm on IPFS
 [![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 ![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
-<!-- While 0.4.0 doesn't get released [![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror) -->
+[![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
 
 > **Install your modules through IPFS!!** This CLI utility enables you to clone the npm registry into IPFS and/or mirror the registry from IPFS.
 

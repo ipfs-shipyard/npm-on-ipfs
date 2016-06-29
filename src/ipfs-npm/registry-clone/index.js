@@ -1,11 +1,128 @@
+'use strict'
+
 const config = require('../config')
 const log = config.log
+require('dnscache')({ enable: true })
+const follow = require('follow-registry')
+const patch = require('patch-package-json')
+const fs = require('graceful-fs')
+const timethat = require('timethat').calc
+const http = require('http-https')
+const url = require('url')
+const IBS = require('ipfs-blob-store')
+const ModuleWriter = require('./module-writer')
+const Verifier = require('./verifier')
 
-module.exports = () => {
-  var hooks = require('./hooks')
+var latestSeq = 'unknown'
+// const GLOBAL_INDEX = '-/index.json'
+// const NOT_FOUND = '-/404.json'
 
-  hooks.startup({}, () => { }, () => {
-    require('./clone').start()
-    log('cloning NPM from https://registry.npmjs.org')
-  })
+module.exports = RegistryClone
+
+function RegistryClone (ipfs, seqNumber) {
+  if (!(this instanceof RegistryClone)) {
+    return new RegistryClone(ipfs, seqNumber)
+  }
+
+  const bs = IBS(config.blobStore)
+  const v = new Verifier(bs)
+  const mw = new ModuleWriter(bs, v)
+
+  // This pauses the feed until callback is executed
+  function change (data, callback) {
+    const changeStart = new Date()
+    let json
+    try {
+      json = patch.json(data.json, config.domain)
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        return callback() // Bad json. Just bail.
+      }
+      throw err
+    }
+    if (!json.name) {
+      return callback() // Bail, something is wrong with this change
+    }
+    // Just to make sure that the value is cast to a Number
+    data.seq = Number(data.seq)
+    latestSeq = Number(latestSeq)
+    if (data.seq > latestSeq) {
+      latestSeq = data.seq
+    }
+    data.latestSeq = latestSeq
+    console.log('[' + data.seq + '/' + latestSeq + '] processing', json.name)
+    if (!data.versions.length) {
+      return callback()
+    }
+    data.versions.forEach((item) => {
+      item.json = patch.json(item.json, config.domain)
+    })
+    mw.saveTarballs(data.tarballs, () => {
+      mw.putJSON(data, (err) => {
+        if (err) {
+          log.err(err)
+          return callback()
+        }
+        var num = Object.keys(json.versions).length
+        /* istanbul ignore next just a log line with logic */
+        console.log('[' + data.seq + '/' + latestSeq + '] finished', num, 'version' + ((num > 1) ? 's' : '') + ' of', json.name, 'in', timethat(changeStart))
+        callback()
+      })
+    })
+  }
+
+  function clean (callback) {
+    if (!config.clean) {
+      return callback()
+    }
+
+    const start = new Date()
+
+    log('Deleting', config.seqFile)
+
+    fs.unlink(config.seqFile, () => {
+      console.log('finished cleaning in', timethat(start))
+      callback()
+    })
+  }
+
+  function updateLatestSeq () {
+    var timer = function () {
+      let u = url.parse('https://skimdb.npmjs.com/registry')
+
+      u.headers = {
+        'user-agent': 'ipfs-npm mirror worker'
+      }
+
+      http.get(u, (res) => {
+        let d = ''
+        res.on('data', (data) => {
+          d += data
+        })
+        res.on('end', function () {
+          const json = JSON.parse(d)
+          latestSeq = json.update_seq
+          log('new latest sequence', latestSeq)
+        })
+      })
+    }
+
+    setInterval(timer, ((60 * 5) * 1000))
+    timer()
+  }
+
+  function run () {
+    updateLatestSeq()
+    const conf = {
+      seqFile: config.seqFile,
+      handler: change
+    }
+    log('starting to follow registry with these options:')
+    log('   domain', config.domain)
+    log('   directory', config.dir)
+    log('   tmp', config.tmp)
+    follow(conf)
+  }
+
+  clean(run)
 }

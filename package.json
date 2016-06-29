@@ -8,8 +8,8 @@
     "ipnpm": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha tests/test-*/index.js",
-    "coverage": "istanbul cover --print both -- _mocha tests/test-*/index.js",
+    "test": "mocha test/index.js",
+    "coverage": "istanbul cover --print both -- _mocha test/index.js",
     "lint": "standard"
   },
   "pre-commit": [
@@ -36,7 +36,7 @@
     "express": "^4.12.3",
     "follow-registry": "^2.0.0",
     "http-https": "^1.0.0",
-    "ipfs-blob-store": "^1.1.0",
+    "ipfs-blob-store": "^1.1.1",
     "lru-cache": "^4.0.1",
     "patch-package-json": "0.0.4",
     "ronin": "^0.3.11",

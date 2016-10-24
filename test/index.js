@@ -1,5 +1,4 @@
-/* globals describe, before, after*/
-
+/* globals describe, before, after */
 'use strict'
 
 const expect = require('chai').expect

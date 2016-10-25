@@ -122,9 +122,12 @@ function RegistryClone (ipfs, opts) {
         if (err) {
           return log(err)
         }
-
-        latestSeq = payload.update_seq
-        log('new latest sequence', latestSeq)
+        try {
+          latestSeq = JSON.parse(payload).update_seq
+          log('new latest sequence', latestSeq)
+        } catch (err) {
+          log('failed to update to latest sequence')
+        }
       })
     }
 

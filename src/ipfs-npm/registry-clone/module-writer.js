@@ -18,7 +18,7 @@ function ModuleWriter (bs, v) {
 
   const putBall = (info, callback) => {
     info.tarball = path.join(info.path)
-    process.nextTick(() => { v.verify(info, callback) })
+    process.nextTick(() => v.verify(info, callback))
   }
 
   this.saveTarballs = (tarballs, callback) => {

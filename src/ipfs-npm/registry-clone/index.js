@@ -7,9 +7,10 @@ const follow = require('follow-registry')
 const patch = require('patch-package-json')
 const fs = require('graceful-fs')
 const timethat = require('timethat').calc
-const http = require('http-https')
-const url = require('url')
+const Wreck = require('wreck')
 const IBS = require('ipfs-blob-store')
+const multiaddr = require('multiaddr')
+const series = require('async/series')
 const ModuleWriter = require('./module-writer')
 const Verifier = require('./verifier')
 
@@ -24,7 +25,17 @@ function RegistryClone (ipfs, seqNumber) {
     return new RegistryClone(ipfs, seqNumber)
   }
 
-  const bs = IBS(config.blobStore)
+  let bsConfig = config.blobStore
+
+  if (ipfs) {
+    bsConfig = Object.assign(bsConfig, multiaddr(ipfs).nodeAddress())
+  }
+
+  if (seqNumber) {
+    // TODO: what to do?
+  }
+
+  const bs = IBS(bsConfig)
   const v = new Verifier(bs)
   const mw = new ModuleWriter(bs, v)
 
@@ -43,6 +54,7 @@ function RegistryClone (ipfs, seqNumber) {
     if (!json.name) {
       return callback() // Bail, something is wrong with this change
     }
+
     // Just to make sure that the value is cast to a Number
     data.seq = Number(data.seq)
     latestSeq = Number(latestSeq)
@@ -50,24 +62,26 @@ function RegistryClone (ipfs, seqNumber) {
       latestSeq = data.seq
     }
     data.latestSeq = latestSeq
-    console.log('[' + data.seq + '/' + latestSeq + '] processing', json.name)
+    console.log('change: [' + data.seq + '/' + latestSeq + '] processing', json.name)
     if (!data.versions.length) {
       return callback()
     }
     data.versions.forEach((item) => {
       item.json = patch.json(item.json, config.domain)
     })
-    mw.saveTarballs(data.tarballs, () => {
-      mw.putJSON(data, (err) => {
-        if (err) {
-          log.err(err)
-          return callback()
-        }
-        var num = Object.keys(json.versions).length
-        /* istanbul ignore next just a log line with logic */
-        console.log('[' + data.seq + '/' + latestSeq + '] finished', num, 'version' + ((num > 1) ? 's' : '') + ' of', json.name, 'in', timethat(changeStart))
-        callback()
-      })
+
+    series([
+      (cb) => mw.saveTarballs(data.tarballs, cb),
+      (cb) => mw.putJSON(data, cb)
+    ], (err, res) => {
+      if (err) {
+        log.err(err)
+        return callback()
+      }
+      var num = Object.keys(json.versions).length
+      /* istanbul ignore next just a log line with logic */
+      console.log('change: [' + data.seq + '/' + latestSeq + '] finished', num, 'version' + ((num > 1) ? 's' : '') + ' of', json.name, 'in', timethat(changeStart))
+      callback()
     })
   }
 
@@ -87,23 +101,20 @@ function RegistryClone (ipfs, seqNumber) {
   }
 
   function updateLatestSeq () {
-    var timer = function () {
-      let u = url.parse('https://skimdb.npmjs.com/registry')
-
-      u.headers = {
-        'user-agent': 'ipfs-npm mirror worker'
+    const timer = function () {
+      const opts = {
+        headers: {
+          'user-agent': 'ipfs-npm mirror worker'
+        }
       }
 
-      http.get(u, (res) => {
-        let d = ''
-        res.on('data', (data) => {
-          d += data
-        })
-        res.on('end', function () {
-          const json = JSON.parse(d)
-          latestSeq = json.update_seq
-          log('new latest sequence', latestSeq)
-        })
+      Wreck.get(config.skim, opts, (err, res, payload) => {
+        if (err) {
+          return log(err)
+        }
+
+        latestSeq = payload.update_seq
+        log('new latest sequence', latestSeq)
       })
     }
 
@@ -117,10 +128,9 @@ function RegistryClone (ipfs, seqNumber) {
       seqFile: config.seqFile,
       handler: change
     }
+
     log('starting to follow registry with these options:')
-    log('   domain', config.domain)
-    log('   directory', config.dir)
-    log('   tmp', config.tmp)
+    log('   seqFile', conf.seqFile)
     follow(conf)
   }
 

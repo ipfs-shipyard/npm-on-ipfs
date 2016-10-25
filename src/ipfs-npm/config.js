@@ -17,7 +17,9 @@ module.exports = {
     host: '127.0.0.1'
   },
   writeLimit: 100,
-  registry: 'http://registry.npmjs.org/',
+  protocol: 'https',
+  registry: 'replicate.npmjs.org/registry',
+  skim: 'https://replicate.npmjs.com/registry',
   tmp: tmp,
   error: path.join(__dirname, '../defaults', '404.json'),
   seqFile: path.join(tmp, 'registry-mirror.seq'),

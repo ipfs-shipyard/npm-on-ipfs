@@ -20,21 +20,31 @@ var latestSeq = 'unknown'
 
 module.exports = RegistryClone
 
-function RegistryClone (ipfs, seqNumber) {
+function RegistryClone (ipfs, opts) {
   if (!(this instanceof RegistryClone)) {
-    return new RegistryClone(ipfs, seqNumber)
+    return new RegistryClone(ipfs, opts)
   }
 
   let bsConfig = config.blobStore
+  opts = opts || {}
 
-  if (ipfs) {
-    bsConfig = Object.assign(bsConfig, multiaddr(ipfs).nodeAddress())
+  if (opts.url) {
+    const parsed = multiaddr(opts.url).nodeAddress()
+    bsConfig = Object.assign(bsConfig, {
+      host: parsed.host,
+      port: parsed.port
+    })
   }
 
-  if (seqNumber) {
+  if (typeof opts.flush === 'boolean') {
+    bsConfig.flush = opts.flush
+  }
+
+  if (opts.seqNumber) {
     // TODO: what to do?
   }
 
+  log('starting ipfs blob store with', bsConfig)
   const bs = IBS(bsConfig)
   const v = new Verifier(bs)
   const mw = new ModuleWriter(bs, v)

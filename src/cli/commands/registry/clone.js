@@ -19,11 +19,19 @@ module.exports = Command.extend({
     },
     'log-level': {
       type: 'string'
+    },
+    flush: {
+      type: 'boolean',
+      default: true
     }
   },
 
-  run: function (seqNumber, ipfsApiUrl, logLevel) {
-    const ipfs = npmIPFS.ipfs()
-    npmIPFS.registry.clone(ipfs)
+  run: function (seqNumber, ipfsApiUrl, logLevel, flush) {
+    const ipfs = npmIPFS.ipfs({url: ipfsApiUrl})
+    npmIPFS.registry.clone(ipfs, {
+      seqNumber: seqNumber,
+      flush: flush,
+      url: ipfsApiUrl
+    })
   }
 })

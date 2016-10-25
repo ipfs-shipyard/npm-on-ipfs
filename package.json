@@ -41,7 +41,7 @@
     "debug": "^2.2.0",
     "dnscache": "0.0.4",
     "express": "^4.14.0",
-    "follow-registry": "github:dignifiedquire/follow-registry#fixes",
+    "follow-registry": "^3.1.0",
     "ipfs-api": "^9.0.0",
     "ipfs-blob-store": "^1.1.1",
     "lru-cache": "^4.0.1",

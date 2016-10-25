@@ -1,3 +1,5 @@
+'use strict'
+
 exports.config = require('./config.js')
 exports.daemon = require('./mirror-daemon')
 exports.ipfs = require('./ipfs-client.js')

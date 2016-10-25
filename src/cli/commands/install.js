@@ -1,3 +1,5 @@
+'use strict'
+
 const Command = require('ronin').Command
 // const npmIPFS = require('./../../ipfs-npm')
 // const config = npmIPFS.config

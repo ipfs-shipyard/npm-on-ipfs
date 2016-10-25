@@ -8,20 +8,18 @@
     "ipnpm": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha test/index.js",
-    "coverage": "istanbul cover --print both -- _mocha test/index.js",
-    "lint": "standard"
+    "lint": "aegir-lint",
+    "test": "aegir-test --env node",
+    "release": "aegir-release --env no-build",
+    "release-minor": "aegir-release --type minor --env no-build",
+    "release-major": "aegir-release --type major --env no-build",
+    "coverage": "aegir-coverage",
+    "coverage-publish": "aegir-coverage publish"
   },
   "pre-commit": [
     "lint",
     "test"
   ],
-  "standard": {
-    "ignore": [
-      "test/test-data/",
-      "test/t-run-*"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/diasdavid/ipfs-npm.git"
@@ -55,16 +53,14 @@
   },
   "devDependencies": {
     "abstract-blob-store": "^3.2.0",
+    "aegir": "^8.1.2",
     "assert": "^1.4.1",
     "chai": "^3.5.0",
     "ipfsd-ctl": "^0.16.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
     "mockery": "^2.0.0",
     "ncp": "^2.0.0",
     "pre-commit": "^1.1.3",
     "prettysize": "0.0.3",
-    "rimraf": "^2.5.4",
-    "standard": "^8.4.0"
+    "rimraf": "^2.5.4"
   }
 }

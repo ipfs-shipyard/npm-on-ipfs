@@ -1,3 +1,5 @@
+'use strict'
+
 // const async = require('async')
 const Command = require('ronin').Command
 const npmIPFS = require('./../../../ipfs-npm')
@@ -12,7 +14,7 @@ module.exports = Command.extend({
       type: 'number',
       default: undefined
     },
-    'ipfs': {
+    ipfs: {
       type: 'string'
     },
     'log-level': {

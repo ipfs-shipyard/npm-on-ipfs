@@ -1,3 +1,5 @@
+'use strict'
+
 const debug = require('debug')
 const path = require('path')
 const os = require('os')

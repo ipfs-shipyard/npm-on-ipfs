@@ -1,3 +1,5 @@
+'use strict'
+
 const ipfsAPI = require('ipfs-api')
 
 module.exports = ipfs

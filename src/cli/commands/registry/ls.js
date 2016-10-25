@@ -1,3 +1,5 @@
+'use strict'
+
 // const async = require('async')
 const Command = require('ronin').Command
 // const npmIPFS = require('./../../../ipfs-npm')

@@ -1,36 +1,41 @@
-var express = require('express')
-var lru = require('lru-cache')
-var url = require('url')
-var debug = require('debug')
-var log = debug('registry-mirror')
+'use strict'
+
+const express = require('express')
+const lru = require('lru-cache')
+const url = require('url')
+const debug = require('debug')
+const log = debug('registry-mirror')
 log.err = debug('registry-mirror:error')
 const ibs = require('ipfs-blob-store')
-var config = require('./config.js')
+const config = require('./config.js')
 
-exports = module.exports = serveNPM
+exports = module.exports = Mirror
 
-function serveNPM (callback) {
-  var self = this
-  var app = express()
-  var cache = lru()
+function Mirror (callback) {
+  if (!(this instanceof Mirror)) {
+    return new Mirror(callback)
+  }
 
-  var store = ibs(config.blobStore)
+  const app = express()
+  const cache = lru()
+
+  const store = ibs(config.blobStore)
 
   // serve up main index (no caching)
-  app.get('/', function (req, res) {
+  app.get('/', (req, res) => {
     res.type('json')
     store.createReadStream('/-/index.json').pipe(res)
   })
 
   // serve up tarballs
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     if (req.url.slice(-1) === '/') {
       return next() // ignore dirs
     }
 
-    var rs = store.createReadStream(req.url)
+    const rs = store.createReadStream(req.url)
 
-    rs.on('error', function (err) {
+    rs.on('error', (err) => {
       if (err) {}
       return next()
     })
@@ -38,50 +43,48 @@ function serveNPM (callback) {
   })
 
   // serve up metadata. doing it manually so we can modify JSON
-  app.use(function (req, res) {
-    var cached = cache.get(req.url)
+  app.use((req, res) => {
+    const cached = cache.get(req.url)
     if (cached) {
       res.type('json')
       res.send(cached)
       return
     }
 
-    var file = ''
-    var rs = store.createReadStream(req.url + '/index.json')
+    let file = ''
+    const rs = store.createReadStream(req.url + '/index.json')
 
-    rs.on('error', function (err) {
+    rs.on('error', (err) => {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
       return
     })
-    rs.on('data', function (chunk) {
+    rs.on('data', (chunk) => {
       file = file + chunk.toString('utf8')
     })
-    rs.on('end', function () {
-      var data = JSON.parse(file)
+    rs.on('end', () => {
+      const data = JSON.parse(file)
       if (data && data.versions && typeof data.versions === 'object') {
-        Object.keys(data.versions).forEach(function (versionNum) {
-          var version = data.versions[versionNum]
+        Object.keys(data.versions).forEach((versionNum) => {
+          const version = data.versions[versionNum]
           if (version.dist && version.dist.tarball && typeof version.dist.tarball === 'string') {
-            var parts = url.parse(version.dist.tarball)
-            version.dist.tarball = 'http://' + req.hostname + ':' + self.port + parts.path
+            const parts = url.parse(version.dist.tarball)
+            version.dist.tarball = 'http://' + req.hostname + ':' + this.port + parts.path
           }
         })
       }
-      var buf = new Buffer(JSON.stringify(data))
+      const buf = new Buffer(JSON.stringify(data))
       cache.set(req.url, buf)
       res.type('json')
       res.send(buf)
     })
   })
 
-  self.server = app.listen(config.mirror.port, config.mirror.host, function () {
-    var addr = self.server.address()
-    self.port = addr.port
+  this.server = app.listen(config.mirror.port, config.mirror.host, () => {
+    const addr = this.server.address()
+    this.port = addr.port
 
     console.log('mirror is running')
     console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
     callback()
   })
-
-  return self
 }

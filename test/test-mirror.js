@@ -1,14 +1,15 @@
-/* globals describe, it */
-
+/* eslint-env mocha */
 'use strict'
 
 const expect = require('chai').expect
-const mirror = require('../../src').mirror
 const wreck = require('wreck')
-const config = require('./../../src/config.js')
+const parallel = require('async/parallel')
+
+const config = require('../src/ipfs-npm/config.js')
+const mirror = require('../src/ipfs-npm').daemon
 
 describe('mirror', () => {
-  const url = 'http://127.0.0.1:' + 9040 + '/'
+  const url = 'http://127.0.0.1:9040/'
 
   it('start serving npm from IPFS', function (done) {
     this.timeout(50000)
@@ -22,18 +23,16 @@ describe('mirror', () => {
     // requests that cli makes:
     // npm http request GET http://localhost:9876/utf7
     // npm http fetch GET http://localhost:9876/utf7/-/utf7-1.0.0.tgz
-    wreck.get(url + 'utf7', function (err, res, payload) {
+    parallel([
+      (cb) => wreck.get(url + 'utf7', cb),
+      (cb) => wreck.get(url + 'utf7/index.json', cb),
+      (cb) => wreck.get(url + 'utf7/-/utf7-1.0.0.tgz', cb)
+    ], (err, res) => {
       expect(err).to.not.exist
-      expect(res.statusCode).to.equal(200)
-      wreck.get(url + 'utf7/index.json', function (err, res, payload) {
-        expect(err).to.not.exist
-        expect(res.statusCode).to.equal(200)
-        wreck.get(url + 'utf7/-/utf7-1.0.0.tgz', function (err, res, payload) {
-          expect(err).to.not.exist
-          expect(res.statusCode).to.equal(200)
-          done()
-        })
+      res.forEach((r) => {
+        expect(r[0].statusCode).to.equal(200)
       })
+      done()
     })
   })
 })

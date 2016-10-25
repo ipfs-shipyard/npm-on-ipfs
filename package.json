@@ -16,12 +16,21 @@
     "lint",
     "test"
   ],
+  "standard": {
+    "ignore": [
+      "test/test-data/",
+      "test/t-run-*"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/diasdavid/ipfs-npm.git"
   },
   "keywords": [
-    "IPFS"
+    "IPFS",
+    "npm",
+    "npm-on-ipfs",
+    "libp2p"
   ],
   "author": "David Dias <daviddias@ipfs.io>",
   "license": "MIT",

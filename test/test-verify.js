@@ -1,4 +1,4 @@
-/* globals describe, before, after, it, beforeEach */
+/* eslint-env mocha */
 
 const assert = require('assert')
 const mockery = require('mockery')
@@ -24,7 +24,7 @@ var thisFileHash
 var memblob = require('abstract-blob-store')()
 
 describe('verify', () => {
-  before((done) => {
+  before(() => {
     mockery.registerMock('./ibs', memblob)
 
     mockery.enable({
@@ -32,22 +32,22 @@ describe('verify', () => {
       warnOnReplace: false,
       warnOnUnregistered: false
     })
-    verify = require('../../src/npm-pipe-ipfs/verify')
+    const Verifier = require('../src/ipfs-npm/registry-clone/verifier')
+    verify = Verifier(memblob)
     cacheVerify = verify.verify
-    done()
-  })
-  after((done) => {
-    mockery.deregisterAll()
-    mockery.disable()
-    done()
   })
 
-  it('should export an object with methods', (done) => {
+  after(() => {
+    mockery.deregisterAll()
+    mockery.disable()
+  })
+
+  it('should export an object with methods', () => {
+    console.log('testing')
     assert.equal(typeof verify, 'object')
     ;['verify', 'update', 'report', 'counter'].forEach((name) => {
       assert.equal(typeof verify[name], 'function')
     })
-    done()
   })
 
   describe('verify method', () => {
@@ -63,6 +63,7 @@ describe('verify', () => {
         })
         .pipe(shasum)
     })
+
     beforeEach(clearData)
 
     it("checks hash and does't call update", (done) => {

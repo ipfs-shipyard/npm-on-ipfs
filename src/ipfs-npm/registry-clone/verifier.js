@@ -17,8 +17,8 @@ function Verifier (bs) {
   const counter = {}
   const report = {}
 
-  this.report = () => { return report }
-  this.counter = () => { return counter }
+  this.report = () => report
+  this.counter = () => counter
 
   // This is the function where the tarball gets downloaded and stored
   this.update = (info, callback) => {

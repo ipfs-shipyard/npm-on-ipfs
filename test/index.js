@@ -1,42 +1,45 @@
-/* globals describe, before, after */
+/* eslint-env mocha */
 'use strict'
 
-const expect = require('chai').expect
 const ipfsd = require('ipfsd-ctl')
 const ncp = require('ncp')
 const rimraf = require('rimraf')
+const waterfall = require('async/waterfall')
+const series = require('async/series')
+
+ncp.limit = 16
 
 describe('core', () => {
   const repoExample = process.cwd() + '/test/test-data/repo'
   const repoTests = process.cwd() + '/test/t-run-' + Date.now()
+  let node
 
   before(function (done) {
     this.timeout(500000)
-    ncp(repoExample, repoTests, (err) => {
-      expect(err).to.not.exist
-      ipfsd.disposable({
+
+    waterfall([
+      (cb) => ncp(repoExample, repoTests, cb),
+      (cb) => ipfsd.disposable({
         repoPath: repoTests,
         init: false
-      }, (err, node) => {
-        expect(err).to.not.exist
-        node.startDaemon((err) => {
-          expect(err).to.not.exist
-          done()
-        })
-      })
-    })
+      }, cb),
+      (_node, cb) => {
+        node = _node
+        node.startDaemon(cb)
+      }
+    ], done)
   })
 
   after(function (done) {
     this.timeout(50000)
-    rimraf(repoTests, err => {
-      expect(err).to.equal(null)
-      done()
-    })
+    series([
+      // TODO: figure out why ipfsd-ctl throws here
+      // (cb) => node.stopDaemon(cb),
+      (cb) => rimraf(repoTests, cb)
+    ], done)
   })
 
-  // require('./test-mirror.js')
-  // require('./test-files.js')
-  // require('./test-util.js')
-  // require('./test-verify.js')
+  require('./test-mirror')
+  require('./test-module-writer')
+  require('./test-verify')
 })

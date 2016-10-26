@@ -20,7 +20,7 @@ module.exports = {
   },
   writeLimit: 100,
   protocol: 'https',
-  registry: 'replicate.npmjs.org/registry',
+  registry: 'registry.npmjs.com',
   skim: 'https://replicate.npmjs.com/registry',
   tmp: tmp,
   error: path.join(__dirname, '../defaults', '404.json'),

@@ -8,10 +8,16 @@ const config = require('./config.js')
 
 exports = module.exports = Mirror
 
-function Mirror (callback) {
+function Mirror (opts, callback) {
   if (!(this instanceof Mirror)) {
-    return new Mirror(callback)
+    return new Mirror(opts, callback)
   }
+  if (typeof opts === 'function') {
+    callback = opts
+    opts = {}
+  }
+
+  const mirrorConfig = Object.assign(config.mirror, opts)
 
   const app = express()
   const cache = lru()
@@ -76,12 +82,10 @@ function Mirror (callback) {
     })
   })
 
-  this.server = app.listen(config.mirror.port, config.mirror.host, () => {
+  this.server = app.listen(mirrorConfig.port, mirrorConfig.host, () => {
     const addr = this.server.address()
     this.port = addr.port
 
-    console.log('mirror is running')
-    console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
-    callback()
+    callback(null, addr)
   })
 }

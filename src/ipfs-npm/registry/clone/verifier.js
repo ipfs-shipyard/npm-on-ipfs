@@ -4,6 +4,8 @@ const Wreck = require('wreck')
 const timethat = require('timethat').calc
 const url = require('url')
 const pretty = require('prettysize')
+const sha = require('sha')
+const once = require('once')
 
 const config = require('../../config')
 const log = config.log
@@ -44,7 +46,6 @@ function Verifier (bs) {
       log('[' + counter[info.path] + '] downloading', u)
       Wreck.get(u, opts, (err, res, payload) => {
         if (err) {
-          log(' [' + counter[info.path] + '] failed to download', info.tarball)
           report.error = err
           report[info.tarball] = info
           delete counter[info.path]
@@ -63,15 +64,13 @@ function Verifier (bs) {
         info.http = res.statusCode
 
         if (res.statusCode === 404) {
-          log(' [' + counter[info.path] + '] failed to download with a 404', info.tarball)
-
           report[info.tarball] = info
           delete counter[info.path]
           writer.end()
-          return callback(new Error('failed to download ' + info.tarball))
+          return callback(new Error('failed to download with a 404' + info.tarball))
         }
 
-        log('[' + counter[info.path] + '] finished downloading', url, 'in', timethat(startDL))
+        log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
         process.nextTick(() => this.verify(info, callback))
 
         res.pipe(writer)
@@ -101,8 +100,10 @@ function Verifier (bs) {
 
       shasumCheck(info, (err) => {
         if (err) {
-          this.update(info, callback)
+          log.err('shasum failed for %s: %s', info.tarball, err)
+          return this.update(info, callback)
         }
+
         delete counter[info.path]
         callback(null, info)
       })
@@ -111,6 +112,18 @@ function Verifier (bs) {
 
   // TODO shasum check was never in place, needs to be implemented
   function shasumCheck (info, callback) {
-    callback()
+    callback = once(callback)
+
+    const shasum = info.shasum
+    if (!shasum) {
+      log.error('Missing shasum for %s', info.tarball)
+      return callback()
+    }
+    log('shacheck %s: %s', info.tarball, shasum)
+
+    bs.createReadStream(info.tarball)
+      .pipe(sha.stream(shasum))
+      .once('error', callback)
+      .once('end', callback)
   }
 }

@@ -140,7 +140,9 @@ function RegistryClone (ipfs, opts) {
     updateLatestSeq()
     const conf = {
       seqFile: config.seqFile,
-      handler: change
+      handler: change,
+      registry: config.registry,
+      skim: config.skim
     }
 
     log('starting to follow registry with these options:')

@@ -26,7 +26,7 @@ function Verifier (bs) {
   // This is the function where the tarball gets downloaded and stored
   this.update = (info, callback) => {
     callback = once(callback)
-
+    log('updating [%s]', counter[info.path], info.path, info.tarball, info.shasum)
     process.nextTick(() => {
       const writer = bs.createWriteStream(info.tarball)
       counter[info.path] = counter[info.path] || 0

@@ -1,15 +1,16 @@
 'use strict'
 
 // const async = require('async')
-const Command = require('ronin').Command
 // const npmIPFS = require('./../../../ipfs-npm')
 // const config = npmIPFS.config
 // const log = config.log
 
-module.exports = Command.extend({
-  desc: 'Check modules available in the mirror',
+module.exports = {
+  id: 'ls',
 
-  options: {
+  describe: 'list modules available in the mirror',
+
+  builder: {
     update: {
       type: 'boolean',
       alias: 'u',
@@ -17,8 +18,8 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (update) {
-    console.log('not implemented yet')
+  handler (argv) {
+    throw new Error('not implemented yet')
     /*
     const series = []
     if (update) {
@@ -40,4 +41,4 @@ module.exports = Command.extend({
     })
     */
   }
-})
+}

@@ -1,17 +1,23 @@
 'use strict'
 
-const Command = require('ronin').Command
 // const npmIPFS = require('./../../../ipfs-npm')
 // const config = npmIPFS.config
 // const log = config.log
 
-module.exports = Command.extend({
-  desc: 'Publish an IPNS record with your current npm list',
+module.exports = {
+  id: 'publish',
 
-  options: {},
+  describe: 'publish an IPNS record with your current npm list',
 
-  run: function () {
-    console.log('Not Implemented yet')
+  builder: {
+    ipfs: {
+      describe: 'Select an IPFS daemon, e.g. /ip4/127.0.0.1/tcp/5001',
+      type: 'string'
+    }
+  },
+
+  handler (argv) {
+    throw new Error('Not Implemented yet')
     // npmIPFS.registryCache.publish()
   }
-})
+}

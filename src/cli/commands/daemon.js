@@ -1,14 +1,15 @@
 'use strict'
 
-const Command = require('ronin').Command
 // const npmIPFS = require('./../../ipfs-npm')
 // const config = npmIPFS.config
 // const log = config.log
 
-module.exports = Command.extend({
-  desc: 'creates a registry endpoint for the npm cli to interact with',
+module.exports = {
+  id: 'daemon',
 
-  options: {
+  describe: 'create a registry endpoint for the npm cli to interact with',
+
+  builder: {
     port: {
       type: 'number'
     },
@@ -18,8 +19,8 @@ module.exports = Command.extend({
     }
   },
 
-  run: function (port, host, logRoot) {
-    console.log('Not implemented yet')
+  handler (argv) {
+    throw new Error('Not implemented yet')
     /*
     if (port) {
       config.mirror.port = port
@@ -35,4 +36,4 @@ module.exports = Command.extend({
     })
     */
   }
-})
+}

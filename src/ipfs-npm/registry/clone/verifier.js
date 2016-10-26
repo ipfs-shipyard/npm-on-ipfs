@@ -28,7 +28,14 @@ function Verifier (bs) {
     callback = once(callback)
     log('updating [%s]', counter[info.path], info.path, info.tarball, info.shasum)
     process.nextTick(() => {
-      const writer = bs.createWriteStream(info.tarball)
+      const writer = bs.createWriteStream(info.tarball, (err) => {
+        if (err) {
+          return callback(new Error('failed to save to ipfs'))
+        }
+
+        log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
+        process.nextTick(() => this.verify(info, callback))
+      })
       counter[info.path] = counter[info.path] || 0
       counter[info.path]++
 
@@ -74,10 +81,6 @@ function Verifier (bs) {
           }
         })
         .pipe(writer)
-        .once('finish', () => {
-          log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
-          process.nextTick(() => this.verify(info, callback))
-        })
     })
   }
 

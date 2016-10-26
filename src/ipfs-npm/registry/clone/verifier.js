@@ -131,9 +131,11 @@ function Verifier (bs) {
     }
     log('shacheck %s: %s', info.tarball, shasum)
 
-    bs.createReadStream(info.tarball)
-      .pipe(sha.stream(shasum))
-      .once('error', callback)
-      .once('finish', callback)
+    process.nextTick(() => {
+      bs.createReadStream(info.tarball)
+        .pipe(sha.stream(shasum))
+        .once('error', callback)
+        .once('finish', callback)
+    })
   }
 }

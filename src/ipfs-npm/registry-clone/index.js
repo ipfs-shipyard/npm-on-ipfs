@@ -14,7 +14,7 @@ const series = require('async/series')
 const ModuleWriter = require('./module-writer')
 const Verifier = require('./verifier')
 
-var latestSeq = 'unknown'
+let latestSeq = 'unknown'
 // const GLOBAL_INDEX = '-/index.json'
 // const NOT_FOUND = '-/404.json'
 
@@ -88,7 +88,7 @@ function RegistryClone (ipfs, opts) {
         log.err(err)
         return callback()
       }
-      var num = Object.keys(json.versions).length
+      const num = Object.keys(json.versions).length
       /* istanbul ignore next just a log line with logic */
       console.log('change: [' + data.seq + '/' + latestSeq + '] finished', num, 'version' + ((num > 1) ? 's' : '') + ' of', json.name, 'in', timethat(changeStart))
       callback()

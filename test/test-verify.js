@@ -19,10 +19,10 @@ function stubUpdate () {
   }
 }
 
-var verify
-var cacheVerify
-var thisFileHash
-var memblob = require('abstract-blob-store')()
+let verify
+let cacheVerify
+let thisFileHash
+const memblob = require('abstract-blob-store')()
 
 describe('verify', () => {
   before(() => {
@@ -44,7 +44,6 @@ describe('verify', () => {
   })
 
   it('should export an object with methods', () => {
-    console.log('testing')
     assert.equal(typeof verify, 'object')
     ;['verify', 'update', 'report', 'counter'].forEach((name) => {
       assert.equal(typeof verify[name], 'function')

@@ -1,10 +1,8 @@
 'use strict'
 
-const debug = require('debug')
-const log = debug('registry-mirror')
 const async = require('async')
-log.err = debug('registry-mirror:error')
 const config = require('./config')
+const log = config.log
 const api = config.apiCtl
 
 exports = module.exports

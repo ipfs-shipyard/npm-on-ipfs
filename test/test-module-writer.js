@@ -99,7 +99,7 @@ describe('module-writer', () => {
 
     it('success', (done) => {
       memblob.data = {}
-      var info = {
+      const info = {
         json: {name: 'foopackage'}
       }
       writer.putJSON(info, (err) => {

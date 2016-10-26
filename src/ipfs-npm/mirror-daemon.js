@@ -3,9 +3,6 @@
 const express = require('express')
 const lru = require('lru-cache')
 const url = require('url')
-const debug = require('debug')
-const log = debug('registry-mirror')
-log.err = debug('registry-mirror:error')
 const ibs = require('ipfs-blob-store')
 const config = require('./config.js')
 

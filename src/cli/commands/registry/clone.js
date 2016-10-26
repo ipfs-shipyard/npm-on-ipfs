@@ -32,11 +32,16 @@ module.exports = {
   },
 
   handler (argv) {
-    const ipfs = npmIPFS.ipfs({url: argv.ipfs})
-    npmIPFS.registry.clone(ipfs, {
-      seqNumber: argv['set-number'],
-      flush: argv.flush,
-      url: argv.ipfs
+    npmIPFS.ipfs({url: argv.ipfs}, (err, ipfs) => {
+      if (err) {
+        console.error(err.message)
+        process.exit(1)
+      }
+      npmIPFS.registry.clone(ipfs, {
+        seqNumber: argv['set-number'],
+        flush: argv.flush,
+        url: argv.ipfs
+      })
     })
   }
 }

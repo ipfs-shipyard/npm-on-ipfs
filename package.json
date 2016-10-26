@@ -45,6 +45,7 @@
     "ipfs-api": "^9.0.0",
     "ipfs-blob-store": "^1.1.1",
     "lru-cache": "^4.0.1",
+    "multiaddr": "^2.0.3",
     "once": "^1.4.0",
     "patch-package-json": "0.0.4",
     "read-pkg-up": "^2.0.0",

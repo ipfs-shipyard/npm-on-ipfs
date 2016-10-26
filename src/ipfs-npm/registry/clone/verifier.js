@@ -36,9 +36,10 @@ function Verifier (bs) {
         log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
         process.nextTick(() => this.verify(info, callback))
       })
+      log('counter', info.path, counter[info.path])
       counter[info.path] = counter[info.path] || 0
       counter[info.path]++
-
+      log('counter', info.path, counter[info.path])
       const startDL = new Date()
       const u = url.format({
         protocol: config.protocol,
@@ -58,6 +59,7 @@ function Verifier (bs) {
         .once('error', (err) => {
           report.error = err
           report[info.tarball] = info
+          log('counter del', info.path, counter[info.path])
           delete counter[info.path]
 
           // in case end has already been called by the error handler
@@ -75,6 +77,7 @@ function Verifier (bs) {
 
           if (res.statusCode === 404) {
             report[info.tarball] = info
+            log('counter del', info.path, counter[info.path])
             delete counter[info.path]
             writer.end()
             return callback(new Error('failed to download with a 404' + info.tarball))
@@ -99,6 +102,7 @@ function Verifier (bs) {
       if (counter[info.path] >= 4) {
         report[info.tarball] = info
         log(' [' + counter[info.path] + '] file appears to be corrupt, skipping..', info.tarball)
+        log('counter del', info.path, counter[info.path])
         delete counter[info.path]
         // bail, the tarball is corrupt
         return callback(null, info)
@@ -109,7 +113,7 @@ function Verifier (bs) {
           log.err('shasum failed for %s: %s', info.tarball, err)
           return this.update(info, callback)
         }
-
+        log('counter del', info.path, counter[info.path])
         delete counter[info.path]
         callback(null, info)
       })

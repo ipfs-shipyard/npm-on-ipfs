@@ -48,11 +48,11 @@
     "once": "^1.4.0",
     "patch-package-json": "0.0.4",
     "read-pkg-up": "^2.0.0",
+    "request": "^2.76.0",
     "sha": "^2.0.1",
     "st": "^1.2.0",
     "timethat": "0.0.3",
     "update-notifier": "^1.0.2",
-    "wreck": "^10.0.0",
     "yargs": "^6.3.0"
   },
   "devDependencies": {

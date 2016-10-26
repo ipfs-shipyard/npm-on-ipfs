@@ -1,6 +1,6 @@
 'use strict'
 
-const Wreck = require('wreck')
+const request = require('request')
 const timethat = require('timethat').calc
 const url = require('url')
 const pretty = require('prettysize')
@@ -25,6 +25,8 @@ function Verifier (bs) {
 
   // This is the function where the tarball gets downloaded and stored
   this.update = (info, callback) => {
+    callback = once(callback)
+
     process.nextTick(() => {
       const writer = bs.createWriteStream(info.tarball)
       counter[info.path] = counter[info.path] || 0
@@ -38,14 +40,15 @@ function Verifier (bs) {
       })
 
       const opts = {
+        url: u,
         headers: {
           'user-agent': 'ipfs-npm mirror worker'
         }
       }
 
       log('[' + counter[info.path] + '] downloading', u)
-      Wreck.get(u, opts, (err, res, payload) => {
-        if (err) {
+      request(opts)
+        .once('error', (err) => {
           report.error = err
           report[info.tarball] = info
           delete counter[info.path]
@@ -56,25 +59,25 @@ function Verifier (bs) {
             writer.end()
           } catch (err) {}
 
-          return callback(new Error('failed to download ' + info.tarball))
-        }
+          callback(new Error('failed to download ' + info.tarball))
+        })
+        .once('response', (res) => {
+          log('[' + counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
 
-        log('[' + counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
+          info.http = res.statusCode
 
-        info.http = res.statusCode
-
-        if (res.statusCode === 404) {
-          report[info.tarball] = info
-          delete counter[info.path]
-          writer.end()
-          return callback(new Error('failed to download with a 404' + info.tarball))
-        }
-
-        log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
-        process.nextTick(() => this.verify(info, callback))
-
-        res.pipe(writer)
-      })
+          if (res.statusCode === 404) {
+            report[info.tarball] = info
+            delete counter[info.path]
+            writer.end()
+            return callback(new Error('failed to download with a 404' + info.tarball))
+          }
+        })
+        .pipe(writer)
+        .once('finish', () => {
+          log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
+          process.nextTick(() => this.verify(info, callback))
+        })
     })
   }
 
@@ -124,6 +127,6 @@ function Verifier (bs) {
     bs.createReadStream(info.tarball)
       .pipe(sha.stream(shasum))
       .once('error', callback)
-      .once('end', callback)
+      .once('finish', callback)
   }
 }

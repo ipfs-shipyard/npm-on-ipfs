@@ -5,7 +5,7 @@ const follow = require('follow-registry')
 const patch = require('patch-package-json')
 const fs = require('graceful-fs')
 const timethat = require('timethat').calc
-const Wreck = require('wreck')
+const request = require('request')
 const IBS = require('ipfs-blob-store')
 const multiaddr = require('multiaddr')
 const series = require('async/series')
@@ -114,14 +114,15 @@ function RegistryClone (ipfs, opts) {
   function updateLatestSeq () {
     const timer = function () {
       const opts = {
+        url: config.skim,
         headers: {
           'user-agent': 'ipfs-npm mirror worker'
         }
       }
 
-      Wreck.get(config.skim, opts, (err, res, payload) => {
-        if (err) {
-          return log(err)
+      request(opts, (err, res, payload) => {
+        if (err || res.statusCode > 400) {
+          return log.err(err || `Response: %{res.statusCode}`)
         }
         try {
           latestSeq = JSON.parse(payload).update_seq

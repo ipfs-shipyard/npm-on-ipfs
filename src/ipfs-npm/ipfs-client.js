@@ -23,7 +23,7 @@ function ipfs (options, callback) {
       return callback(new Error(`Failed to connect to a daemon on "${options.url}"`))
     }
 
-    console.log('Connected to a daemon on "%s" with version "%s"', options.url, version)
+    console.log('Connected to a daemon on "%s" with version "%s"', options.url, version.version)
     callback(null, api)
   })
 }

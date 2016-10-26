@@ -22,7 +22,7 @@ describe('module-writer', () => {
       }
     }
 
-    mockery.registerMock('./config.js', {
+    mockery.registerMock('../config.js', {
       dir: __dirname,
       limit: 2,
       blobstore: memblob
@@ -34,7 +34,7 @@ describe('module-writer', () => {
       warnOnUnregistered: false
     })
 
-    writer = require('../src/ipfs-npm/registry-clone/module-writer')(memblob, verifier)
+    writer = require('../src/ipfs-npm/registry/clone/module-writer')(memblob, verifier)
   })
 
   after(() => {

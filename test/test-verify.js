@@ -26,14 +26,12 @@ const memblob = require('abstract-blob-store')()
 
 describe('verify', () => {
   before(() => {
-    mockery.registerMock('./ibs', memblob)
-
     mockery.enable({
       useCleanCache: true,
       warnOnReplace: false,
       warnOnUnregistered: false
     })
-    const Verifier = require('../src/ipfs-npm/registry-clone/verifier')
+    const Verifier = require('../src/ipfs-npm/registry/clone/verifier')
     verify = Verifier(memblob)
     cacheVerify = verify.verify
   })

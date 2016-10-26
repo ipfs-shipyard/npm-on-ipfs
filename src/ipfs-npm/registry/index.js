@@ -1,7 +1,7 @@
 'use strict'
 
 const async = require('async')
-const config = require('./config')
+const config = require('../config')
 const log = config.log
 const api = config.apiCtl
 

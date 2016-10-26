@@ -1,10 +1,11 @@
 'use strict'
 
 const Wreck = require('wreck')
-const config = require('./../config')
 const timethat = require('timethat').calc
 const url = require('url')
 const pretty = require('prettysize')
+
+const config = require('../../config')
 const log = config.log
 
 module.exports = Verifier

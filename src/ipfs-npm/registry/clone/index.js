@@ -1,7 +1,5 @@
 'use strict'
 
-const config = require('../config')
-const log = config.log
 require('dnscache')({ enable: true })
 const follow = require('follow-registry')
 const patch = require('patch-package-json')
@@ -11,8 +9,11 @@ const Wreck = require('wreck')
 const IBS = require('ipfs-blob-store')
 const multiaddr = require('multiaddr')
 const series = require('async/series')
+
 const ModuleWriter = require('./module-writer')
 const Verifier = require('./verifier')
+const config = require('../../config')
+const log = config.log
 
 let latestSeq = 'unknown'
 // const GLOBAL_INDEX = '-/index.json'

@@ -26,11 +26,32 @@ function Verifier (bs) {
   // This is the function where the tarball gets downloaded and stored
   this.update = (info, callback) => {
     callback = once(callback)
+    if (!info.path || !info.tarball || !info.shasum) {
+      return callback(new Error('insufficient data'))
+    }
+
     log('updating [%s]', counter[info.path], info.path, info.tarball, info.shasum)
+
+    const errorHandler = (msg, writer) => {
+      (err) => {
+        report.error = err
+        report[info.tarball] = info
+
+        delete counter[info.path]
+
+        // in case end has already been called by the error handler
+        // sometimes it happens :(
+        try {
+          writer.end()
+        } catch (err) {}
+
+        callback(new Error('failed to download ' + info.tarball))
+      }
+    }
     process.nextTick(() => {
       const writer = bs.createWriteStream(info.tarball, (err) => {
         if (err) {
-          return callback(new Error('failed to save to ipfs'))
+          return errorHandler('failed to save to ipfs', writer)(err)
         }
         // already called back
         if (counter[info.path] === undefined) {
@@ -59,20 +80,7 @@ function Verifier (bs) {
 
       log('[' + counter[info.path] + '] downloading', u)
       request(opts)
-        .once('error', (err) => {
-          report.error = err
-          report[info.tarball] = info
-
-          delete counter[info.path]
-
-          // in case end has already been called by the error handler
-          // sometimes it happens :(
-          try {
-            writer.end()
-          } catch (err) {}
-
-          callback(new Error('failed to download ' + info.tarball))
-        })
+        .once('error', errorHandler('failed to download', writer))
         .once('response', (res) => {
           log('[' + counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
 
@@ -85,6 +93,8 @@ function Verifier (bs) {
             return callback(new Error('failed to download with a 404' + info.tarball))
           }
         })
+        .pipe(sha.stream(info.shasum))
+        .once('error', errorHandler('failed to verify shasum', writer))
         .pipe(writer)
     })
   }
@@ -109,33 +119,31 @@ function Verifier (bs) {
         return callback(null, info)
       }
 
-      shasumCheck(info, (err) => {
-        if (err) {
-          log.err('shasum failed for %s: %s', info.tarball, err)
-          return this.update(info, callback)
-        }
-        delete counter[info.path]
-        callback(null, info)
-      })
+      // shasumCheck(info, (err) => {
+      //   if (err) {
+      //     log.err('shasum failed for %s: %s', info.tarball, err)
+      //     return this.update(info, callback)
+      //   }
+      delete counter[info.path]
+      callback(null, info)
+      // })
     })
   }
 
-  // TODO shasum check was never in place, needs to be implemented
-  function shasumCheck (info, callback) {
-    callback = once(callback)
+  // function shasumCheck (info, callback) {
+  //   callback = once(callback)
 
-    const shasum = info.shasum
-    if (!shasum) {
-      log.error('Missing shasum for %s', info.tarball)
-      return callback()
-    }
-    log('shacheck %s: %s', info.tarball, shasum)
+  //   const shasum = info.shasum
+  //   if (!shasum) {
+  //     log.error('Missing shasum for %s', info.tarball)
+  //     return callback()
+  //   }
+  //   log('shacheck %s: %s', info.tarball, shasum)
 
-    process.nextTick(() => {
-      bs.createReadStream(info.tarball)
-        .pipe(sha.stream(shasum))
-        .once('error', callback)
-        .once('finish', callback)
-    })
-  }
+  //   // TODO: this hangs sometimes, why?
+  //   bs.createReadStream(info.tarball)
+  //     .pipe(sha.stream(shasum))
+  //     .once('error', callback)
+  //     .once('finish', callback)
+  // }
 }

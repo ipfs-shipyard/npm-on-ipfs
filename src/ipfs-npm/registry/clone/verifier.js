@@ -32,22 +32,21 @@ function Verifier (bs) {
 
     log('updating [%s]', counter[info.path], info.path, info.tarball, info.shasum)
 
-    const errorHandler = (msg, writer) => {
-      (err) => {
-        report.error = err
-        report[info.tarball] = info
+    const errorHandler = (msg, writer) => (err) => {
+      report.error = err
+      report[info.tarball] = info
 
-        delete counter[info.path]
+      delete counter[info.path]
 
-        // in case end has already been called by the error handler
-        // sometimes it happens :(
-        try {
-          writer.end()
-        } catch (err) {}
+      // in case end has already been called by the error handler
+      // sometimes it happens :(
+      try {
+        writer.end()
+      } catch (err) {}
 
-        callback(new Error('failed to download ' + info.tarball))
-      }
+      callback(new Error('failed to download ' + info.tarball))
     }
+
     process.nextTick(() => {
       const writer = bs.createWriteStream(info.tarball, (err) => {
         if (err) {

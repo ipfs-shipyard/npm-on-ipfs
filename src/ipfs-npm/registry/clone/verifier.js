@@ -79,8 +79,8 @@ function Verifier (bs) {
 
       log('[' + counter[info.path] + '] downloading', u)
       request(opts)
-        .once('error', errorHandler('failed to download', writer))
-        .once('response', (res) => {
+        .on('error', errorHandler('failed to download', writer))
+        .on('response', (res) => {
           log('[' + counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
 
           info.http = res.statusCode
@@ -93,8 +93,9 @@ function Verifier (bs) {
           }
         })
         .pipe(sha.stream(info.shasum))
-        .once('error', errorHandler('failed to verify shasum', writer))
+        .on('error', errorHandler('failed to verify shasum', writer))
         .pipe(writer)
+        .on('error', errorHandler('failed to write', writer))
     })
   }
 

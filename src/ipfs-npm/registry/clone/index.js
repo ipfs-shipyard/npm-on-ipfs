@@ -32,7 +32,7 @@ function RegistryClone (ipfs, opts) {
   if (opts.url) {
     const parsed = multiaddr(opts.url).nodeAddress()
     bsConfig = Object.assign(bsConfig, {
-      host: parsed.host,
+      host: parsed.address,
       port: parsed.port
     })
   }

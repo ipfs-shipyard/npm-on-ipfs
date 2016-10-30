@@ -40,6 +40,4 @@ describe('core', () => {
   })
 
   require('./test-mirror')
-  require('./test-module-writer')
-  require('./test-verify')
 })

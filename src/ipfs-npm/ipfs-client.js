@@ -19,7 +19,6 @@ function ipfs (options, callback) {
 
   api.version((err, version) => {
     if (err) {
-      console.error()
       return callback(new Error(`Failed to connect to a daemon on "${options.url}"`))
     }
 

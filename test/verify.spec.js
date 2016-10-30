@@ -1,7 +1,11 @@
 /* eslint-env mocha */
 'use strict'
 
-const assert = require('assert')
+const chai = require('chai')
+chai.use(require('sinon-chai'))
+const sinon = require('sinon')
+
+const expect = chai.expect
 const mockery = require('mockery')
 const crypto = require('crypto')
 const fs = require('fs')
@@ -11,20 +15,11 @@ function clearData (done) {
   done()
 }
 
-function stubUpdate () {
-  verify.verify = cacheVerify
-  verify.update = (info, callback) => {
-    info.updateCalled = true
-    callback(null, info)
-  }
-}
-
-let verify
-let cacheVerify
-let thisFileHash
 const memblob = require('abstract-blob-store')()
 
 describe('verify', () => {
+  let verifier
+
   before(() => {
     mockery.enable({
       useCleanCache: true,
@@ -32,8 +27,7 @@ describe('verify', () => {
       warnOnUnregistered: false
     })
     const Verifier = require('../src/ipfs-npm/registry/clone/verifier')
-    verify = Verifier(memblob)
-    cacheVerify = verify.verify
+    verifier = new Verifier(memblob)
   })
 
   after(() => {
@@ -41,22 +35,14 @@ describe('verify', () => {
     mockery.disable()
   })
 
-  it('should export an object with methods', () => {
-    assert.equal(typeof verify, 'object')
-    ;['verify', 'update', 'report', 'counter'].forEach((name) => {
-      assert.equal(typeof verify[name], 'function')
-    })
-  })
-
-  describe('verify method', () => {
-    before(function (done) {
-      stubUpdate()
+  describe('.verify', () => {
+    before((done) => {
+      sinon.spy(verifier, 'update')
       const shasum = crypto.createHash('sha1')
       shasum.setEncoding('hex')
       fs.createReadStream(__filename)
         .on('end', function () {
           shasum.end()
-          thisFileHash = shasum.read()
           done()
         })
         .pipe(shasum)
@@ -70,22 +56,24 @@ describe('verify', () => {
         tarball: 'existing.tgz',
         shasum: '3da541559918a808c2402bba5012f6c60b27661c'
       }
-      verify.verify(info, (err, d) => {
-        assert.ifError(err)
-        assert(!d.updateCalled)
+
+      verifier.verify(info, (err, d) => {
+        expect(err).to.not.exist
+        expect(verifier.update).to.not.have.been.called
         done()
       })
     })
 
     it('with non-existent tarball, update was called', (done) => {
       const info = {
-        path: '/the/path/2',
-        tarball: 'notarealfile.tgz',
-        shasum: thisFileHash
+        path: '/module-best-practices/-/module-best-practices-1.1.23.tgz',
+        tarball: 'module-best-practices-1.1.23.tgz',
+        shasum: 'e72aadf604d52983adaa087f7bf3371ef6bd6ac1'
       }
-      verify.verify(info, (err, d) => {
-        assert.ifError(err)
-        assert(d.updateCalled)
+
+      verifier.verify(info, (err, d) => {
+        expect(err).to.not.exist
+        expect(verifier.update).to.have.been.calledOnce
         done()
       })
     })

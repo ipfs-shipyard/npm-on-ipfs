@@ -10,33 +10,27 @@ const once = require('once')
 const config = require('../../config')
 const log = config.log
 
-module.exports = Verifier
-
-function Verifier (bs) {
-  if (!(this instanceof Verifier)) {
-    return new Verifier(bs)
+module.exports = class Verifier {
+  constructor (bs) {
+    this.store = bs
+    this.counter = {}
+    this.report = {}
   }
 
-  const counter = {}
-  const report = {}
-
-  this.report = () => report
-  this.counter = () => counter
-
   // This is the function where the tarball gets downloaded and stored
-  this.update = (info, callback) => {
+  update (info, callback) {
     callback = once(callback)
     if (!info.path || !info.tarball || !info.shasum) {
       return callback(new Error('insufficient data'))
     }
 
-    log('updating [%s]', counter[info.path], info.path, info.tarball, info.shasum)
+    log('updating [%s]', this.counter[info.path], info.path, info.tarball, info.shasum)
 
     const errorHandler = (msg, writer) => (err) => {
-      report.error = err
-      report[info.tarball] = info
+      this.report.error = err
+      this.report[info.tarball] = info
 
-      delete counter[info.path]
+      delete this.counter[info.path]
 
       // in case end has already been called by the error handler
       // sometimes it happens :(
@@ -44,24 +38,24 @@ function Verifier (bs) {
         writer.end()
       } catch (err) {}
 
-      callback(new Error('failed to download ' + info.tarball))
+      callback(new Error(msg + ' ' + info.tarball))
     }
 
     process.nextTick(() => {
-      const writer = bs.createWriteStream(info.tarball, (err) => {
+      const writer = this.store.createWriteStream(info.tarball, (err) => {
         if (err) {
           return errorHandler('failed to save to ipfs', writer)(err)
         }
         // already called back
-        if (counter[info.path] === undefined) {
+        if (this.counter[info.path] === undefined) {
           return
         }
-        log('[' + counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
+        log('[' + this.counter[info.path] + '] finished downloading', u, 'in', timethat(startDL))
         process.nextTick(() => this.verify(info, callback))
       })
 
-      counter[info.path] = counter[info.path] || 0
-      counter[info.path]++
+      this.counter[info.path] = this.counter[info.path] || 0
+      this.counter[info.path]++
 
       const startDL = new Date()
       const u = url.format({
@@ -77,19 +71,19 @@ function Verifier (bs) {
         }
       }
 
-      log('[' + counter[info.path] + '] downloading', u)
+      log('[' + this.counter[info.path] + '] downloading', u)
       request(opts)
         .on('error', errorHandler('failed to download', writer))
         .on('response', (res) => {
-          log('[' + counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
+          log('[' + this.counter[info.path] + ']', '(' + res.statusCode + ')', info.path, 'is', pretty(res.headers['content-length']))
 
           info.http = res.statusCode
 
           if (res.statusCode === 404) {
-            report[info.tarball] = info
-            delete counter[info.path]
+            this.report[info.tarball] = info
+            delete this.counter[info.path]
             writer.end()
-            return callback(new Error('failed to download with a 404' + info.tarball))
+            return callback(new Error('failed to download with a 404: ' + info.tarball))
           }
         })
         .pipe(sha.stream(info.shasum))
@@ -99,10 +93,10 @@ function Verifier (bs) {
     })
   }
 
-  this.verify = (info, callback) => {
-    counter[info.path] = counter[info.path] || 0
+  verify (info, callback) {
+    this.counter[info.path] = this.counter[info.path] || 0
 
-    bs.exists(info.tarball, (err, good) => {
+    this.store.exists(info.tarball, (err, good) => {
       if (err) {
         return log.err(err)
       }
@@ -111,39 +105,16 @@ function Verifier (bs) {
         return this.update(info, callback)
       }
 
-      if (counter[info.path] >= 4) {
-        report[info.tarball] = info
-        log(' [' + counter[info.path] + '] file appears to be corrupt, skipping..', info.tarball)
-        delete counter[info.path]
+      if (this.counter[info.path] >= 4) {
+        this.report[info.tarball] = info
+        log(' [' + this.counter[info.path] + '] file appears to be corrupt, skipping..', info.tarball)
+        delete this.counter[info.path]
         // bail, the tarball is corrupt
         return callback(null, info)
       }
 
-      // shasumCheck(info, (err) => {
-      //   if (err) {
-      //     log.err('shasum failed for %s: %s', info.tarball, err)
-      //     return this.update(info, callback)
-      //   }
-      delete counter[info.path]
+      delete this.counter[info.path]
       callback(null, info)
-      // })
     })
   }
-
-  // function shasumCheck (info, callback) {
-  //   callback = once(callback)
-
-  //   const shasum = info.shasum
-  //   if (!shasum) {
-  //     log.error('Missing shasum for %s', info.tarball)
-  //     return callback()
-  //   }
-  //   log('shacheck %s: %s', info.tarball, shasum)
-
-  //   // TODO: this hangs sometimes, why?
-  //   bs.createReadStream(info.tarball)
-  //     .pipe(sha.stream(shasum))
-  //     .once('error', callback)
-  //     .once('finish', callback)
-  // }
 }

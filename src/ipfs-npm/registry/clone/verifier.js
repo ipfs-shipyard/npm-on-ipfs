@@ -96,21 +96,18 @@ module.exports = class Verifier {
   verify (info, callback) {
     this.counter[info.path] = this.counter[info.path] || 0
 
-    this.store.exists(info.tarball, (err, good) => {
+    this.store.exists(info.tarball, (err, exists) => {
       if (err) {
-        return log.err(err)
+        log.err(err)
       }
 
-      if (!good) {
+      if (!exists) {
         return this.update(info, callback)
       }
 
       if (this.counter[info.path] >= 4) {
         this.report[info.tarball] = info
         log(' [' + this.counter[info.path] + '] file appears to be corrupt, skipping..', info.tarball)
-        delete this.counter[info.path]
-        // bail, the tarball is corrupt
-        return callback(null, info)
       }
 
       delete this.counter[info.path]

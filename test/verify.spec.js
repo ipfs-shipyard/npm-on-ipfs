@@ -12,11 +12,6 @@ const fs = require('fs')
 const path = require('path')
 const Writable = require('stream').Writable
 
-function clearData (done) {
-  memblob.data = {'existing.tgz': 'asdf'}
-  done()
-}
-
 const memblob = require('abstract-blob-store')()
 
 describe.only('Verifier', () => {
@@ -40,7 +35,14 @@ describe.only('Verifier', () => {
         .pipe(shasum)
     })
 
-    beforeEach(clearData)
+    after(() => {
+      verifier.update.restore()
+    })
+
+    beforeEach(() => {
+      memblob.data = {'existing.tgz': 'asdf'}
+      verifier.update.reset()
+    })
 
     it("checks hash and doesn't call update", (done) => {
       const info = {
@@ -49,7 +51,7 @@ describe.only('Verifier', () => {
         shasum: '3da541559918a808c2402bba5012f6c60b27661c'
       }
 
-      verifier.verify(info, (err, d) => {
+      verifier.verify(info, (err) => {
         expect(err).to.not.exist
         expect(verifier.update).to.not.have.been.called
         done()
@@ -63,9 +65,48 @@ describe.only('Verifier', () => {
         shasum: 'e72aadf604d52983adaa087f7bf3371ef6bd6ac1'
       }
 
-      verifier.verify(info, (err, d) => {
+      verifier.verify(info, (err) => {
         expect(err).to.not.exist
         expect(verifier.update).to.have.been.calledOnce
+        done()
+      })
+    })
+
+    it('retries to call update up to four times', (done) => {
+      const info = {
+        path: '/module-best-practices/-/module-best-practices-1.1.23.tgz',
+        tarball: 'module-best-practices-1.1.23.tgz',
+        shasum: 'e72aadf604d52983adaa087f7bf3371ef6bd6ac1'
+      }
+
+      // Fake four failed attempts to download
+      verifier.counter[info.path] = 4
+      sinon.stub(memblob, 'exists').yields(null, true)
+
+      verifier.verify(info, (err) => {
+        expect(err).to.not.exist
+        expect(verifier.counter[info.path]).to.not.exist
+        expect(verifier.update).to.not.have.been.called
+
+        memblob.exists.restore()
+        done()
+      })
+    })
+
+    it('calls update on failed existence check', (done) => {
+      const info = {
+        path: '/module-best-practices/-/module-best-practices-1.1.23.tgz',
+        tarball: 'module-best-practices-1.1.23.tgz',
+        shasum: 'e72aadf604d52983adaa087f7bf3371ef6bd6ac1'
+      }
+      sinon.stub(memblob, 'exists')
+        .onFirstCall().yields(new Error('fail'))
+        .onSecondCall().yields(null, true)
+
+      verifier.verify(info, (err) => {
+        expect(err).to.not.exist
+        expect(verifier.update).to.have.been.calledOnce
+        memblob.exists.restore()
         done()
       })
     })

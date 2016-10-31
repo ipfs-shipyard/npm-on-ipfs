@@ -6,9 +6,8 @@ const patch = require('patch-package-json')
 const fs = require('graceful-fs')
 const timethat = require('timethat').calc
 const request = require('request')
-const IBS = require('ipfs-blob-store')
 const multiaddr = require('multiaddr')
-const series = require('async/series')
+const async = require('async')
 
 const ModuleWriter = require('./module-writer')
 const Verifier = require('./verifier')
@@ -19,39 +18,87 @@ let latestSeq = 'unknown'
 // const GLOBAL_INDEX = '-/index.json'
 // const NOT_FOUND = '-/404.json'
 
-module.exports = RegistryClone
-
-function RegistryClone (ipfs, opts) {
-  if (!(this instanceof RegistryClone)) {
-    return new RegistryClone(ipfs, opts)
+module.exports = function registryClone (opts) {
+  opts = opts || {
+    store: require('ipfs-blob-store')
   }
 
-  let bsConfig = config.blobStore
-  opts = opts || {}
+  let storeConfig = config.blobStore
 
   if (opts.url) {
     const parsed = multiaddr(opts.url).nodeAddress()
-    bsConfig = Object.assign(bsConfig, {
+    storeConfig = Object.assign(storeConfig, {
       host: parsed.address,
-      port: parsed.port
+      port: parseInt(parsed.port, 10)
     })
   }
 
   if (typeof opts.flush === 'boolean') {
-    bsConfig.flush = opts.flush
+    storeConfig.flush = opts.flush
+  }
+
+  const followConf = {
+    seqFile: config.seqFile,
+    handler: changeHandler,
+    registry: config.registry,
+    skim: config.skim
   }
 
   if (opts.seqNumber) {
-    // TODO: what to do?
+    followConf.since = opts.seqNumber
   }
 
-  log('starting ipfs blob store with', bsConfig)
-  const bs = IBS(bsConfig)
+  log('starting ipfs blob store with', storeConfig)
+
+  const bs = opts.store(storeConfig)
   const v = new Verifier(bs)
   const mw = new ModuleWriter(bs, v)
 
+  updateLatestSeq()
+
+  if (config.clean) {
+    async.series([
+      (cb) => clean(config.seqFile, cb),
+      run
+    ])
+  } else {
+    run()
+  }
+
+  function run () {
+    log('starting to follow registry with these options:')
+    log('   seqFile', followConf.seqFile)
+    follow(followConf)
+  }
+
+  function updateLatestSeq () {
+    const timer = function () {
+      const opts = {
+        url: config.skim,
+        headers: {
+          'user-agent': 'ipfs-npm mirror worker'
+        }
+      }
+
+      request(opts, (err, res, payload) => {
+        if (err || res.statusCode > 400) {
+          return log.err(err || `Response: %{res.statusCode}`)
+        }
+        try {
+          latestSeq = JSON.parse(payload).update_seq
+          log('new latest sequence', latestSeq)
+        } catch (err) {
+          log('failed to update to latest sequence')
+        }
+      })
+    }
+
+    setInterval(timer, ((60 * 5) * 1000))
+    timer()
+  }
+
   // This pauses the feed until callback is executed
-  function change (data, callback) {
+  function changeHandler (data, callback) {
     const changeStart = new Date()
     let json
     try {
@@ -81,7 +128,7 @@ function RegistryClone (ipfs, opts) {
       item.json = patch.json(item.json, config.domain)
     })
 
-    series([
+    async.series([
       (cb) => mw.saveTarballs(data.tarballs, cb),
       (cb) => mw.putJSON(data, cb)
     ], (err, res) => {
@@ -95,61 +142,15 @@ function RegistryClone (ipfs, opts) {
       callback()
     })
   }
+}
 
-  function clean (callback) {
-    if (!config.clean) {
-      return callback()
-    }
+function clean (file, callback) {
+  const start = new Date()
 
-    const start = new Date()
+  log('Deleting', file)
 
-    log('Deleting', config.seqFile)
-
-    fs.unlink(config.seqFile, () => {
-      console.log('finished cleaning in', timethat(start))
-      callback()
-    })
-  }
-
-  function updateLatestSeq () {
-    const timer = function () {
-      const opts = {
-        url: config.skim,
-        headers: {
-          'user-agent': 'ipfs-npm mirror worker'
-        }
-      }
-
-      request(opts, (err, res, payload) => {
-        if (err || res.statusCode > 400) {
-          return log.err(err || `Response: %{res.statusCode}`)
-        }
-        try {
-          latestSeq = JSON.parse(payload).update_seq
-          log('new latest sequence', latestSeq)
-        } catch (err) {
-          log('failed to update to latest sequence')
-        }
-      })
-    }
-
-    setInterval(timer, ((60 * 5) * 1000))
-    timer()
-  }
-
-  function run () {
-    updateLatestSeq()
-    const conf = {
-      seqFile: config.seqFile,
-      handler: change,
-      registry: config.registry,
-      skim: config.skim
-    }
-
-    log('starting to follow registry with these options:')
-    log('   seqFile', conf.seqFile)
-    follow(conf)
-  }
-
-  clean(run)
+  fs.unlink(file, () => {
+    console.log('finished cleaning in', timethat(start))
+    callback()
+  })
 }

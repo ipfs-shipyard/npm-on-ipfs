@@ -14,7 +14,7 @@ const Writable = require('stream').Writable
 
 const memblob = require('abstract-blob-store')()
 
-describe.only('Verifier', () => {
+describe('Verifier', () => {
   let verifier
 
   before(() => {

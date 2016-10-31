@@ -37,7 +37,7 @@ module.exports = {
         console.error(err.message)
         process.exit(1)
       }
-      npmIPFS.registry.clone(ipfs, {
+      npmIPFS.registry.clone({
         seqNumber: argv['set-number'],
         flush: argv.flush,
         url: argv.ipfs

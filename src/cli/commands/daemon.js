@@ -1,36 +1,38 @@
-const Command = require('ronin').Command
-// const npmIPFS = require('./../../ipfs-npm')
+'use strict'
+
+const npmIPFS = require('../../ipfs-npm')
 // const config = npmIPFS.config
 // const log = config.log
 
-module.exports = Command.extend({
-  desc: 'creates a registry endpoint for the npm cli to interact with',
+module.exports = {
+  id: 'daemon',
 
-  options: {
+  describe: 'create a registry endpoint for the npm cli to interact with',
+
+  builder: {
     port: {
-      type: 'number'
+      desc: 'Port the server should run on',
+      type: 'number',
+      default: 5001
     },
     host: {
+      desc: 'Port the server should run on',
       type: 'string',
       default: 'localhost'
     }
   },
 
-  run: function (port, host, logRoot) {
-    console.log('Not implemented yet')
-    /*
-    if (port) {
-      config.mirror.port = port
-    }
-    if (host) {
-      config.mirror.host = host
-    }
-    npmIPFS.mirror((err) => {
+  handler (argv) {
+    npmIPFS.daemon({
+      port: argv.port,
+      host: argv.host
+    }, (err, res) => {
       if (err) {
         throw err
       }
-      console.log('ipnpm daemon running on:', config.mirror.host, config.mirror.port)
+
+      console.log('damon is running')
+      console.log('use npm with --registry=http://' + res.address + ':' + res.port)
     })
-    */
   }
-})
+}

@@ -4,7 +4,7 @@ language: node_js
 
 node_js:
   - '4'
-  - '5'
+  - '6'
   - stable
 
 # always use npm latest
@@ -24,4 +24,7 @@ env:
 
 script:
   - npm run lint
-  - npm test
+  - npm run coverage
+
+after_success:
+  - npm run coverage-publish

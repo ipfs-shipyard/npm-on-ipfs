@@ -1,3 +1,5 @@
+'use strict'
+
 const debug = require('debug')
 const path = require('path')
 const os = require('os')
@@ -17,7 +19,9 @@ module.exports = {
     host: '127.0.0.1'
   },
   writeLimit: 100,
-  registry: 'http://registry.npmjs.org/',
+  protocol: 'https',
+  registry: 'registry.npmjs.com',
+  skim: 'https://replicate.npmjs.com/registry',
   tmp: tmp,
   error: path.join(__dirname, '../defaults', '404.json'),
   seqFile: path.join(tmp, 'registry-mirror.seq'),

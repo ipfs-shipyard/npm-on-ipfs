@@ -1,27 +1,47 @@
+'use strict'
+
 // const async = require('async')
-const Command = require('ronin').Command
 const npmIPFS = require('./../../../ipfs-npm')
 // const config = npmIPFS.config
 // const log = config.log
 
-module.exports = Command.extend({
-  desc: 'Check modules available in the mirror',
+module.exports = {
+  id: 'clone',
 
-  options: {
+  describe: 'copy all available modules from the registry into the mirror',
+
+  builder: {
     'set-number': {
-      type: 'number',
-      default: undefined
+      describe: 'Select the mirror sequence number to start from',
+      type: 'number'
     },
-    'ipfs': {
+    ipfs: {
+      describe: 'Select an IPFS daemon, e.g. /ip4/127.0.0.1/tcp/5001',
       type: 'string'
     },
     'log-level': {
-      type: 'string'
+      describe: 'Set the log level',
+      type: 'string',
+      choices: ['all', 'module']
+    },
+    flush: {
+      describe: 'Write the modules to disk as soon as they are written into IPFS',
+      type: 'boolean',
+      default: true
     }
   },
 
-  run: function (seqNumber, ipfsApiUrl, logLevel) {
-    const ipfs = npmIPFS.ipfs()
-    npmIPFS.registry.clone(ipfs)
+  handler (argv) {
+    npmIPFS.ipfs({url: argv.ipfs}, (err, ipfs) => {
+      if (err) {
+        console.error(err.message)
+        process.exit(1)
+      }
+      npmIPFS.registry.clone({
+        seqNumber: argv['set-number'],
+        flush: argv.flush,
+        url: argv.ipfs
+      })
+    })
   }
-})
+}

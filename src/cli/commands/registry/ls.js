@@ -1,22 +1,38 @@
-// const async = require('async')
-const Command = require('ronin').Command
-// const npmIPFS = require('./../../../ipfs-npm')
-// const config = npmIPFS.config
-// const log = config.log
+'use strict'
 
-module.exports = Command.extend({
-  desc: 'Check modules available in the mirror',
+const async = require('async')
+const npmIPFS = require('./../../../ipfs-npm')
 
-  options: {
-    update: {
-      type: 'boolean',
-      alias: 'u',
-      default: false
+module.exports = {
+  id: 'ls',
+
+  describe: 'list modules available in the mirror',
+
+  builder: {
+    ipfs: {
+      describe: 'Select an IPFS daemon, e.g. /ip4/127.0.0.1/tcp/5001',
+      type: 'string'
     }
   },
 
-  run: function (update) {
-    console.log('not implemented yet')
+  handler (argv) {
+    if (argv.update) {
+      throw new Error('not implemented yet')
+    }
+
+    async.waterfall([
+      (cb) => npmIPFS.ipfs({url: argv.ipfs}, cb),
+      (ipfs, cb) => npmIPFS.registry.ls(ipfs, cb)
+    ], (err, res) => {
+      if (err) {
+        console.error(err.message)
+        process.exit(1)
+      }
+
+      res.Entries.forEach((module) => {
+        console.log(`${module.Name}\t${module.Hash}`)
+      })
+    })
     /*
     const series = []
     if (update) {
@@ -38,4 +54,4 @@ module.exports = Command.extend({
     })
     */
   }
-})
+}

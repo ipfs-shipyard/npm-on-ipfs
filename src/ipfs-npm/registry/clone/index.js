@@ -55,7 +55,19 @@ module.exports = function registryClone (ipfs, opts) {
   const v = new Verifier(bs)
   const mw = new ModuleWriter(bs, v)
 
+  let flushCounter = 0
+
   updateLatestSeq()
+
+  const queue = async.queue((task, cb) => {
+    if (task.flush) {
+      flushToDisk(() => {
+        handleChange(task.data, cb)
+      })
+    } else {
+      handleChange(task.data, cb)
+    }
+  }, 1)
 
   if (config.clean) {
     async.series([
@@ -71,8 +83,6 @@ module.exports = function registryClone (ipfs, opts) {
     log('   seqFile', followConf.seqFile)
     follow(followConf)
   }
-
-  let flushCounter = 0
 
   function updateLatestSeq () {
     const timer = function () {
@@ -104,19 +114,15 @@ module.exports = function registryClone (ipfs, opts) {
   function changeHandler (data, callback) {
     flushCounter++
     log('flushCounter: %s', flushCounter)
-    if (opts.flush === false && flushCounter >= opts.flushInterval) {
-      flushToDisk(() => {
-        flushCounter = 0
-        handleChange(data, callback)
-      })
-    } else {
-      handleChange(data, callback)
+    const toFlush = opts.flush === false && flushCounter >= opts.flushInterval
+    if (toFlush) {
+      flushCounter = 0
     }
+    queue.push({flush: toFlush, data: data}, callback)
   }
 
   function flushToDisk (callback) {
     log('start: flushing %s', storeConfig.baseDir)
-
     ipfs.files.stat(storeConfig.baseDir, (err, stat) => {
       if (err) {
         log.error('failed to flush: %s', err.message)

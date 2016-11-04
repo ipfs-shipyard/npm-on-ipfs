@@ -148,10 +148,13 @@ describe('RegistryClone', () => {
       it('calls flush after flushInterval changes', (done) => {
         fakeApi = {
           files: {
-            stat: sinon.stub().yields()
+            stat: (p, cb) => {
+              setTimeout(cb, 100)
+            }
           }
         }
 
+        sinon.spy(fakeApi.files, 'stat')
         clone(fakeApi, {flushInterval: 5, flush: false})
         const handler = stubs.follow.args[0][0].handler
         const change = (id) => {
@@ -180,6 +183,9 @@ describe('RegistryClone', () => {
           (cb) => async.parallel([
             (cb) => handler(change(6), cb),
             (cb) => handler(change(7), cb),
+            (cb) => handler(change(8), cb),
+            (cb) => handler(change(9), cb),
+            (cb) => handler(change(10), cb),
             (cb) => handler(change(8), cb),
             (cb) => handler(change(9), cb),
             (cb) => handler(change(10), cb)

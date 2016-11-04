@@ -67,7 +67,7 @@ module.exports = function registryClone (ipfs, opts) {
     } else {
       handleChange(task.data, cb)
     }
-  }, 1)
+  }, 100)
 
   if (config.clean) {
     async.series([

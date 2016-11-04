@@ -28,6 +28,11 @@ module.exports = {
       describe: 'Write the modules to disk as soon as they are written into IPFS',
       type: 'boolean',
       default: true
+    },
+    'flush-interval': {
+      describe: 'If flush=false this describes how often content is flushed to disk',
+      type: 'number',
+      default: 10000
     }
   },
 
@@ -37,10 +42,11 @@ module.exports = {
         console.error(err.message)
         process.exit(1)
       }
-      npmIPFS.registry.clone({
+      npmIPFS.registry.clone(ipfs, {
         seqNumber: argv['set-number'],
         flush: argv.flush,
-        url: argv.ipfs
+        url: argv.ipfs,
+        flushInterval: argv['flush-interval']
       })
     })
   }

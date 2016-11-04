@@ -18,10 +18,11 @@ let latestSeq = 'unknown'
 // const GLOBAL_INDEX = '-/index.json'
 // const NOT_FOUND = '-/404.json'
 
-module.exports = function registryClone (opts) {
-  opts = opts || {
-    store: require('ipfs-blob-store')
-  }
+module.exports = function registryClone (ipfs, opts) {
+  opts = Object.assign({
+    store: require('ipfs-blob-store'),
+    flushInterval: 10000
+  }, opts)
 
   let storeConfig = config.blobStore
 
@@ -71,6 +72,8 @@ module.exports = function registryClone (opts) {
     follow(followConf)
   }
 
+  let flushCounter = 0
+
   function updateLatestSeq () {
     const timer = function () {
       const opts = {
@@ -99,6 +102,34 @@ module.exports = function registryClone (opts) {
 
   // This pauses the feed until callback is executed
   function changeHandler (data, callback) {
+    flushCounter++
+    log('flushCounter: %s', flushCounter)
+    if (opts.flush === false && flushCounter >= opts.flushInterval) {
+      flushToDisk(() => {
+        flushCounter = 0
+        handleChange(data, callback)
+      })
+    } else {
+      handleChange(data, callback)
+    }
+  }
+
+  function flushToDisk (callback) {
+    log('start: flushing %s', storeConfig.baseDir)
+
+    ipfs.files.flush(storeConfig.baseDir, (err) => {
+      if (err) {
+        log.error('failed to flush: %s', err.message)
+        return callback()
+      }
+
+      log('finish: flushing %s', storeConfig.baseDir)
+
+      callback()
+    })
+  }
+
+  function handleChange (data, callback) {
     const changeStart = new Date()
     let json
     try {

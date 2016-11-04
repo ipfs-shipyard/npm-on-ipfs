@@ -6,6 +6,7 @@ const chai = require('chai')
 chai.use(require('sinon-chai'))
 const sinon = require('sinon')
 const mockery = require('mockery')
+const async = require('async')
 
 const expect = chai.expect
 
@@ -18,6 +19,8 @@ const changeFixture = require('./fixtures/change0.json')
 
 describe('RegistryClone', () => {
   let clone
+  let fakeApi
+
   before(() => {
     mockery.registerMock('follow-registry', stubs.follow)
 
@@ -26,7 +29,7 @@ describe('RegistryClone', () => {
       warnOnReplace: false,
       warnOnUnregistered: false
     })
-
+    fakeApi = {}
     clone = require('../src/ipfs-npm/registry/clone')
   })
 
@@ -38,7 +41,7 @@ describe('RegistryClone', () => {
   describe('options', () => {
     it('defaults', () => {
       sinon.spy(stubs, 'memblob')
-      clone({store: stubs.memblob})
+      clone(fakeApi, {store: stubs.memblob})
 
       const callRes = stubs.memblob.args[0][0]
       expect(callRes).to.have.property('flush', true)
@@ -51,7 +54,7 @@ describe('RegistryClone', () => {
 
     it('sets flush', () => {
       sinon.spy(stubs, 'memblob')
-      clone({
+      clone(fakeApi, {
         store: stubs.memblob,
         flush: false
       })
@@ -63,7 +66,7 @@ describe('RegistryClone', () => {
 
     it('sets custom ipfs url', () => {
       sinon.spy(stubs, 'memblob')
-      clone({
+      clone(fakeApi, {
         store: stubs.memblob,
         url: '/ip4/192.168.0.1/tcp/1234'
       })
@@ -81,7 +84,7 @@ describe('RegistryClone', () => {
     })
 
     it('follows with the correct config', () => {
-      clone({store: stubs.memblob})
+      clone(fakeApi, {store: stubs.memblob})
       const conf = stubs.follow.args[0][0]
 
       expect(conf).to.have.property('seqFile', config.seqFile)
@@ -101,7 +104,7 @@ describe('RegistryClone', () => {
     })
 
     it('handles a regular change', (done) => {
-      clone({store: stubs.memblob})
+      clone(fakeApi, {store: stubs.memblob})
       const handler = stubs.follow.args[0][0].handler
 
       handler(changeFixture, (err) => {
@@ -113,21 +116,21 @@ describe('RegistryClone', () => {
 
     describe('bail', () => {
       it('invalid json', (done) => {
-        clone({store: stubs.memblob})
+        clone(fakeApi, {store: stubs.memblob})
         const handler = stubs.follow.args[0][0].handler
 
         handler({json: 'w'}, done)
       })
 
       it('missing name', (done) => {
-        clone({store: stubs.memblob})
+        clone(fakeApi, {store: stubs.memblob})
         const handler = stubs.follow.args[0][0].handler
 
         handler({json: {hello: 'world'}}, done)
       })
 
       it('no versions', (done) => {
-        clone({store: stubs.memblob})
+        clone(fakeApi, {store: stubs.memblob})
         const handler = stubs.follow.args[0][0].handler
         const data = JSON.parse(JSON.stringify(changeFixture))
         data.versions = []
@@ -135,11 +138,55 @@ describe('RegistryClone', () => {
       })
 
       it('failed saveTarballs', (done) => {
-        clone({store: stubs.memblob})
+        clone(fakeApi, {store: stubs.memblob})
         const handler = stubs.follow.args[0][0].handler
         const data = JSON.parse(JSON.stringify(changeFixture))
         data.error = new Error('fail')
         handler(data, done)
+      })
+
+      it('calls flush after flushInterval changes', (done) => {
+        fakeApi = {
+          files: {
+            flush: sinon.stub().yields()
+          }
+        }
+
+        clone(fakeApi, {flushInterval: 5, flush: false})
+        const handler = stubs.follow.args[0][0].handler
+        const change = (id) => {
+          return {
+            json: {
+              id: `hello${id}`,
+              versions: []
+            }
+          }
+        }
+
+        async.series([
+          (cb) => handler(change(1), cb),
+          (cb) => handler(change(2), cb),
+          (cb) => handler(change(3), cb),
+          (cb) => handler(change(4), cb),
+          (cb) => {
+            expect(fakeApi.files.flush).to.not.have.been.called
+            cb()
+          },
+          (cb) => handler(change(5), cb),
+          (cb) => {
+            expect(fakeApi.files.flush).to.have.been.calledOnce
+            cb()
+          },
+          (cb) => handler(change(6), cb),
+          (cb) => handler(change(7), cb),
+          (cb) => handler(change(8), cb),
+          (cb) => handler(change(9), cb),
+          (cb) => handler(change(10), cb)
+        ], (err) => {
+          expect(err).to.not.exist
+          expect(fakeApi.files.flush).to.have.been.calledTwice
+          done()
+        })
       })
     })
   })

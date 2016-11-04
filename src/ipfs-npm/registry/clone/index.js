@@ -117,13 +117,13 @@ module.exports = function registryClone (ipfs, opts) {
   function flushToDisk (callback) {
     log('start: flushing %s', storeConfig.baseDir)
 
-    ipfs.files.flush(storeConfig.baseDir, (err) => {
+    ipfs.files.stat(storeConfig.baseDir, (err, stat) => {
       if (err) {
         log.error('failed to flush: %s', err.message)
         return callback()
       }
 
-      log('finish: flushing %s', storeConfig.baseDir)
+      log('finish: flushing %s', storeConfig.baseDir, JSON.stringify(stat))
 
       callback()
     })

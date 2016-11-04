@@ -148,7 +148,7 @@ describe('RegistryClone', () => {
       it('calls flush after flushInterval changes', (done) => {
         fakeApi = {
           files: {
-            flush: sinon.stub().yields()
+            stat: sinon.stub().yields()
           }
         }
 
@@ -169,22 +169,24 @@ describe('RegistryClone', () => {
           (cb) => handler(change(3), cb),
           (cb) => handler(change(4), cb),
           (cb) => {
-            expect(fakeApi.files.flush).to.not.have.been.called
+            expect(fakeApi.files.stat).to.not.have.been.called
             cb()
           },
           (cb) => handler(change(5), cb),
           (cb) => {
-            expect(fakeApi.files.flush).to.have.been.calledOnce
+            expect(fakeApi.files.stat).to.have.been.calledOnce
             cb()
           },
-          (cb) => handler(change(6), cb),
-          (cb) => handler(change(7), cb),
-          (cb) => handler(change(8), cb),
-          (cb) => handler(change(9), cb),
-          (cb) => handler(change(10), cb)
+          (cb) => async.parallel([
+            (cb) => handler(change(6), cb),
+            (cb) => handler(change(7), cb),
+            (cb) => handler(change(8), cb),
+            (cb) => handler(change(9), cb),
+            (cb) => handler(change(10), cb)
+          ], cb)
         ], (err) => {
           expect(err).to.not.exist
-          expect(fakeApi.files.flush).to.have.been.calledTwice
+          expect(fakeApi.files.stat).to.have.been.calledTwice
           done()
         })
       })

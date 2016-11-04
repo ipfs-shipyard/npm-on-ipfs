@@ -124,9 +124,14 @@ module.exports = function registryClone (ipfs, opts) {
       }
 
       log('finish: flushing %s', storeConfig.baseDir, JSON.stringify(stat))
+      writeStats(stat)
 
       callback()
     })
+  }
+
+  function writeStats (stat) {
+    fs.appendFileSync('flushlog.txt', JSON.stringify(stat) + '\n\n')
   }
 
   function handleChange (data, callback) {

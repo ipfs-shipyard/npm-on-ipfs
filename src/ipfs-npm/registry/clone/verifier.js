@@ -25,6 +25,12 @@ module.exports = class Verifier {
       return callback(new Error('insufficient data'))
     }
 
+    const u = url.format({
+      protocol: config.protocol,
+      hostname: config.registry,
+      pathname: info.path.substring(1)
+    })
+
     log('updating [%s]', this.counter[info.path], info.path, info.tarball, info.shasum)
 
     const errorHandler = (msg, writer, fatal) => (err) => {
@@ -39,7 +45,7 @@ module.exports = class Verifier {
         writer.end()
       } catch (err) {}
 
-      log('error %s, \n%s', info.tarball, err.message)
+      log('error %s, \n%s', u, err.message)
 
       if (fatal) {
         callback(new Error(msg + ' ' + info.tarball))
@@ -65,11 +71,6 @@ module.exports = class Verifier {
       this.counter[info.path]++
 
       const startDL = new Date()
-      const u = url.format({
-        protocol: config.protocol,
-        hostname: config.registry,
-        pathname: info.path.substring(1)
-      })
 
       const opts = {
         url: u,

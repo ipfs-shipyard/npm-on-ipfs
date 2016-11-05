@@ -150,6 +150,7 @@ module.exports = function registryClone (ipfs, opts) {
   }
 
   function writeStats (stat) {
+    stat.date = Date.now()
     fs.appendFileSync('flushlog.txt', JSON.stringify(stat) + '\n\n')
   }
 }

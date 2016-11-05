@@ -27,7 +27,7 @@ module.exports = class Verifier {
 
     log('updating [%s]', this.counter[info.path], info.path, info.tarball, info.shasum)
 
-    const errorHandler = (msg, writer) => (err) => {
+    const errorHandler = (msg, writer, fatal) => (err) => {
       this.report.error = err
       this.report[info.tarball] = info
 
@@ -39,7 +39,13 @@ module.exports = class Verifier {
         writer.end()
       } catch (err) {}
 
-      callback(new Error(msg + ' ' + info.tarball))
+      log('error %s, \n%s', info.tarball, err.message)
+
+      if (fatal) {
+        callback(new Error(msg + ' ' + info.tarball))
+      } else {
+        this.verify(info, callback)
+      }
     }
 
     process.nextTick(() => {

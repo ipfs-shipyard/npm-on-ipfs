@@ -15,7 +15,7 @@ registry-mirror
 # Resources
 
 - [Demo video](https://vimeo.com/147968322)
-- [Lengthy introduction in a blog post](http://blog.daviddias.me/2015/12/08/stellar-module-management)
+- [Lengthy introduction in a blog post](http://blog.daviddias.me/post/stellar-module-management/)
 - [Node.js Interactive Talk - Stellar Module Management](https://www.youtube.com/watch?v=-S-Tc7Gl8FM)
 
 # Quick setup (probably all that you need)

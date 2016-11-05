@@ -1,5 +1,6 @@
 'use strict'
 
+require('dnscache')({ enable: true })
 const patch = require('patch-package-json')
 const async = require('async')
 const timethat = require('timethat').calc

@@ -17,12 +17,13 @@ const stubs = {
 const config = require('../src/ipfs-npm/config')
 const changeFixture = require('./fixtures/change0.json')
 
-describe('RegistryClone', () => {
+describe.only('RegistryClone', () => {
   let clone
   let fakeApi
 
   before(() => {
     mockery.registerMock('follow-registry', stubs.follow)
+    mockery.registerMock('abstract-blob-store', stubs.memblob)
 
     mockery.enable({
       useCleanCache: true,
@@ -38,10 +39,11 @@ describe('RegistryClone', () => {
     mockery.deregisterAll()
   })
 
+  // TODO: why does mocking child process not work?
   describe('options', () => {
     it('defaults', () => {
       sinon.spy(stubs, 'memblob')
-      clone(fakeApi, {store: stubs.memblob})
+      clone(fakeApi, {store: 'abstract-blob-store'})
 
       const callRes = stubs.memblob.args[0][0]
       expect(callRes).to.have.property('flush', true)

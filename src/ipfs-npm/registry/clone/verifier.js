@@ -8,7 +8,8 @@ const sha = require('sha')
 const once = require('once')
 
 const config = require('../../config')
-const log = config.log
+
+const log = require('./log')('Verifier')
 
 module.exports = class Verifier {
   constructor (bs) {
@@ -98,7 +99,7 @@ module.exports = class Verifier {
 
     this.store.exists(info.tarball, (err, exists) => {
       if (err) {
-        log.err(err)
+        log.error(err)
       }
 
       if (!exists) {

@@ -32,7 +32,7 @@ describe('module-writer', () => {
       warnOnUnregistered: false
     })
 
-    const Writer = require('../src/ipfs-npm/registry/clone/module-writer')
+    const Writer = require('../../src/ipfs-npm/registry/clone/module-writer')
     writer = new Writer(memblob, verifier)
   })
 
@@ -80,7 +80,10 @@ describe('module-writer', () => {
       memblob.createWriteStream = (obj, cb) => {
         count++
         cb(new Error('fail'))
-        return {write () {}, end () {}}
+        return {
+          write () { },
+          end () { }
+        }
       }
 
       writer.putJSON(info, (err) => {
@@ -95,19 +98,19 @@ describe('module-writer', () => {
     it('success', (done) => {
       memblob.data = {}
       const info = {
-        json: {name: 'foopackage'},
+        json: { name: 'foopackage' },
         seq: 97,
         latestSeq: 42,
         versions: [{
-          json: {name: 'foopackage', cool: true},
+          json: { name: 'foopackage', cool: true },
           version: '1.0.0'
         }, {
-          json: {name: 'foopackage', cool: false},
+          json: { name: 'foopackage', cool: false },
           version: '2.0.0'
         }, {
           version: '3.0.0'
         }, {
-          json: {why: 'me'},
+          json: { why: 'me' },
           version: '3.1.1'
         }]
       }
@@ -117,15 +120,15 @@ describe('module-writer', () => {
         assert.ok(!err)
         assert.deepEqual(
           memblob.data['foopackage/index.json'],
-          toBlob({name: 'foopackage'})
+          toBlob({ name: 'foopackage' })
         )
         assert.deepEqual(
           memblob.data['foopackage/1.0.0/index.json'],
-          toBlob({name: 'foopackage', cool: true})
+          toBlob({ name: 'foopackage', cool: true })
         )
         assert.deepEqual(
           memblob.data['foopackage/2.0.0/index.json'],
-          toBlob({name: 'foopackage', cool: false})
+          toBlob({ name: 'foopackage', cool: false })
         )
         assert.deepEqual(
           memblob.data['foopackage/3.0.0/index.json'],
@@ -133,7 +136,7 @@ describe('module-writer', () => {
         )
         assert.deepEqual(
           memblob.data['foopackage/3.1.1/index.json'],
-          toBlob({why: 'me', name: 'foopackage'})
+          toBlob({ why: 'me', name: 'foopackage' })
         )
         done()
       })
@@ -149,7 +152,7 @@ describe('module-writer', () => {
       ]
       async.forEach(packages, (name, cb) => {
         writer.putJSON({
-          json: {name: name}
+          json: { name: name }
         }, cb)
       }, (err) => {
         if (err) {
@@ -158,7 +161,7 @@ describe('module-writer', () => {
         packages.forEach((name) => {
           assert.deepEqual(
             memblob.data[`${name}/index.json`],
-            JSON.stringify({name: name}, null, 4) + '\n'
+            JSON.stringify({ name: name }, null, 4) + '\n'
           )
         })
         done()

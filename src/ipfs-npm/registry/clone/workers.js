@@ -3,12 +3,15 @@
 const cluster = require('cluster')
 const os = require('os')
 const EventEmitter = require('events').EventEmitter
+const assert = require('assert')
 
 const log = require('./log')('Workers')
 
 module.exports = class Workers extends EventEmitter {
   constructor (exec, num) {
     super()
+
+    assert(exec, 'missing worker file')
 
     this.exec = exec
     this.NUM_WORKERS = num || os.cpus().length || 4
@@ -28,6 +31,10 @@ module.exports = class Workers extends EventEmitter {
     this.eachWorker((worker) => {
       worker.on('message', this._messageHandler.bind(this, worker.id))
     })
+  }
+
+  kill () {
+    this.eachWorker((worker) => worker.kill())
   }
 
   eachWorker (task) {
@@ -62,7 +69,7 @@ module.exports = class Workers extends EventEmitter {
   }
 
   _messageHandler (id, msg) {
-    this.emit(msg.cmd, msg.data)
+    this.emit(msg.cmd, msg.data, id)
   }
 
   _forkHandler () {
@@ -70,8 +77,12 @@ module.exports = class Workers extends EventEmitter {
   }
 
   _exitHandler (worker, code, signal) {
+    if (worker.exitedAfterDisconnect) {
+      return
+    }
+
     log('worker %d died (%s). restarting...',
-        worker.process.pid, signal || code)
+      worker.process.pid, signal || code)
     cluster.fork()
   }
 }

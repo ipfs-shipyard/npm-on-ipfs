@@ -14,8 +14,8 @@ const stubs = {
   follow: sinon.stub(),
   memblob: require('abstract-blob-store')
 }
-const config = require('../src/ipfs-npm/config')
-const changeFixture = require('./fixtures/change0.json')
+const config = require('../../src/ipfs-npm/config')
+const changeFixture = require('../fixtures/change0.json')
 
 describe('RegistryClone', () => {
   let clone
@@ -23,6 +23,7 @@ describe('RegistryClone', () => {
 
   before(() => {
     mockery.registerMock('follow-registry', stubs.follow)
+    mockery.registerMock('abstract-blob-store', stubs.memblob)
 
     mockery.enable({
       useCleanCache: true,
@@ -38,10 +39,11 @@ describe('RegistryClone', () => {
     mockery.deregisterAll()
   })
 
+  // TODO: why does mocking child process not work?
   describe('options', () => {
     it('defaults', () => {
       sinon.spy(stubs, 'memblob')
-      clone(fakeApi, {store: stubs.memblob})
+      clone(fakeApi, { store: 'abstract-blob-store' })
 
       const callRes = stubs.memblob.args[0][0]
       expect(callRes).to.have.property('flush', true)
@@ -84,7 +86,7 @@ describe('RegistryClone', () => {
     })
 
     it('follows with the correct config', () => {
-      clone(fakeApi, {store: stubs.memblob})
+      clone(fakeApi, { store: stubs.memblob })
       const conf = stubs.follow.args[0][0]
 
       expect(conf).to.have.property('seqFile', config.seqFile)
@@ -104,7 +106,7 @@ describe('RegistryClone', () => {
     })
 
     it('handles a regular change', (done) => {
-      clone(fakeApi, {store: stubs.memblob})
+      clone(fakeApi, { store: stubs.memblob })
       const handler = stubs.follow.args[0][0].handler
 
       handler(changeFixture, (err) => {
@@ -116,21 +118,21 @@ describe('RegistryClone', () => {
 
     describe('bail', () => {
       it('invalid json', (done) => {
-        clone(fakeApi, {store: stubs.memblob})
+        clone(fakeApi, { store: stubs.memblob })
         const handler = stubs.follow.args[0][0].handler
 
-        handler({json: 'w'}, done)
+        handler({ json: 'w' }, done)
       })
 
       it('missing name', (done) => {
-        clone(fakeApi, {store: stubs.memblob})
+        clone(fakeApi, { store: stubs.memblob })
         const handler = stubs.follow.args[0][0].handler
 
-        handler({json: {hello: 'world'}}, done)
+        handler({ json: { hello: 'world' } }, done)
       })
 
       it('no versions', (done) => {
-        clone(fakeApi, {store: stubs.memblob})
+        clone(fakeApi, { store: stubs.memblob })
         const handler = stubs.follow.args[0][0].handler
         const data = JSON.parse(JSON.stringify(changeFixture))
         data.versions = []
@@ -138,7 +140,7 @@ describe('RegistryClone', () => {
       })
 
       it('failed saveTarballs', (done) => {
-        clone(fakeApi, {store: stubs.memblob})
+        clone(fakeApi, { store: stubs.memblob })
         const handler = stubs.follow.args[0][0].handler
         const data = JSON.parse(JSON.stringify(changeFixture))
         data.error = new Error('fail')
@@ -155,7 +157,7 @@ describe('RegistryClone', () => {
         }
 
         sinon.spy(fakeApi.files, 'stat')
-        clone(fakeApi, {flushInterval: 5, flush: false})
+        clone(fakeApi, { flushInterval: 5, flush: false })
         const handler = stubs.follow.args[0][0].handler
         const change = (id) => {
           return {

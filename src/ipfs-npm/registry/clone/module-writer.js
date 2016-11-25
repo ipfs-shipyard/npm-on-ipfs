@@ -4,7 +4,7 @@ const async = require('async')
 const path = require('path')
 
 const config = require('../../config')
-const log = config.log
+const log = require('./log')('ModuleWriter')
 
 module.exports = class ModuleWriter {
   constructor (store, verifier) {

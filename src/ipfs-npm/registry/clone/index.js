@@ -2,17 +2,16 @@
 
 require('dnscache')({ enable: true })
 const follow = require('follow-registry')
-const patch = require('patch-package-json')
 const fs = require('graceful-fs')
 const timethat = require('timethat').calc
 const request = require('request')
 const multiaddr = require('multiaddr')
 const async = require('async')
+const path = require('path')
 
-const ModuleWriter = require('./module-writer')
-const Verifier = require('./verifier')
+const Workers = require('./workers')
 const config = require('../../config')
-const log = config.log
+const log = require('./log')('clone')
 
 let latestSeq = 'unknown'
 // const GLOBAL_INDEX = '-/index.json'
@@ -20,7 +19,7 @@ let latestSeq = 'unknown'
 
 module.exports = function registryClone (ipfs, opts) {
   opts = Object.assign({
-    store: require('ipfs-blob-store'),
+    store: 'ipfs-blob-store',
     flushInterval: 10000
   }, opts)
 
@@ -49,25 +48,7 @@ module.exports = function registryClone (ipfs, opts) {
     followConf.since = opts.seqNumber
   }
 
-  log('starting ipfs blob store with', storeConfig)
-
-  const bs = opts.store(storeConfig)
-  const v = new Verifier(bs)
-  const mw = new ModuleWriter(bs, v)
-
-  let flushCounter = 0
-
   updateLatestSeq()
-
-  const queue = async.queue((task, cb) => {
-    if (task.flush) {
-      flushToDisk(() => {
-        handleChange(task.data, cb)
-      })
-    } else {
-      handleChange(task.data, cb)
-    }
-  }, 100)
 
   if (config.clean) {
     async.series([
@@ -78,9 +59,49 @@ module.exports = function registryClone (ipfs, opts) {
     run()
   }
 
+  // setup workers
+  const workers = new Workers(
+    path.join(__dirname, 'worker.js')
+  )
+  workers.on('processed', processedHandler)
+  workers.sendAll('init', {
+    store: storeConfig,
+    storeName: opts.store
+  })
+
+  const callbacks = new Map()
+
+  // This pauses the feed until callback is executed
+  function changeHandler (data, callback) {
+    // Just to make sure that the value is cast to a Number
+    data.seq = Number(data.seq)
+    latestSeq = Number(latestSeq)
+    if (data.seq > latestSeq) {
+      latestSeq = data.seq
+    }
+    data.latestSeq = latestSeq
+
+    log('change %s/%s', data.seq, latestSeq)
+
+    callbacks.set(data.seq, callback)
+
+    if (data.seq % opts.flushInterval === 0) {
+      flushToDisk(() => {
+        workers.sendNext('change', data)
+      })
+    } else {
+      workers.sendNext('change', data)
+    }
+  }
+
+  function processedHandler (seq) {
+    log('processed', seq)
+    callbacks.get(seq)()
+    callbacks.delete(seq)
+  }
+
   function run () {
-    log('starting to follow registry with these options:')
-    log('   seqFile', followConf.seqFile)
+    log('starting to follow registry')
     follow(followConf)
   }
 
@@ -95,13 +116,16 @@ module.exports = function registryClone (ipfs, opts) {
 
       request(opts, (err, res, payload) => {
         if (err || res.statusCode > 400) {
-          return log.err(err || `Response: %{res.statusCode}`)
+          return log.error(
+            'latestSeq: %s',
+            err.message || `Response: %{res.statusCode}`
+          )
         }
         try {
           latestSeq = JSON.parse(payload).update_seq
-          log('new latest sequence', latestSeq)
+          log('latestSeq: updated to %s', latestSeq)
         } catch (err) {
-          log('failed to update to latest sequence')
+          log('latestSeq: failed to update')
         }
       })
     }
@@ -110,26 +134,15 @@ module.exports = function registryClone (ipfs, opts) {
     timer()
   }
 
-  // This pauses the feed until callback is executed
-  function changeHandler (data, callback) {
-    flushCounter++
-    log('flushCounter: %s', flushCounter)
-    const toFlush = opts.flush === false && flushCounter >= opts.flushInterval
-    if (toFlush) {
-      flushCounter = 0
-    }
-    queue.push({flush: toFlush, data: data}, callback)
-  }
-
   function flushToDisk (callback) {
-    log('start: flushing %s', storeConfig.baseDir)
+    log('flush:start:%s', storeConfig.baseDir)
     ipfs.files.stat(storeConfig.baseDir, (err, stat) => {
       if (err) {
-        log.error('failed to flush: %s', err.message)
+        log.error('flush: %s', err.message)
         return callback()
       }
 
-      log('finish: flushing %s', storeConfig.baseDir, JSON.stringify(stat))
+      log('flush:stop:%s', storeConfig.baseDir, JSON.stringify(stat))
       writeStats(stat)
 
       callback()
@@ -137,62 +150,18 @@ module.exports = function registryClone (ipfs, opts) {
   }
 
   function writeStats (stat) {
+    stat.date = Date.now()
     fs.appendFileSync('flushlog.txt', JSON.stringify(stat) + '\n\n')
-  }
-
-  function handleChange (data, callback) {
-    const changeStart = new Date()
-    let json
-    try {
-      json = patch.json(data.json, config.domain)
-    } catch (err) {
-      if (err instanceof SyntaxError) {
-        return callback() // Bad json. Just bail.
-      }
-      throw err
-    }
-    if (!json.name) {
-      return callback() // Bail, something is wrong with this change
-    }
-
-    // Just to make sure that the value is cast to a Number
-    data.seq = Number(data.seq)
-    latestSeq = Number(latestSeq)
-    if (data.seq > latestSeq) {
-      latestSeq = data.seq
-    }
-    data.latestSeq = latestSeq
-    console.log('change: [' + data.seq + '/' + latestSeq + '] processing', json.name)
-    if (!data.versions.length) {
-      return callback()
-    }
-    data.versions.forEach((item) => {
-      item.json = patch.json(item.json, config.domain)
-    })
-
-    async.series([
-      (cb) => mw.saveTarballs(data.tarballs, cb),
-      (cb) => mw.putJSON(data, cb)
-    ], (err, res) => {
-      if (err) {
-        log.err(err)
-        return callback()
-      }
-      const num = Object.keys(json.versions).length
-      /* istanbul ignore next just a log line with logic */
-      console.log('change: [' + data.seq + '/' + latestSeq + '] finished', num, 'version' + ((num > 1) ? 's' : '') + ' of', json.name, 'in', timethat(changeStart))
-      callback()
-    })
   }
 }
 
 function clean (file, callback) {
   const start = new Date()
 
-  log('Deleting', file)
+  log('clean:start', file)
 
   fs.unlink(file, () => {
-    console.log('finished cleaning in', timethat(start))
+    log('clean:stop [%s]', timethat(start))
     callback()
   })
 }

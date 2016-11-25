@@ -18,7 +18,7 @@ describe('Verifier', () => {
   let verifier
 
   before(() => {
-    const Verifier = require('../src/ipfs-npm/registry/clone/verifier')
+    const Verifier = require('../../src/ipfs-npm/registry/clone/verifier')
     verifier = new Verifier(memblob)
   })
 
@@ -40,7 +40,7 @@ describe('Verifier', () => {
     })
 
     beforeEach(() => {
-      memblob.data = {'existing.tgz': 'asdf'}
+      memblob.data = { 'existing.tgz': 'asdf' }
       verifier.update.reset()
     })
 
@@ -114,7 +114,7 @@ describe('Verifier', () => {
 
   describe('.update', () => {
     it('errors on missing tarball', (done) => {
-      verifier.update({path: 'mypath', shasum: 'checksum'}, (err) => {
+      verifier.update({ path: 'mypath', shasum: 'checksum' }, (err) => {
         expect(err).to.be.an('error')
         expect(err.message).be.eql('insufficient data')
         done()
@@ -122,7 +122,7 @@ describe('Verifier', () => {
     })
 
     it('errors on missing path', (done) => {
-      verifier.update({tarball: 'mypath.tgz', shasum: 'checksum'}, (err) => {
+      verifier.update({ tarball: 'mypath.tgz', shasum: 'checksum' }, (err) => {
         expect(err).to.be.an('error')
         expect(err.message).be.eql('insufficient data')
         done()
@@ -130,7 +130,7 @@ describe('Verifier', () => {
     })
 
     it('errors on missing shasum', (done) => {
-      verifier.update({tarball: 'mypath.tgz', path: 'mypath'}, (err) => {
+      verifier.update({ tarball: 'mypath.tgz', path: 'mypath' }, (err) => {
         expect(err).to.be.an('error')
         expect(err.message).be.eql('insufficient data')
         done()
@@ -202,7 +202,7 @@ describe('Verifier', () => {
           memblob.data['module-best-practices-1.1.23.tgz']
         ).to.be.eql(
           fs.readFileSync(path.join(__dirname, 'fixtures/module-best-practices-1.1.23.tgz'))
-        )
+          )
         done()
       })
     })

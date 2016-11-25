@@ -8,7 +8,8 @@ const sha = require('sha')
 const once = require('once')
 
 const config = require('../../config')
-const log = config.log
+
+const log = require('./log')('Verifier')
 
 module.exports = class Verifier {
   constructor (bs) {
@@ -24,9 +25,15 @@ module.exports = class Verifier {
       return callback(new Error('insufficient data'))
     }
 
+    const u = url.format({
+      protocol: config.protocol,
+      hostname: config.registry,
+      pathname: info.path.substring(1)
+    })
+
     log('updating [%s]', this.counter[info.path], info.path, info.tarball, info.shasum)
 
-    const errorHandler = (msg, writer) => (err) => {
+    const errorHandler = (msg, writer, fatal) => (err) => {
       this.report.error = err
       this.report[info.tarball] = info
 
@@ -38,7 +45,13 @@ module.exports = class Verifier {
         writer.end()
       } catch (err) {}
 
-      callback(new Error(msg + ' ' + info.tarball))
+      log('error %s, \n%s', u, err.message)
+
+      if (fatal) {
+        callback(new Error(msg + ' ' + info.tarball))
+      } else {
+        this.verify(info, callback)
+      }
     }
 
     process.nextTick(() => {
@@ -58,11 +71,6 @@ module.exports = class Verifier {
       this.counter[info.path]++
 
       const startDL = new Date()
-      const u = url.format({
-        protocol: config.protocol,
-        hostname: config.registry,
-        pathname: info.path.substring(1)
-      })
 
       const opts = {
         url: u,
@@ -98,7 +106,7 @@ module.exports = class Verifier {
 
     this.store.exists(info.tarball, (err, exists) => {
       if (err) {
-        log.err(err)
+        log.error(err)
       }
 
       if (!exists) {

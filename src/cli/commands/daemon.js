@@ -1,50 +1,38 @@
-var Command = require('ronin').Command
-var rm = require('./../../index.js')
-var async = require('async')
-var config = require('./../../config.js')
+'use strict'
 
-module.exports = Command.extend({
-  desc: 'Mirror npm registry',
+const npmIPFS = require('../../ipfs-npm')
+// const config = npmIPFS.config
+// const log = config.log
 
-  options: {
-    clone: {
-      type: 'boolean',
-      default: false
-    },
+module.exports = {
+  id: 'daemon',
+
+  describe: 'create a registry endpoint for the npm cli to interact with',
+
+  builder: {
     port: {
-      type: 'number'
+      desc: 'Port the server should run on',
+      type: 'number',
+      default: 5001
     },
     host: {
+      desc: 'Port the server should run on',
       type: 'string',
       default: 'localhost'
-    },
-    'log-root': {
-      type: 'string'
     }
   },
 
-  run: function (clone, port, host, logRoot) {
-    async.series([
-      rm.registryCache.connect,
-      rm.registryCache.cacheRegistry,
-      (callback) => {
-        if (clone) {
-          rm.clone()
-        }
-        callback()
-      },
-      (callback) => {
-        if (port) { config.mirror.port = port }
-        if (host) { config.mirror.host = host }
-        rm.mirror(callback)
-      },
-      (callback) => {
-        // TODO logRoot
-        callback()
+  handler (argv) {
+    npmIPFS.daemon({
+      port: argv.port,
+      host: argv.host
+    }, (err, res) => {
+      if (err) {
+        throw err
       }
-    ], (err, results) => {
-      if (err) { return console.log(err) }
-      console.log('Updated registry cache to:', results[1])
+
+      console.log('damon is running')
+      console.log('use npm with --registry=http://' + res.address + ':' + res.port)
     })
   }
-})
+}

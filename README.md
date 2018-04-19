@@ -1,5 +1,7 @@
-registry-mirror
-===============
+npm on IPFS
+===========
+
+> previously known as `registry-mirror`
 
 ![](/img/ip-npm-small.png)
 
@@ -8,9 +10,9 @@ registry-mirror
 [![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 ![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
-<!-- While 0.4.0 doesn't get released [![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror) -->
+[![Build Status](https://img.shields.io/travis/diasdavid/registry-mirror/master.svg?style=flat-square)](https://travis-ci.org/diasdavid/registry-mirror)
 
-> registry-mirror sets a mirror the the whole NPM registry, using IPFS for the discovery and transport of modules.
+> **Install your modules through IPFS!!** This CLI utility enables you to clone the npm registry into IPFS and/or mirror the registry from IPFS.
 
 # Resources
 
@@ -18,114 +20,65 @@ registry-mirror
 - [Lengthy introduction in a blog post](http://daviddias.me/blog/stellar-module-management/)
 - [Node.js Interactive Talk - Stellar Module Management](https://www.youtube.com/watch?v=-S-Tc7Gl8FM)
 
-# Quick setup (probably all that you need)
-
-## Install IPFS dev0.4.0
-
-To install IPFS dev0.4.0, you will need go installed, to install go in your machine, go to https://golang.org/dl and then run:
+# Installation
 
 ```bash
-$ go get -u github.com/ipfs/go-ipfs
-$ ipfs version
-ipfs version 0.4.0-dev
+> npm install ipfs-npm --global
 ```
 
-## Run IPFS daemon
-
-```bash
-$ ipfs daemon
-Initializing daemon...
-Swarm listening on /ip4/127.0.0.1/tcp/4001
-Swarm listening on /ip4/192.168.1.64/tcp/4001
-Swarm listening on /ip4/192.168.10.172/tcp/4001
-Swarm listening on /ip6/2001:8a0:7ac5:4201:4816:fd56:bea7:eaf3/tcp/4001
-Swarm listening on /ip6/2001:8a0:7ac5:4201:ae87:a3ff:fe19:def1/tcp/4001
-Swarm listening on /ip6/::1/tcp/4001
-API server listening on /ip4/127.0.0.1/tcp/5001
-Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
-Daemon is ready
-```
-
-## Install registry-mirror
-
-```bash
-$ npm i registry-mirror -g
-```
+This will make the `ipfs-npm` CLI tool available globally and an alias, `ipnpm`. We will use the alias for examples and API documentation, as it is shorter.
 
 # Usage
 
-Wait for the `Updated directory listing` log.
+> **WIP**
 
-```bash
-$ registry-mirror daemon
-registry-mirror [info] using output directory /npm-registry/
-registry-mirror [info] listening on 127.0.0.1:50321
-registry-mirror [info] Cloning NPM OFF
-registry-mirror [info] Updated directory listing, good to go :)
-```
+### Examples
 
-Port `50321` is default and can be set with `--port`.
+### API
 
-## Configure npm
+#### `ipnpm registry` commands
 
-Set up your npm to use `registry-mirror` with the default port through:
+##### `ipnpm registry clone` - Download and store the entire npm repository into IPFS
 
-```bash
-$ npm config set registry http://localhost:50321
-```
+Downloads the entire npm registry from registry.npmjs.org and stores it on the IPFS node. 
 
-If you picked another `--port` you need to adjust accordingly.
+This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 
-Good to npm install away! :)
+**options:**
+  - `seq-number` - Select the mirror sequence number to start from. Defaults to last, if none, 0.
+  - `flush` - Write the modules to disk as soon as they are written into IPFS. Defaults to `true`
+  - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
+  - `log` - Sets the log level, default is `module`. Other options are: `[all, module]`. e.g `ipnpm registry clone --log=all`.
 
-# Usage
+##### `ipnpm registry index publish` - Publishes the current index we know as an IPNS name
 
-## CLI
+This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 
-```bash
-$ registry-mirror
-Usage: registry-mirror COMMAND [OPTIONS]
+**options:**
+  - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
 
-Available commands:
+##### `ipnpm registry index fetch` - Fetches the latest known index from the IPFS network
 
-daemon       Mirror npm registry
-ls           Check modules available in the mirror
-npm publish  Publish an IPNS record with your current npm list
-npm update   Update your npm list of modules from IPNS
-```
+This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 
-## Commands
+**options:**
+  - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
 
-### daemon
+#### `ipnpm daemon` - Starts an ipfs-npm daemon, so that we can point our npm cli to ithttps://www.youtube.com/watch?v=zGjj6Wg8SJA&feature=youtu.be
 
-> starts the registry-mirror daemon
+This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 
-`$ registry-mirror daemon`
+**options:**
+  - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
 
-Options:
-- `--clone` - Download the entire npm (Otherwise it just tries to read)
-- `--port=<port>` Listen on the specified port
-- `--host=<host>` Listen on the specified port
+#### `ipnpm install <module>` - Similar to `npm install`, however it tries first to download the module from npm and then falls back into the regular registry
 
-### ls
+This command will try to find an IPFS node on the default (`IPFS_PATH`), if none is found, it will start one.
 
-> lists all the modules available on the IPFS accessible registry and their respective hashes
+**options:**
+  - `ipfs` - Select an IPFS daemon by passing its API URL. e.g `ipnpm registry clone --ipfs=/ip4/127.0.0.1/tcp/5001`.
 
-`$ registry-mirror ls`
-
-### npm update
-
-> update your local registry cache
-
-`$ registry npm update`
-
-### npm publish
-
-> publish the version of the cache you have from npm
-
-`$ registry npm publish`
-
-## Important
+## Important: Getting 502 errors?
 
 If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
 

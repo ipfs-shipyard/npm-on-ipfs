@@ -1,11 +1,22 @@
 #! /usr/bin/env node
 
-var ronin = require('ronin')
+'use strict'
 
-var cli = ronin(__dirname)
+const yargs = require('yargs')
+const updateNotifier = require('update-notifier')
+const readPkgUp = require('read-pkg-up')
 
-cli.run()
+const pkg = readPkgUp.sync({cwd: __dirname}).pkg
+updateNotifier({
+  pkg,
+  updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week
+}).notify()
 
-// cli.autoupdate(function () {
-//  cli.run()
-// })
+yargs
+  .commandDir('commands')
+  .demand(1)
+  .help()
+  .version()
+  .strict()
+  .completion()
+  .argv

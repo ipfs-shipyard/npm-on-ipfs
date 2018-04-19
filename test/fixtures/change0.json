@@ -1,0 +1,672 @@
+{
+  "json": {
+    "_id": "validatr",
+    "_rev": "9-be781f92af7d1504f86dca4db40a400a",
+    "name": "validatr",
+    "description": "A data validation language",
+    "dist-tags": {
+      "latest": "0.0.5"
+    },
+    "versions": {
+      "0.0.2": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.2",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/grammar",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.2",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "7792dc732a3535e9ec72f6be52c5fc3dc4fe0681",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.2.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      },
+      "0.0.3": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.3",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.3",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "7ebc7525b1f4a95aaf84049b6694a1f1f9a6ad4d",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.3.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      },
+      "0.0.4": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.4",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.4",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "4445b4daf8348afc590d84a91f347799b5cbb08b",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.4.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      },
+      "0.0.5": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.5",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.5",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "05138eba5a2ad9c8e810cbb3fc2670178a4efd1a",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.5.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    },
+    "readme": null,
+    "maintainers": [
+      {
+        "name": "christophe.eymard",
+        "email": "christophe.eymard@ravelsoft.com"
+      }
+    ],
+    "time": {
+      "modified": "2011-11-22T15:58:57.905Z",
+      "created": "2011-11-15T16:10:35.477Z",
+      "0.0.2": "2011-11-15T16:10:37.441Z",
+      "0.0.3": "2011-11-15T16:15:15.996Z",
+      "0.0.4": "2011-11-16T17:01:14.580Z",
+      "0.0.5": "2011-11-22T15:58:57.905Z"
+    },
+    "author": {
+      "name": "Christophe Eymard",
+      "email": "christophe.eymard@ravelsoft.com",
+      "url": "http://www.ravelsoft.com"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/ravelsoft/validatr.git"
+    },
+    "_attachments": {}
+  },
+  "versions": [
+    {
+      "version": "latest",
+      "json": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.5",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.5",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "05138eba5a2ad9c8e810cbb3fc2670178a4efd1a",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.5.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.2",
+      "json": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.2",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/grammar",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.2",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "7792dc732a3535e9ec72f6be52c5fc3dc4fe0681",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.2.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.3",
+      "json": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.3",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.3",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "7ebc7525b1f4a95aaf84049b6694a1f1f9a6ad4d",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.3.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.4",
+      "json": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.4",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.4",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "4445b4daf8348afc590d84a91f347799b5cbb08b",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.4.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.5",
+      "json": {
+        "name": "validatr",
+        "description": "A data validation language",
+        "keywords": [
+          "language",
+          "compiler",
+          "validation"
+        ],
+        "author": {
+          "name": "Christophe Eymard",
+          "email": "christophe.eymard@ravelsoft.com",
+          "url": "http://www.ravelsoft.com"
+        },
+        "version": "0.0.5",
+        "homepage": "http://www.ravelsoft.com/",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/ravelsoft/validatr.git"
+        },
+        "licenses": [
+          {
+            "type": "MIT",
+            "url": "https://github.com/satyr/coco/raw/master/LICENSE"
+          }
+        ],
+        "engines": {
+          "node": ">=0.4.0"
+        },
+        "directories": {
+          "lib": "./lib"
+        },
+        "main": "./lib/main",
+        "bin": {
+          "validatr": "./lib/command.js"
+        },
+        "dependencies": {
+          "optimist": "0.2.3",
+          "jinjs": "latest"
+        },
+        "devDependencies": {
+          "pegco": "latest",
+          "rbuild": "latest",
+          "coco": "0.6.x",
+          "async": "latest",
+          "vows": "latest"
+        },
+        "_npmUser": {
+          "name": "christophe.eymard",
+          "email": "christophe.eymard@ravelsoft.com"
+        },
+        "_id": "validatr@0.0.5",
+        "_engineSupported": true,
+        "_npmVersion": "1.0.104",
+        "_nodeVersion": "v0.6.1",
+        "_defaultsLoaded": true,
+        "dist": {
+          "shasum": "05138eba5a2ad9c8e810cbb3fc2670178a4efd1a",
+          "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.5.tgz"
+        },
+        "maintainers": [
+          {
+            "name": "christophe.eymard",
+            "email": "christophe.eymard@ravelsoft.com"
+          }
+        ]
+      }
+    }
+  ],
+  "tarballs": [
+    {
+      "path": "/validatr/-/validatr-0.0.2.tgz",
+      "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.2.tgz",
+      "shasum": "7792dc732a3535e9ec72f6be52c5fc3dc4fe0681"
+    },
+    {
+      "path": "/validatr/-/validatr-0.0.3.tgz",
+      "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.3.tgz",
+      "shasum": "7ebc7525b1f4a95aaf84049b6694a1f1f9a6ad4d"
+    },
+    {
+      "path": "/validatr/-/validatr-0.0.4.tgz",
+      "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.4.tgz",
+      "shasum": "4445b4daf8348afc590d84a91f347799b5cbb08b"
+    },
+    {
+      "path": "/validatr/-/validatr-0.0.5.tgz",
+      "tarball": "https://registry.npmjs.org/validatr/-/validatr-0.0.5.tgz",
+      "shasum": "05138eba5a2ad9c8e810cbb3fc2670178a4efd1a"
+    }
+  ],
+  "seq": 199
+}

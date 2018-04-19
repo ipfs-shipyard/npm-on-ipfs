@@ -1,10 +1,9 @@
-tests/t-run*
+test/t-run*
+
 # Logs
 logs
 *.log
 
-
-registry
 # Runtime data
 pids
 *.pid
@@ -28,3 +27,5 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+
+flushlog.txt

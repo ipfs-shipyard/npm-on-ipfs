@@ -1,0 +1,5 @@
+=============== Oct 25, 2016 (CEST) ===============
+15:24:05.289158 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:24:05.290253 db@open opening
+15:24:05.295445 db@janitor F·5 G·0
+15:24:05.295478 db@open done T·5.196222ms

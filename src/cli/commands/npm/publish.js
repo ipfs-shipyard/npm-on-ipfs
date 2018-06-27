@@ -9,7 +9,7 @@ module.exports = Command.extend({
 
   options: {},
 
-  run: function (name) {
+  run: function () {
     rm.registryCache.publish()
   }
 })

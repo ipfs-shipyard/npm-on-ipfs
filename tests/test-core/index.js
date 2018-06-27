@@ -1,11 +1,15 @@
-/* globals describe, before, after*/
+/* globals describe, before, after */
 
 'use strict'
 
-const expect = require('chai').expect
 const ipfsd = require('ipfsd-ctl')
+const df = ipfsd.create({
+  // type: 'js'
+})
 const ncp = require('ncp')
 const rimraf = require('rimraf')
+const series = require('async/series')
+const config = require('../../src/config')
 
 describe('core', () => {
   const repoExample = process.cwd() + '/tests/ipfs-repo-tests'
@@ -13,27 +17,41 @@ describe('core', () => {
 
   before(function (done) {
     this.timeout(500000)
-    ncp(repoExample, repoTests, (err) => {
-      expect(err).to.not.exist
-      ipfsd.disposable({
+
+    series([
+      (cb) => ncp(repoExample, repoTests, cb),
+      (cb) => df.spawn({
+        disposable: true,
         repoPath: repoTests,
-        init: false
-      }, (err, node) => {
-        expect(err).to.not.exist
-        node.startDaemon((err) => {
-          expect(err).to.not.exist
-          done()
-        })
-      })
+        start: true
+      }, cb)
+    ], (error, results) => {
+      if (!error) {
+        global.daemon = results.pop()
+
+        config.mirror = {
+          host: 'localhost',
+          port: 9040
+        }
+        config.apiCtl = global.daemon.api
+        config.blobStore = {
+          host: global.daemon.api.apiHost,
+          port: global.daemon.api.apiPort,
+          baseDir: '/npm-mirror'
+        }
+      }
+
+      done(error)
     })
   })
 
   after(function (done) {
     this.timeout(50000)
-    rimraf(repoTests, err => {
-      expect(err).to.equal(null)
-      done()
-    })
+
+    series([
+      (cb) => global.daemon ? global.daemon.stop(cb) : cb(),
+      (cb) => rimraf(repoTests, cb)
+    ], done)
   })
 
   require('./test-mirror.js')

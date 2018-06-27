@@ -51,7 +51,6 @@ function serveNPM (callback) {
 
     rs.on('error', function (err) {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
-      return
     })
     rs.on('data', function (chunk) {
       file = file + chunk.toString('utf8')
@@ -67,7 +66,7 @@ function serveNPM (callback) {
           }
         })
       }
-      var buf = new Buffer(JSON.stringify(data))
+      var buf = Buffer.from(JSON.stringify(data))
       cache.set(req.url, buf)
       res.type('json')
       res.send(buf)
@@ -80,6 +79,7 @@ function serveNPM (callback) {
 
     console.log('mirror is running')
     console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
+
     callback()
   })
 

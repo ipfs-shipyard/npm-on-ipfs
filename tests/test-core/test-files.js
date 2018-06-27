@@ -49,9 +49,7 @@ describe('files', () => {
         success()
       }
     })
-    mockery.registerMock('mkdirp', (dir, callback) => {
-      callback()
-    })
+    mockery.registerMock('./ibs', memblob)
     mockery.enable({
       useCleanCache: true,
       warnOnReplace: false,

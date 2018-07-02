@@ -1,3 +1,5 @@
+'use strict'
+
 const ipfsAPI = require('ipfs-api')
 const debug = require('debug')
 const path = require('path')

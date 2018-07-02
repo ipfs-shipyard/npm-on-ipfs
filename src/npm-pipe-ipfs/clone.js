@@ -1,3 +1,5 @@
+'use strict'
+
 require('dnscache')({ enable: true })
 const follow = require('follow-registry')
 const patch = require('patch-package-json')

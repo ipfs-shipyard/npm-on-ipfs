@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha tests/test-*/index.js",
     "coverage": "istanbul cover --print both -- _mocha tests/test-*/index.js",
-    "lint": "standard"
+    "lint": "aegir lint"
   },
   "pre-commit": [
     "lint",
@@ -35,23 +35,24 @@
     "express": "^4.12.3",
     "follow-registry": "^3.1.0",
     "http-https": "^1.0.0",
-    "ipfs-api": "^22.1.0",
+    "ipfs-api": "^22.2.1",
     "ipfs-blob-store": "^1.2.0",
     "lru-cache": "^4.1.3",
     "patch-package-json": "0.0.4",
-    "ronin": "^0.3.11",
+    "ronin": "~0.3.11",
     "st": "^1.0.0",
     "timethat": "0.0.3"
   },
   "devDependencies": {
     "abstract-blob-store": "^3.2.0",
+    "aegir": "^14.0.0",
     "assert": "^1.3.0",
     "chai": "^4.1.2",
     "eslint-config-standard-react": "^6.0.0",
     "eslint-plugin-react": "^7.9.1",
     "http-https": "^1.0.0",
-    "ipfsd-ctl": "^0.37.4",
-    "istanbul": "^0.4.2",
+    "ipfsd-ctl": "~0.37.5",
+    "istanbul": "~0.4.2",
     "mocha": "^5.2.0",
     "mockery": "^2.1.0",
     "ncp": "^2.0.0",

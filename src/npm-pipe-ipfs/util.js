@@ -1,3 +1,5 @@
+'use strict'
+
 var url = require('url')
 var verify = require('./verify.js').verify
 var path = require('path')

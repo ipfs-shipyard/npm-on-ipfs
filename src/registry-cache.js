@@ -1,3 +1,5 @@
+'use strict'
+
 const debug = require('debug')
 const log = debug('registry-mirror')
 const async = require('async')

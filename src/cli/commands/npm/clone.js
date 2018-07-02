@@ -1,3 +1,5 @@
+'use strict'
+
 var Command = require('ronin').Command
 var debug = require('debug')
 var clone = require('../../../npm-pipe-ipfs/clone')

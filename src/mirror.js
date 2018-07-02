@@ -1,3 +1,5 @@
+'use strict'
+
 var express = require('express')
 var lru = require('lru-cache')
 var url = require('url')
@@ -73,9 +75,11 @@ function serveNPM (callback) {
     })
   })
 
-  self.server = app.listen(config.mirror.port, config.mirror.host, function () {
-    var addr = self.server.address()
-    self.port = addr.port
+  const output = {}
+
+  output.server = app.listen(config.mirror.port, config.mirror.host, function () {
+    var addr = output.server.address()
+    output.port = addr.port
 
     console.log('mirror is running')
     console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
@@ -83,5 +87,5 @@ function serveNPM (callback) {
     callback()
   })
 
-  return self
+  return output
 }

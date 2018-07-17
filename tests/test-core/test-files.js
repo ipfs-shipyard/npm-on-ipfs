@@ -8,11 +8,11 @@ const mockery = require('mockery')
 const testError = new Error()
 const memblob = require('abstract-blob-store')('/tests')
 
-var files
+let files
 
 describe('files', () => {
   before((done) => {
-    mockery.registerMock('./verify.js', {
+    mockery.registerMock('./verify', {
       verify: (obj, callback) => {
         obj.verified = true
         if (obj.makeError) {
@@ -22,10 +22,11 @@ describe('files', () => {
         }
       }
     })
-    mockery.registerMock('./config.js', {
+    mockery.registerMock('../config', {
       dir: __dirname,
       limit: 2,
-      blobstore: memblob
+      blobstore: memblob,
+      log: () => {}
     })
     mockery.registerMock('./hooks', {
       afterTarball: (info, callback, callback2) => {

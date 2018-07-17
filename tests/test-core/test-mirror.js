@@ -6,7 +6,7 @@ const expect = require('chai').expect
 const mirror = require('../../src').mirror
 const wreck = require('wreck')
 
-describe('mirror', () => {
+describe.skip('mirror', () => {
   const url = 'http://127.0.0.1:' + 9040 + '/'
 
   before(function (done) {

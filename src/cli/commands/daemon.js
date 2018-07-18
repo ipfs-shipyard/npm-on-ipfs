@@ -1,3 +1,5 @@
+'use strict'
+
 var Command = require('ronin').Command
 var rm = require('./../../index.js')
 var async = require('async')

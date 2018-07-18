@@ -1,3 +1,5 @@
+'use strict'
+
 var Command = require('ronin').Command
 var rm = require('../../../index.js')
 var debug = require('debug')
@@ -9,7 +11,7 @@ module.exports = Command.extend({
 
   options: {},
 
-  run: function (name) {
+  run: function () {
     rm.registryCache.publish()
   }
 })

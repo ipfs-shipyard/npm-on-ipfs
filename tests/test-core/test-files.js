@@ -1,16 +1,18 @@
 /* globals describe, before, after, it */
 
+'use strict'
+
 const assert = require('assert')
 const mockery = require('mockery')
 
 const testError = new Error()
 const memblob = require('abstract-blob-store')('/tests')
 
-var files
+let files
 
 describe('files', () => {
   before((done) => {
-    mockery.registerMock('./verify.js', {
+    mockery.registerMock('./verify', {
       verify: (obj, callback) => {
         obj.verified = true
         if (obj.makeError) {
@@ -20,10 +22,11 @@ describe('files', () => {
         }
       }
     })
-    mockery.registerMock('./config.js', {
+    mockery.registerMock('../config', {
       dir: __dirname,
       limit: 2,
-      blobstore: memblob
+      blobstore: memblob,
+      log: () => {}
     })
     mockery.registerMock('./hooks', {
       afterTarball: (info, callback, callback2) => {
@@ -49,9 +52,7 @@ describe('files', () => {
         success()
       }
     })
-    mockery.registerMock('mkdirp', (dir, callback) => {
-      callback()
-    })
+    mockery.registerMock('./ibs', memblob)
     mockery.enable({
       useCleanCache: true,
       warnOnReplace: false,

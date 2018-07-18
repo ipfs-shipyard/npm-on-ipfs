@@ -1,5 +1,7 @@
 /* globals describe, before, after, it, beforeEach */
 
+'use strict'
+
 const assert = require('assert')
 const mockery = require('mockery')
 const crypto = require('crypto')

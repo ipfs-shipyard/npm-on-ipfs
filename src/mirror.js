@@ -1,3 +1,5 @@
+'use strict'
+
 var express = require('express')
 var lru = require('lru-cache')
 var url = require('url')
@@ -51,7 +53,6 @@ function serveNPM (callback) {
 
     rs.on('error', function (err) {
       res.sendStatus(err.code === 'ENOENT' ? 404 : 500)
-      return
     })
     rs.on('data', function (chunk) {
       file = file + chunk.toString('utf8')
@@ -67,21 +68,24 @@ function serveNPM (callback) {
           }
         })
       }
-      var buf = new Buffer(JSON.stringify(data))
+      var buf = Buffer.from(JSON.stringify(data))
       cache.set(req.url, buf)
       res.type('json')
       res.send(buf)
     })
   })
 
-  self.server = app.listen(config.mirror.port, config.mirror.host, function () {
-    var addr = self.server.address()
-    self.port = addr.port
+  const output = {}
+
+  output.server = app.listen(config.mirror.port, config.mirror.host, function () {
+    var addr = output.server.address()
+    output.port = addr.port
 
     console.log('mirror is running')
     console.log('use npm with --registry=http://' + addr.address + ':' + addr.port)
+
     callback()
   })
 
-  return self
+  return output
 }

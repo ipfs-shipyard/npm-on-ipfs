@@ -1,3 +1,5 @@
+'use strict'
+
 // hook for the several states of downloading an npm module
 
 function hook (data, callback, success) {

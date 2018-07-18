@@ -1,3 +1,5 @@
+'use strict'
+
 const http = require('http-https')
 const config = require('./../config')
 const hooks = require('./hooks')

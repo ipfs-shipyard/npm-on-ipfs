@@ -1,0 +1,10 @@
+version: '3'
+services:
+  ipfs:
+    image: ipfs/js-ipfs
+  npm:
+    build: .
+    ports:
+      - "5000:5000"
+    links:
+      - ipfs

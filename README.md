@@ -19,30 +19,26 @@ registry-mirror
 
 # Quick setup (probably all that you need)
 
-## Install IPFS dev0.4.0
+## Install IPFS or js-IPFS
 
-To install IPFS dev0.4.0, you will need go installed, to install go in your machine, go to https://golang.org/dl and then run:
+Follow [these instructions](https://ipfs.io/docs/install/) for `go` or for `js`:
 
 ```bash
-$ go get -u github.com/ipfs/go-ipfs
-$ ipfs version
-ipfs version 0.4.0-dev
+$ npm install -g ipfs
 ```
 
 ## Run IPFS daemon
 
+`go`:
+
 ```bash
 $ ipfs daemon
-Initializing daemon...
-Swarm listening on /ip4/127.0.0.1/tcp/4001
-Swarm listening on /ip4/192.168.1.64/tcp/4001
-Swarm listening on /ip4/192.168.10.172/tcp/4001
-Swarm listening on /ip6/2001:8a0:7ac5:4201:4816:fd56:bea7:eaf3/tcp/4001
-Swarm listening on /ip6/2001:8a0:7ac5:4201:ae87:a3ff:fe19:def1/tcp/4001
-Swarm listening on /ip6/::1/tcp/4001
-API server listening on /ip4/127.0.0.1/tcp/5001
-Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
-Daemon is ready
+```
+
+`js`:
+
+```bash
+$ jsipfs daemon
 ```
 
 ## Install registry-mirror
@@ -56,11 +52,7 @@ $ npm i registry-mirror -g
 Wait for the `Updated directory listing` log.
 
 ```bash
-$ registry-mirror daemon
-registry-mirror [info] using output directory /npm-registry/
-registry-mirror [info] listening on 127.0.0.1:50321
-registry-mirror [info] Cloning NPM OFF
-registry-mirror [info] Updated directory listing, good to go :)
+$ registry-mirror
 ```
 
 Port `50321` is default and can be set with `--port`.
@@ -82,47 +74,41 @@ Good to npm install away! :)
 ## CLI
 
 ```bash
-$ registry-mirror
-Usage: registry-mirror COMMAND [OPTIONS]
+$ registry-mirror --help
+registry-mirror
 
-Available commands:
-
-daemon       Mirror npm registry
-ls           Check modules available in the mirror
-npm publish  Publish an IPNS record with your current npm list
-npm update   Update your npm list of modules from IPNS
-```
-
-## Commands
-
-### daemon
-
-> starts the registry-mirror daemon
-
-`$ registry-mirror daemon`
+Starts a registry server that uses IPFS to fetch js dependencies
 
 Options:
-- `--clone` - Download the entire npm (Otherwise it just tries to read)
-- `--port=<port>` Listen on the specified port
-- `--host=<host>` Listen on the specified port
-
-### ls
-
-> lists all the modules available on the IPFS accessible registry and their respective hashes
-
-`$ registry-mirror ls`
-
-### npm update
-
-> update your local registry cache
-
-`$ registry npm update`
-
-### npm publish
-
-> publish the version of the cache you have from npm
-
-`$ registry npm publish`
+  --help                    Show help                                  [boolean]
+  --version                 Show version number                        [boolean]
+  --clone                   Whether to clone the registry in the background
+                                                                 [default: true]
+  --clone-tarballs          Whether to eagerly download tarballs [default: true]
+  --mirror-host             Which host to listen to requests on
+                                                          [default: "localhost"]
+  --mirror-port             Which port to listen to requests on [default: 50321]
+  --mirror-protocol         Which protocol to use with the server
+                                                               [default: "http"]
+  --mirror-registry         Where to download missing files from
+                                         [default: "https://registry.npmjs.com"]
+  --ipfs-port               Which port the daemon is listening on[default: 5001]
+  --ipfs-host               Which host the daemon is listening on
+                                                          [default: "127.0.0.1"]
+  --ipfs-base-dir           Which mfs prefix to use
+                                                  [default: "/commons-registry"]
+  --ipfs-flush              Whether to flush the MFS cache       [default: true]
+  --clone-skim              Which registry to clone
+                               [default: "https://replicate.npmjs.com/registry"]
+  --clone-user-agent        What user agent to specify when contacting the
+                            registry    [default: "IPFS registry-mirror worker"]
+  --clone-delay             How long in ms to wait between cloning each module
+                                                                    [default: 0]
+  --clone-upgrade-to-https  If a tarball is specifed with an http URL, whether
+                            to upgrade it to https               [default: true]
+  --request-max-sockets     How many concurrent http requests to make while
+                            cloning the repo                       [default: 10]
+```
 
 ## Important
 

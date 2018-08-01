@@ -15,7 +15,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'Whether to clone the registry in the background',
       default: true
     })
-    .option('clone-tarballs', {
+    .option('download-tarballs', {
       describe: 'Whether to eagerly download tarballs',
       default: true
     })

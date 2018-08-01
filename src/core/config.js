@@ -20,7 +20,7 @@ module.exports = (overrides) => {
       registry: process.env.CLONE_REGISTRY_URL || overrides.cloneRegistry,
       skim: process.env.CLONE_SKIM_URL || overrides.cloneSkim,
       upgradeToHttps: Boolean(process.env.CLONE_UPGRADE_TO_HTTPS) || overrides.cloneUpgradeToHttps,
-      downloadTarballs: Boolean(process.env.CLONE_DOWNLOAD_TARBALLS) || overrides.cloneTarballs,
+      downloadTarballs: Boolean(process.env.CLONE_DOWNLOAD_TARBALLS) || overrides.downloadTarballs,
       userAgent: process.env.CLONE_USER_AGENT || overrides.cloneUserAgent
     },
     request: {

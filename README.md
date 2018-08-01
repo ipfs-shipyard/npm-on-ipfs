@@ -84,7 +84,7 @@ Options:
   --version                 Show version number                        [boolean]
   --clone                   Whether to clone the registry in the background
                                                                  [default: true]
-  --clone-tarballs          Whether to eagerly download tarballs [default: true]
+  --download-tarballs       Whether to eagerly download tarballs [default: true]
   --mirror-host             Which host to listen to requests on
                                                           [default: "localhost"]
   --mirror-port             Which port to listen to requests on [default: 50321]

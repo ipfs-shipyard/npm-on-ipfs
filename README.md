@@ -19,32 +19,23 @@ registry-mirror
 
 # Quick setup (probably all that you need)
 
-## Install IPFS or js-IPFS
+## Install go-ipfs or js-ipfs
 
-Follow [these instructions](https://ipfs.io/docs/install/) for `go` or for `js`:
+For: 
+`go-ipfs`: Follow [these instructions](https://ipfs.io/docs/install/)
+`js-ipfs`: `> npm install -g ipfs`
 
-```bash
-$ npm install -g ipfs
-```
+## Start the IPFS daemon
 
-## Run IPFS daemon
+For: 
+`go-ipfs`: `> ipfs daemon`
+`js-ipfs`: `> jsipfs daemon`
 
-`go`:
 
-```bash
-$ ipfs daemon
-```
-
-`js`:
+## Install this module
 
 ```bash
-$ jsipfs daemon
-```
-
-## Install registry-mirror
-
-```bash
-$ npm i registry-mirror -g
+> npm i registry-mirror -g
 ```
 
 # Usage
@@ -52,7 +43,7 @@ $ npm i registry-mirror -g
 Wait for the `Updated directory listing` log.
 
 ```bash
-$ registry-mirror
+> registry-mirror
 ```
 
 Port `50321` is default and can be set with `--port`.

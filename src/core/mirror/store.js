@@ -7,8 +7,16 @@ const {
 const add = require('../clone/add')
 const request = require('request')
 
-module.exports = (options) => {
-  const store = ipfsBlobStore(options.ipfs)
+module.exports = async (options) => {
+  if (options.ipfs.port && options.ipfs.host) {
+    options.store.port = options.ipfs.port
+    options.store.host = options.ipfs.host
+    console.info(`👺 Connecting to remote IPFS daemon at ${options.ipfs.port}:${options.ipfs.host}`)
+  } else {
+    console.info('😈 Using in-process IPFS daemon')
+  }
+
+  const store = await ipfsBlobStore(options.store)
 
   return {
     createReadStream: (path) => {
@@ -16,7 +24,10 @@ module.exports = (options) => {
 
       const stream = store.createReadStream(path)
       stream.once('error', readError(options, store, path, output, stream))
-      stream.pipe(output)
+      stream.once('data', (chunk) => {
+        output.write(chunk)
+        stream.pipe(output)
+      })
 
       return output
     }
@@ -25,11 +36,11 @@ module.exports = (options) => {
 
 const readError = (options, store, path, output, stream) => {
   return (error) => {
-    stream.unpipe(output)
+    //stream.unpipe(output)
 
     const startDownload = Date.now()
 
-    if (error.message.includes('file does not exist')) {
+    if (error.message.includes('does not exist')) {
       // try getting the file directly from npm
       downloadFile(options, store, path)
         .then(() => {

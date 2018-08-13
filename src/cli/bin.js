@@ -2,6 +2,8 @@
 
 'use strict'
 
+process.title = 'registry-mirror'
+
 const dash = require('appmetrics-dash')
 dash.attach({
   port: 3001
@@ -37,11 +39,11 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('ipfs-port', {
       describe: 'Which port the daemon is listening on',
-      default: 5001
+      default: null
     })
     .option('ipfs-host', {
       describe: 'Which host the daemon is listening on',
-      default: '127.0.0.1'
+      default: null
     })
     .option('ipfs-base-dir', {
       describe: 'Which mfs prefix to use',
@@ -50,6 +52,14 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     .option('ipfs-flush', {
       describe: 'Whether to flush the MFS cache',
       default: true
+    })
+    .option('ipfs-max-requests', {
+      describe: 'How many concurrent requests to make to the IPFS daemon',
+      default: 5
+    })
+    .option('ipfs-type', {
+      describe: '"proc" to start an in process node, "go" or "js" to connect to a remote daemon (in conjunction with --ipfs-port and --ipfs-host).',
+      default: 'proc'
     })
     .option('clone-skim', {
       describe: 'Which registry to clone',

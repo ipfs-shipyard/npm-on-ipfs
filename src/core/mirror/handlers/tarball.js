@@ -7,9 +7,10 @@ module.exports = (request, response, next) => {
   log(`Requested ${request.url}`)
 
   log(`Loading ${request.url}`)
-  request.app.locals.store
-    .createReadStream(request.url)
-    .once('error', (error) => {
+
+  const readStream = request.app.locals.store.createReadStream(request.url)
+
+  readStream.once('error', (error) => {
       if (error.code === 'ECONNREFUSED') {
         response.statusCode = 504
       } else if (error.code === 'ECONNRESET') {
@@ -18,6 +19,8 @@ module.exports = (request, response, next) => {
       } else {
         response.statusCode = 404
       }
+
+      readStream.unpipe(response)
 
       next(error)
     })

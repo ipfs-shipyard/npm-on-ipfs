@@ -18,11 +18,12 @@ const createRegistryUpdateHandler = (options, blobStore) => {
     add(options, data, blobStore)
       .then(() => {
         console.log(`🐙 [${data.seq}] processed ${data.json.name}`)
-        setTimeout(() => callback(), options.clone.delay)
       })
       .catch((error) => {
         console.error(`💥 [${data.seq}] error processing ${data.json.name} - ${error}`)
-        setTimeout(() => callback(error), options.clone.delay)
+      })
+      .then(() => {
+        setTimeout(() => callback(), options.clone.delay)
       })
   }
 }

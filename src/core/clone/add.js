@@ -5,96 +5,138 @@ const request = require('request')
 const {
   saveJSON
 } = require('./files.js')
+const createPool = require('../utils/create-pool')
 const URL = require('url')
 
-const updatePaths = (options, pkg, blobStore) => {
-  return new Promise((resolve, reject) => {
-    // find all the places we store tarball URLs
-    const versions = []
-      .concat(
-        pkg.json && pkg.json.versions && Object.keys(pkg.json.versions).map(key => pkg.json.versions[key].dist)
-      )
-      .concat(
-        pkg.versions && pkg.versions.map(version => version.json && version.json.dist)
-      )
-      .concat(
-        pkg.tarballs
-      )
-      .filter(Boolean)
+// shared executor pool so as to not overwhelm the ipfs daemon
+let pool
 
-    const tarballs = {}
+const extractTarballsAndUpdatePaths = (options, pkg) => {
+  // find all the places we store tarball URLs
+  const versions = []
+    .concat(
+      pkg.json && pkg.json.versions && Object.keys(pkg.json.versions).map(key => pkg.json.versions[key].dist)
+    )
+    .concat(
+      pkg.versions && pkg.versions.map(version => version.json && version.json.dist)
+    )
+    .concat(
+      pkg.tarballs
+    )
+    .filter(Boolean)
 
-    versions.forEach(version => {
-      if (!tarballs[version.tarball]) {
-        tarballs[version.tarball] = {
-          shasum: version.shasum,
-          tarball: version.tarball,
-          locations: []
-        }
+  const tarballs = {}
+
+  versions.forEach(version => {
+    if (!tarballs[version.tarball]) {
+      const url = URL.parse(version.tarball)
+
+      if (url.protocol === 'http:' && options.clone.upgradeToHttps) {
+        url.protocol = 'https:'
       }
 
-      tarballs[version.tarball].locations.push(version)
+      tarballs[version.tarball] = {
+        shasum: version.shasum,
+        tarball: version.tarball,
+        url,
+        locations: []
+      }
+    }
+
+    tarballs[version.tarball].locations.push(version)
+  })
+
+  let prefix = `${options.mirror.protocol}://${options.mirror.host}`
+
+  if ((options.mirror.protocol === 'https' && options.mirror.port !== 443) || (options.mirror.protocol === 'http' && options.mirror.port !== 80)) {
+    prefix = `${prefix}:${options.mirror.port}`
+  }
+
+  Object.keys(tarballs)
+    .forEach(key => {
+      const tarball = tarballs[key]
+      const newLocation = `${prefix}${tarball.url.pathname}`
+
+      tarballs[key].locations.forEach(location => {
+        location.tarball = newLocation
+      })
+
+      log(`Rewrote ${key} to ${newLocation}`)
     })
 
-    resolve(tarballs)
-  })
-    .then(tarballs => Promise.all(
-      Object.keys(tarballs)
-        .map(key => {
+  return tarballs
+}
+
+const storeTarballs = (options, tarballs, blobStore) => {
+  return Promise.all(
+    Object.keys(tarballs)
+      .map(key => {
+        return () => {
           return new Promise((resolve, reject) => {
-            const url = URL.parse(key)
+            const tarball = tarballs[key]
 
-            if (url.protocol === 'http:' && options.clone.upgradeToHttps) {
-              url.protocol = 'https:'
-            }
+            log(`Storing ${tarball.url.href} at ${tarball.url.pathname}`)
 
-            if (!options.clone.downloadTarballs) {
-              return resolve({
-                key: url.pathname
-              })
-            }
-
-            log(`Storing ${url.href} at ${url.pathname}`)
-
-            const writeStream = blobStore.createWriteStream(url.pathname, (error, meta) => {
+            blobStore.exists(tarball.url.pathname, (error, exists) => {
               if (error) {
                 return reject(error)
               }
 
-              return resolve(meta)
-            })
-
-            request
-              .get(url.href, options.request)
-              .pipe(writeStream)
-          })
-            .then(meta => {
-              let prefix = `${options.mirror.protocol}://${options.mirror.host}`
-
-              if ((options.mirror.protocol === 'https' && options.mirror.port !== 443) || (options.mirror.protocol === 'http' && options.mirror.port !== 80)) {
-                prefix = `${prefix}:${options.mirror.port}`
+              if (exists) {
+                console.info(`🍏️ Already had ${tarball.url.pathname}`)
+                return resolve()
               }
 
-              const newLocation = `${prefix}${meta.key}`
+              const writeStream = blobStore.createWriteStream(tarball.url.pathname, (error) => {
+                if (error) {
+                  return reject(error)
+                }
 
-              tarballs[key].locations.forEach(location => {
-                location.tarball = newLocation
+                console.info(`🛢️  Stored ${tarball.url.pathname}`)
+                return resolve()
               })
 
-              log(`Rewrote ${key} to ${newLocation}`)
+              request
+                .get(tarball.url.href, options.request)
+                .on('error', (error) => {
+                  writeStream.end()
+                  reject(error)
+                })
+                .pipe(writeStream)
             })
-        })
-    ))
+          })
+            .catch(error => {
+              console.error(`💥 Error storing tarball ${key} - ${error}`)
+              log(error)
+            })
+        }
+      })
+      .map(fn => pool.addTask(fn))
+  )
 }
 
 module.exports = async (options, data, blobStore) => {
+  if (!pool) {
+    pool = createPool(options.clone.maxRequests)
+  }
+
   try {
-    await updatePaths(options, data, blobStore)
+    const tarballs = extractTarballsAndUpdatePaths(options, data)
+
     await saveJSON(data, blobStore)
 
     log(`Added ${data.json.name}`)
+
+    if (options.clone.downloadTarballs) {
+      storeTarballs(options, tarballs, blobStore)
+        .catch((error) => {
+          console.error(`💥 Error adding ${data.json.name} - ${error}`)
+          log(error)
+        })
+    }
   } catch (error) {
     console.error(`💥 Error adding ${data.json.name} - ${error}`)
+    log(error)
 
     throw error
   }

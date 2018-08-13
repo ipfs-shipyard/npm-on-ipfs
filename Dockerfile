@@ -7,4 +7,6 @@ RUN cd app && npm install && npm link
 
 COPY ./src /app/src
 
-CMD registry-mirror
+EXPOSE 50321
+
+CMD registry-mirror --ipfs-port=5002

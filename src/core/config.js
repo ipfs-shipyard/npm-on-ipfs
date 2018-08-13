@@ -8,9 +8,11 @@ module.exports = (overrides) => {
       protocol: process.env.MIRROR_PROTOCOL || overrides.mirrorProtocol,
       registry: process.env.MIRROR_REGISTRY || overrides.mirrorRegistry
     },
-    store: {
+    ipfs: {
       port: process.env.IPFS_PORT || overrides.ipfsPort,
       host: process.env.IPFS_HOST || overrides.ipfsHost,
+    },
+    store: {
       baseDir: process.env.IPFS_BASE_DIR || overrides.ipfsBaseDir,
       flush: Boolean(process.env.IPFS_FLUSH) || overrides.ipfsFlush
     },
@@ -21,7 +23,8 @@ module.exports = (overrides) => {
       skim: process.env.CLONE_SKIM_URL || overrides.cloneSkim,
       upgradeToHttps: Boolean(process.env.CLONE_UPGRADE_TO_HTTPS) || overrides.cloneUpgradeToHttps,
       downloadTarballs: Boolean(process.env.CLONE_DOWNLOAD_TARBALLS) || overrides.downloadTarballs,
-      userAgent: process.env.CLONE_USER_AGENT || overrides.cloneUserAgent
+      userAgent: process.env.CLONE_USER_AGENT || overrides.cloneUserAgent,
+      maxRequests: Number(process.env.IPFS_MAX_REQUESTS) || overrides.ipfsMaxRequests
     },
     request: {
       pool: {

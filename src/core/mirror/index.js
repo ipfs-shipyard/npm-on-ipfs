@@ -9,7 +9,7 @@ const {
 const clone = require('../clone')
 const store = require('./store')
 
-module.exports = (options) => {
+module.exports = async (options) => {
   options = config(options)
 
   console.info(`📦 Mirroring npm on ${options.mirror.host}:${options.mirror.port}`)
@@ -41,6 +41,8 @@ module.exports = (options) => {
     next()
   })
 
+  app.locals.store = await store(options)
+
   app.listen(options.mirror.port, () => {
     let url = `${options.mirror.protocol}://${options.mirror.host}`
 
@@ -52,8 +54,6 @@ module.exports = (options) => {
     console.info(`🔧 Please either update your npm config with 'npm config set registry ${url}'`)
     console.info(`🔧 or use the '--registry' flag, eg: 'npm install --registry=${url}'`)
   })
-
-  app.locals.store = store(options)
 
   if (options.clone.enabled) {
     clone(options)

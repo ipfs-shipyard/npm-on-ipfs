@@ -36,8 +36,6 @@ module.exports = async (options) => {
 
 const readError = (options, store, path, output, stream) => {
   return (error) => {
-    //stream.unpipe(output)
-
     const startDownload = Date.now()
 
     if (error.message.includes('does not exist')) {

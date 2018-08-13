@@ -11,19 +11,19 @@ module.exports = (request, response, next) => {
   const readStream = request.app.locals.store.createReadStream(request.url)
 
   readStream.once('error', (error) => {
-      if (error.code === 'ECONNREFUSED') {
-        response.statusCode = 504
-      } else if (error.code === 'ECONNRESET') {
-        // will trigger a retry from the npm client
-        response.statusCode = 500
-      } else {
-        response.statusCode = 404
-      }
+    if (error.code === 'ECONNREFUSED') {
+      response.statusCode = 504
+    } else if (error.code === 'ECONNRESET') {
+      // will trigger a retry from the npm client
+      response.statusCode = 500
+    } else {
+      response.statusCode = 404
+    }
 
-      readStream.unpipe(response)
+    readStream.unpipe(response)
 
-      next(error)
-    })
+    next(error)
+  })
     .once('data', () => {
       response.statusCode = 200
       response.setHeader('Content-type', 'application/octet-stream')

@@ -10,7 +10,7 @@ module.exports = (overrides) => {
     },
     ipfs: {
       port: process.env.IPFS_PORT || overrides.ipfsPort,
-      host: process.env.IPFS_HOST || overrides.ipfsHost,
+      host: process.env.IPFS_HOST || overrides.ipfsHost
     },
     store: {
       baseDir: process.env.IPFS_BASE_DIR || overrides.ipfsBaseDir,

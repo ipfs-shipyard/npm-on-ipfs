@@ -22,14 +22,14 @@ registry-mirror
 ## Install go-ipfs or js-ipfs
 
 For: 
-`go-ipfs`: Follow [these instructions](https://ipfs.io/docs/install/)
-`js-ipfs`: `> npm install -g ipfs`
+- `go-ipfs`: Follow [these instructions](https://ipfs.io/docs/install/)
+- `js-ipfs`: `> npm install -g ipfs`
 
 ## Start the IPFS daemon
 
 For: 
-`go-ipfs`: `> ipfs daemon`
-`js-ipfs`: `> jsipfs daemon`
+- `go-ipfs`: `> ipfs daemon`
+- `js-ipfs`: `> jsipfs daemon`
 
 
 ## Install this module

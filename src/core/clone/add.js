@@ -78,7 +78,9 @@ const storeTarballs = (options, tarballs, blobStore) => {
             log(`Storing ${tarball.url.href} at ${tarball.url.pathname}`)
 
             blobStore.exists(tarball.url.pathname, (error, exists) => {
-              if (error) {
+              if (error && error.code !== 0) {
+                console.info('error', error)
+                console.info('error.code', error.code)
                 return reject(error)
               }
 

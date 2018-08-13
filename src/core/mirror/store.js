@@ -1,29 +1,18 @@
 'use strict'
 
-const ipfsBlobStore = require('ipfs-blob-store')
 const {
   PassThrough
 } = require('stream')
 const add = require('../clone/add')
 const request = require('request')
 
-module.exports = async (options) => {
-  if (options.ipfs.port && options.ipfs.host) {
-    options.store.port = options.ipfs.port
-    options.store.host = options.ipfs.host
-    console.info(`👺 Connecting to remote IPFS daemon at ${options.ipfs.port}:${options.ipfs.host}`)
-  } else {
-    console.info('😈 Using in-process IPFS daemon')
-  }
-
-  const store = await ipfsBlobStore(options.store)
-
+module.exports = async (options, blobStore) => {
   return {
     createReadStream: (path) => {
       const output = new PassThrough()
 
-      const stream = store.createReadStream(path)
-      stream.once('error', readError(options, store, path, output, stream))
+      const stream = blobStore.createReadStream(path)
+      stream.once('error', readError(options, blobStore, path, output, stream))
       stream.once('data', (chunk) => {
         output.write(chunk)
         stream.pipe(output)

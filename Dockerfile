@@ -9,4 +9,4 @@ COPY ./src /app/src
 
 EXPOSE 50321
 
-CMD registry-mirror --ipfs-port=5002
+CMD registry-mirror

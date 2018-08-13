@@ -8,6 +8,7 @@ const {
 } = require('./handlers')
 const clone = require('../clone')
 const store = require('./store')
+const ipfsBlobStore = require('ipfs-blob-store')
 
 module.exports = async (options) => {
   options = config(options)
@@ -41,7 +42,17 @@ module.exports = async (options) => {
     next()
   })
 
-  app.locals.store = await store(options)
+  if (options.ipfs.port && options.ipfs.host) {
+    options.store.port = options.ipfs.port
+    options.store.host = options.ipfs.host
+    console.info(`👺 Connecting to remote IPFS daemon at ${options.ipfs.port}:${options.ipfs.host}`)
+  } else {
+    console.info('😈 Using in-process IPFS daemon')
+  }
+
+  const blobStore = await ipfsBlobStore(options.store)
+
+  app.locals.store = await store(options, blobStore)
 
   app.listen(options.mirror.port, () => {
     let url = `${options.mirror.protocol}://${options.mirror.host}`
@@ -56,6 +67,6 @@ module.exports = async (options) => {
   })
 
   if (options.clone.enabled) {
-    clone(options)
+    clone(options, blobStore)
   }
 }

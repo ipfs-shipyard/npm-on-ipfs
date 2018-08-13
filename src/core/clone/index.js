@@ -28,7 +28,7 @@ const createRegistryUpdateHandler = (options, blobStore) => {
   }
 }
 
-module.exports = (options) => {
+module.exports = (options, blobStore) => {
   console.info('🌈 Cloning registry...')
 
   if (options.clone.downloadTarballs) {
@@ -39,6 +39,6 @@ module.exports = (options) => {
     ua: options.clone.userAgent,
     skim: options.clone.skim,
     // registry: options.clone.registry,
-    handler: createRegistryUpdateHandler(options, ipfsBlobStore(options.ipfs))
+    handler: createRegistryUpdateHandler(options, blobStore || ipfsBlobStore(options.ipfs))
   })
 }

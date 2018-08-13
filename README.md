@@ -19,19 +19,6 @@ registry-mirror
 
 # Quick setup (probably all that you need)
 
-## Install go-ipfs or js-ipfs
-
-For: 
-- `go-ipfs`: Follow [these instructions](https://ipfs.io/docs/install/)
-- `js-ipfs`: `> npm install -g ipfs`
-
-## Start the IPFS daemon
-
-For: 
-- `go-ipfs`: `> ipfs daemon`
-- `js-ipfs`: `> jsipfs daemon`
-
-
 ## Install this module
 
 ```bash
@@ -40,10 +27,18 @@ For:
 
 # Usage
 
-Wait for the `Updated directory listing` log.
+Wait for the `Server running` message:
 
 ```bash
-> registry-mirror
+$ docker run registry-mirror
+📦 Mirroring npm on localhost:50321
+😈 Using in-process IPFS daemon
+Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/ipfs/Qm...
+Swarm listening on /ip4/127.0.0.1/tcp/4002/ipfs/Qm...
+Swarm listening on /ip4/172.17.0.2/tcp/4002/ipfs/Qm...
+🚀 Server running
+🔧 Please either update your npm config with 'npm config set registry http://localhost:50321'
+🔧 or use the '--registry' flag, eg: 'npm install --registry=http://localhost:50321'
 ```
 
 Port `50321` is default and can be set with `--port`.
@@ -83,12 +78,16 @@ Options:
                                                                [default: "http"]
   --mirror-registry         Where to download missing files from
                                          [default: "https://registry.npmjs.com"]
-  --ipfs-port               Which port the daemon is listening on[default: 5001]
-  --ipfs-host               Which host the daemon is listening on
-                                                          [default: "127.0.0.1"]
+  --ipfs-port               Which port the daemon is listening on[default: null]
+  --ipfs-host               Which host the daemon is listening on[default: null]
   --ipfs-base-dir           Which mfs prefix to use
                                                   [default: "/commons-registry"]
   --ipfs-flush              Whether to flush the MFS cache       [default: true]
+  --ipfs-max-requests       How many concurrent requests to make to the IPFS
+                            daemon                                  [default: 5]
+  --ipfs-type               "proc" to start an in process node, "go" or "js" to
+                            connect to a remote daemon (in conjunction with
+                            --ipfs-port and --ipfs-host).      [default: "proc"]
   --clone-skim              Which registry to clone
                                [default: "https://replicate.npmjs.com/registry"]
   --clone-user-agent        What user agent to specify when contacting the
@@ -99,6 +98,13 @@ Options:
                             to upgrade it to https               [default: true]
   --request-max-sockets     How many concurrent http requests to make while
                             cloning the repo                       [default: 10]
+```
+
+## Docker
+
+```
+$ docker build . -t registry-mirror
+$ docker run -p 50321:50321 registry-mirror
 ```
 
 ## Important

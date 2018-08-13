@@ -6,6 +6,7 @@ const log = require('debug')('ipfs:registry-mirror:files')
 function writeJSONFile (name, data, blobStore) {
   return new Promise((resolve, reject) => {
     log(`Writing ${name}`)
+
     const stream = blobStore.createWriteStream(name, (error, meta) => {
       if (error) {
         return reject(error)

@@ -34,7 +34,6 @@
     "dnscache": "^1.0.1",
     "express": "^4.16.3",
     "follow-registry": "achingbrain/follow-registry",
-    "fs-extra": "^7.0.0",
     "ipfs-blob-store": "^2.0.0",
     "once": "^1.4.0",
     "request": "^2.87.0",

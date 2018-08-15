@@ -1,14 +1,16 @@
 {
-  "name": "registry-mirror",
+  "name": "ipfs-npm",
   "version": "0.6.3",
   "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
+  "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
   "main": "src/index.js",
   "bin": {
-    "registry-mirror": "src/cli/bin.js"
+    "registry-mirror": "src/cli/bin.js",
+    "ipfs-npm": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha tests/test-*/index.js",
-    "coverage": "istanbul cover --print both -- _mocha tests/test-*/index.js",
+    "test": "mocha test/*.js",
+    "coverage": "istanbul cover --print both -- _mocha test/*.js",
     "lint": "aegir lint"
   },
   "repository": {
@@ -16,9 +18,11 @@
     "url": "git+https://github.com/ipfs-shipyard/npm-on-ipfs.git"
   },
   "keywords": [
-    "IPFS"
+    "IPFS",
+    "npm",
+    "cache",
+    "offline"
   ],
-  "author": "David Dias <daviddias@ipfs.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ipfs-shipyard/npm-on-ipfs/issues"
@@ -37,6 +41,8 @@
     "yargs": "^12.0.1"
   },
   "devDependencies": {
-    "aegir": "^15.0.0"
+    "aegir": "^15.0.0",
+    "istanbul": "~0.4.5",
+    "mocha": "^5.2.0"
   }
 }

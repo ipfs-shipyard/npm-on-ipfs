@@ -22,7 +22,7 @@ module.exports = (overrides) => {
       registry: process.env.CLONE_REGISTRY_URL || overrides.cloneRegistry,
       skim: process.env.CLONE_SKIM_URL || overrides.cloneSkim,
       upgradeToHttps: Boolean(process.env.CLONE_UPGRADE_TO_HTTPS) || overrides.cloneUpgradeToHttps,
-      downloadTarballs: Boolean(process.env.CLONE_DOWNLOAD_TARBALLS) || overrides.downloadTarballs,
+      eagerDownload: Boolean(process.env.CLONE_EAGER_DOWNLOAD) || overrides.eagerDownload,
       userAgent: process.env.CLONE_USER_AGENT || overrides.cloneUserAgent,
       maxRequests: Number(process.env.IPFS_MAX_REQUESTS) || overrides.ipfsMaxRequests
     },

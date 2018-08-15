@@ -119,7 +119,14 @@ const storeTarballs = (options, tarballs, blobStore) => {
 
 module.exports = async (options, data, blobStore) => {
   if (!pool) {
-    pool = createPool(options.clone.maxRequests)
+    let concurrency = 100
+
+    if (options.ipfs.port) {
+      // do not overload a remote IPFS daemon
+      concurrency = options.clone.maxRequests
+    }
+
+    pool = createPool(concurrency)
   }
 
   try {
@@ -129,7 +136,7 @@ module.exports = async (options, data, blobStore) => {
 
     log(`Added ${data.json.name}`)
 
-    if (options.clone.downloadTarballs) {
+    if (options.clone.eagerDownload) {
       storeTarballs(options, tarballs, blobStore)
         .catch((error) => {
           console.error(`💥 Error adding ${data.json.name} - ${error}`)

@@ -31,8 +31,8 @@ const createRegistryUpdateHandler = (options, blobStore) => {
 module.exports = (options, blobStore) => {
   console.info('🌈 Cloning registry...')
 
-  if (options.clone.downloadTarballs) {
-    console.info('🍭 Downloading tarballs')
+  if (options.clone.eagerDownload) {
+    console.info('🍭 Eagerly downloading tarballs')
   }
 
   follow({

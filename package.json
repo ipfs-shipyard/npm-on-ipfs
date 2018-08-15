@@ -9,8 +9,8 @@
     "ipfs-npm": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha tests/test-*/index.js",
-    "coverage": "istanbul cover --print both -- _mocha tests/test-*/index.js",
+    "test": "mocha test/*.js",
+    "coverage": "istanbul cover --print both -- _mocha test/*.js",
     "lint": "aegir lint"
   },
   "repository": {

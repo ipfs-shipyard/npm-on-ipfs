@@ -1,19 +1,19 @@
-registry-mirror
-===============
+npm on IPFS
+===========
 
 ![](/img/ip-npm-small.png)
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
-[![Dependency Status](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+[![](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
+[![](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 ![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
 
-> registry-mirror sets a mirror the the whole NPM registry, using IPFS for the discovery and transport of modules.
+> Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
 # Resources
 
-- [Demo video](https://vimeo.com/147968322)
+- [The original demo video](https://vimeo.com/147968322)
 - [Lengthy introduction in a blog post](http://daviddias.me/blog/stellar-module-management/)
 - [Node.js Interactive Talk - Stellar Module Management](https://www.youtube.com/watch?v=-S-Tc7Gl8FM)
 
@@ -22,7 +22,7 @@ registry-mirror
 ## Install this module
 
 ```bash
-> npm i registry-mirror -g
+> npm i ipfs-npm -g
 ```
 
 # Usage
@@ -30,7 +30,7 @@ registry-mirror
 Wait for the `Server running` message:
 
 ```bash
-$ docker run registry-mirror
+$ docker run ipfs-npm
 📦 Mirroring npm on localhost:50321
 😈 Using in-process IPFS daemon
 Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/ipfs/Qm...
@@ -45,7 +45,7 @@ Port `50321` is default and can be set with `--port`.
 
 ## Configure npm
 
-Set up your npm to use `registry-mirror` with the default port through:
+Set up your npm to use `ipfs-npm` with the default port through:
 
 ```bash
 $ npm config set registry http://localhost:50321
@@ -60,8 +60,8 @@ Good to npm install away! :)
 ## CLI
 
 ```bash
-$ registry-mirror --help
-registry-mirror
+$ ipfs-npm --help
+ipfs-npm
 
 Starts a registry server that uses IPFS to fetch js dependencies
 
@@ -103,8 +103,8 @@ Options:
 ## Docker
 
 ```
-$ docker build . -t registry-mirror
-$ docker run -p 50321:50321 registry-mirror
+$ docker build . -t ipfs-npm
+$ docker run -p 50321:50321 ipfs-npm
 ```
 
 ## Important

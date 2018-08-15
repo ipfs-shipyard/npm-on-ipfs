@@ -1,10 +1,11 @@
 {
-  "name": "registry-mirror",
+  "name": "ipfs-npm",
   "version": "0.6.3",
   "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
   "main": "src/index.js",
   "bin": {
-    "registry-mirror": "src/cli/bin.js"
+    "registry-mirror": "src/cli/bin.js",
+    "ipfs-npm": "src/cli/bin.js"
   },
   "scripts": {
     "test": "mocha tests/test-*/index.js",

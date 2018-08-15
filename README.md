@@ -17,6 +17,10 @@ npm on IPFS
 - [Lengthy introduction in a blog post](http://daviddias.me/blog/stellar-module-management/)
 - [Node.js Interactive Talk - Stellar Module Management](https://www.youtube.com/watch?v=-S-Tc7Gl8FM)
 
+## Lead Maintainer
+
+[Alex Potsides](https://github.com/achingbrain)
+
 # Quick setup (probably all that you need)
 
 ## Install this module

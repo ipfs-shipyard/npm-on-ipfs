@@ -9,4 +9,4 @@ COPY ./src /app/src
 
 EXPOSE 50321
 
-CMD registry-mirror
+CMD ipfs-npm

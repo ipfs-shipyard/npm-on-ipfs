@@ -67,7 +67,7 @@ const extractTarballsAndUpdatePaths = (options, pkg) => {
   return tarballs
 }
 
-const storeTarballs = (options, tarballs, blobStore) => {
+const storeTarballs = (options, tarballs, blobStore, emitter) => {
   return Promise.all(
     Object.keys(tarballs)
       .map(key => {
@@ -95,6 +95,7 @@ const storeTarballs = (options, tarballs, blobStore) => {
                 }
 
                 console.info(`🛢️  Stored ${tarball.url.pathname}`)
+
                 return resolve()
               })
 
@@ -117,7 +118,7 @@ const storeTarballs = (options, tarballs, blobStore) => {
   )
 }
 
-module.exports = async (options, data, blobStore) => {
+module.exports = async (options, data, blobStore, emitter) => {
   if (!pool) {
     let concurrency = 100
 
@@ -137,11 +138,22 @@ module.exports = async (options, data, blobStore) => {
     log(`Added ${data.json.name}`)
 
     if (options.clone.eagerDownload) {
-      storeTarballs(options, tarballs, blobStore)
+      storeTarballs(options, tarballs, blobStore, emitter)
         .catch((error) => {
           console.error(`💥 Error adding ${data.json.name} - ${error}`)
           log(error)
         })
+        .then(() => {
+          emitter.emit('processed', {
+            json: data.json,
+            downloaded: Object.keys(tarballs).map(key => tarballs[key])
+          })
+        })
+    } else {
+      emitter.emit('processed', {
+        json: data.json,
+        downloaded: []
+      })
     }
   } catch (error) {
     console.error(`💥 Error adding ${data.json.name} - ${error}`)

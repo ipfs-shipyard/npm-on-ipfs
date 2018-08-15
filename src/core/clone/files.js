@@ -12,7 +12,7 @@ function writeJSONFile (name, data, blobStore) {
         return reject(error)
       }
 
-      resolve(meta)
+      resolve()
     })
     stream.write(JSON.stringify(data) + '\n')
     stream.end()

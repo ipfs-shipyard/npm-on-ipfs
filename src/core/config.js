@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (overrides) => {
+module.exports = (overrides = {}) => {
   return {
     mirror: {
       host: process.env.MIRROR_HOST || overrides.mirrorHost,

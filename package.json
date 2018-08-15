@@ -9,8 +9,8 @@
     "ipfs-npm": "src/cli/bin.js"
   },
   "scripts": {
-    "test": "mocha test/*.js",
-    "coverage": "istanbul cover --print both -- _mocha test/*.js",
+    "test": "aegir test -t node",
+    "coverage": "aegir coverage",
     "lint": "aegir lint"
   },
   "repository": {
@@ -38,11 +38,13 @@
     "ipfs-blob-store": "^2.0.0",
     "once": "^1.4.0",
     "request": "^2.87.0",
+    "sinon": "^6.1.5",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
     "aegir": "^15.0.0",
-    "istanbul": "~0.4.5",
-    "mocha": "^5.2.0"
+    "chai": "^4.1.2",
+    "dirty-chai": "^2.0.1",
+    "mock-require": "^3.0.2"
   }
 }

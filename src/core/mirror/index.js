@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const once = require('once')
 const config = require('../config')
 const {
   json,
@@ -52,21 +53,33 @@ module.exports = async (options) => {
 
   const blobStore = await ipfsBlobStore(options.store)
 
-  app.locals.store = await store(options, blobStore)
-
-  app.listen(options.mirror.port, () => {
-    let url = `${options.mirror.protocol}://${options.mirror.host}`
-
-    if ((options.mirror.protocol === 'https' && options.mirror.port !== 443) || (options.mirror.protocol === 'http' && options.mirror.port !== 80)) {
-      url = `${url}:${options.mirror.port}`
-    }
-
-    console.info('🚀 Server running')
-    console.info(`🔧 Please either update your npm config with 'npm config set registry ${url}'`)
-    console.info(`🔧 or use the '--registry' flag, eg: 'npm install --registry=${url}'`)
-  })
-
   if (options.clone.enabled) {
     clone(options, blobStore)
   }
+
+  return new Promise(async (resolve, reject) => {
+    const callback = once((error) => {
+      if (error) {
+        reject(error)
+      }
+
+      let url = `${options.mirror.protocol}://${options.mirror.host}`
+      const port = server.address().port
+
+      if ((options.mirror.protocol === 'https' && port !== 443) || (options.mirror.protocol === 'http' && port !== 80)) {
+        url = `${url}:${port}`
+      }
+
+      console.info('🚀 Server running')
+      console.info(`🔧 Please either update your npm config with 'npm config set registry ${url}'`)
+      console.info(`🔧 or use the '--registry' flag, eg: 'npm install --registry=${url}'`)
+
+      resolve(server)
+    })
+
+    let server = app.listen(options.mirror.port, callback)
+    server.once('error', callback)
+
+    app.locals.store = store(options, blobStore, server)
+  })
 }

@@ -12,7 +12,7 @@ module.exports = {
           response.statusCode = 200
           return response.end(resources[request.url])
         }
-
+console.info(request.url)
         response.statusCode = 404
         response.end('404')
       })
@@ -24,6 +24,10 @@ module.exports = {
 
         testServers.push(server)
 
+        if (typeof resources === 'function') {
+          resources = resources(server)
+        }
+
         resolve(server)
       })
     })
@@ -33,9 +37,9 @@ module.exports = {
     const servers = testServers
     testServers = []
 
-    return  Promise.all(
+    return Promise.all(
       servers.map((server) => {
-        new Promise((resolve) => {
+        return new Promise((resolve) => {
           server.close(resolve)
         })
       })

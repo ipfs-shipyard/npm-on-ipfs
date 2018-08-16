@@ -3,11 +3,12 @@ npm on IPFS
 
 ![](/img/ip-npm-small.png)
 
-[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai)
+[![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://ipfs.io/)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
-[![](https://david-dm.org/diasdavid/registry-mirror.svg?style=flat-square)](https://david-dm.org/diasdavid/registry-mirror)
-[![](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
-![](https://img.shields.io/badge/coverage-76%25-yellow.svg?style=flat-square)
+[![Build Status](https://ci.ipfs.team/buildStatus/icon?job=ipfs-shipyard/npm-on-ipfs/master)](https://ci.ipfs.team/job/ipfs-shipyard/job/npm-on-ipfs/job/master/)
+[![Code Coverage](https://codecov.io/gh/ipfs-shipyard/npm-on-ipfs/branch/master/graph/badge.svg)](https://codecov.io/gh/ipfs-shipyard/npm-on-ipfs)
+[![Dependency Status](https://david-dm.org/ipfs-shipyard/npm-on-ipfs.svg?style=flat-square)](https://david-dm.org/ipfs-shipyard/npm-on-ipfs)
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 

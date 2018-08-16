@@ -6,13 +6,13 @@ const {
 const add = require('../clone/add')
 const request = require('request')
 
-module.exports = async (options, blobStore) => {
+module.exports = (options, blobStore, app) => {
   return {
     createReadStream: (path) => {
       const output = new PassThrough()
 
       const stream = blobStore.createReadStream(path)
-      stream.once('error', readError(options, blobStore, path, output, stream))
+      stream.once('error', readError(options, blobStore, path, output, stream, app))
       stream.once('data', (chunk) => {
         output.write(chunk)
         stream.pipe(output)
@@ -23,13 +23,13 @@ module.exports = async (options, blobStore) => {
   }
 }
 
-const readError = (options, store, path, output, stream) => {
+const readError = (options, store, path, output, stream, app) => {
   return (error) => {
     const startDownload = Date.now()
 
     if (error.message.includes('does not exist')) {
       // try getting the file directly from npm
-      downloadFile(options, store, path)
+      downloadFile(options, store, path, app)
         .then(() => {
           console.info(`✅ Downloaded ${path} in ${Date.now() - startDownload}ms`)
 
@@ -53,15 +53,15 @@ const readError = (options, store, path, output, stream) => {
   }
 }
 
-const downloadFile = (options, store, path) => {
+const downloadFile = (options, store, path, app) => {
   if (path.endsWith('/index.json')) {
-    return downloadManifest(options, store, path)
+    return downloadManifest(options, store, path, app)
   }
 
-  return downloadTarball(options, store, path)
+  return downloadTarball(options, store, path, app)
 }
 
-const downloadManifest = (options, store, path) => {
+const downloadManifest = (options, store, path, app) => {
   return new Promise((resolve, reject) => {
     path = path.replace('/index.json', '')
 
@@ -87,7 +87,7 @@ const downloadManifest = (options, store, path) => {
 
       add(options, {
         json
-      }, store)
+      }, store, app)
         .then(() => {
           console.info(`🆗 Added manifest from ${url} to IPFS in ${Date.now() - addStart}ms`)
           resolve()

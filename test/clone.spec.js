@@ -1,11 +1,11 @@
-/*  */
+/* eslint-env mocha */
 'use strict'
 
 const mock = require('mock-require')
 const sinon = require('sinon')
 const config = require('../src/core/config')
 const createModuleUpdate = require('./fixtures/create-module-update')
-const createWriteableStream = require('./fixtures/create-writeable-stream')
+const createBlobStore = require('./fixtures/create-blob-store')
 const {
   createTestServer,
   destroyTestServers
@@ -21,26 +21,10 @@ describe('clone', () => {
   let blobStore
 
   beforeEach(() => {
-    blobStore = {
-      createWriteStream: sinon.stub(),
-      createReadStream: sinon.stub(),
-      exists: sinon.stub(),
-      remove: sinon.stub()
-    }
+    blobStore = createBlobStore()
     follow = sinon.stub()
     mock('follow-registry', follow)
     clone = mock.reRequire('../src/core/clone')
-
-    blobStore.createWriteStream
-      .callsFake((path, callback) => {
-        const stream = createWriteableStream()
-
-        stream.end.callsFake(() => {
-          setImmediate(callback)
-        })
-
-        return stream
-      })
   })
 
   afterEach(async () => {

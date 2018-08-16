@@ -109,4 +109,49 @@ describe('clone', () => {
       })
     })
   })
+
+  it('should survive an invalid update', (done) => {
+    const cloner = clone(config({
+      eagerDownload: true
+    }), blobStore)
+
+    const handler = follow.getCall(0).args[0].handler
+    const data = {}
+
+    handler(data, () => {
+      done()
+    })
+  })
+
+  it('should not download a tarball that already exists', (done) => {
+    const tarballPath = '/new-module/-/1.0.0/new-module-1.0.0.tar.gz'
+
+    const cloner = clone(config({
+      eagerDownload: true
+    }), blobStore)
+
+    const handler = follow.getCall(0).args[0].handler
+    const versions = [{
+      tarball: `http://127.0.0.1:5${tarballPath}`,
+      shasum: '123'
+    }]
+    const data = createModuleUpdate('new-module', versions)
+
+    const stream = blobStore.createWriteStream(tarballPath)
+    stream.end('tarball content')
+
+    blobStore.createWriteStream.resetHistory()
+
+    handler(data, () => {
+      setTimeout(() => {
+        expect(blobStore.exists.calledWith(tarballPath)).to.be.ok()
+
+        blobStore.createWriteStream.getCalls().forEach(call => {
+          expect(call.args[0]).to.not.equal(tarballPath)
+        })
+
+        done()
+      }, 500)
+    })
+  })
 })

@@ -12,7 +12,7 @@ const emitter = new EventEmitter()
 
 const createRegistryUpdateHandler = (options, blobStore) => {
   return function onRegistryUpdate (data, callback) {
-    if (!data.json.name) {
+    if (!data.json || !data.json.name) {
       return callback() // Bail, something is wrong with this change
     }
 

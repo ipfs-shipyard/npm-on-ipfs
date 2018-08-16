@@ -6,11 +6,6 @@ const pkg = require('../../package')
 
 process.title = pkg.name
 
-const dash = require('appmetrics-dash')
-dash.attach({
-  port: 3001
-})
-
 const yargs = require('yargs')
 
 yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js dependencies', (yargs) => { // eslint-disable-line no-unused-expressions

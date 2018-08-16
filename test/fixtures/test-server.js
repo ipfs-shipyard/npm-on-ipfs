@@ -12,7 +12,7 @@ module.exports = {
           response.statusCode = 200
           return response.end(resources[request.url])
         }
-console.info(request.url)
+
         response.statusCode = 404
         response.end('404')
       })

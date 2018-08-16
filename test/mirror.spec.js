@@ -5,13 +5,11 @@ const mock = require('mock-require')
 const sinon = require('sinon')
 const Readable = require('stream').Readable
 const request = require('request-promise-native')
-const createModuleUpdate = require('./fixtures/create-module-update')
 const createBlobStore = require('./fixtures/create-blob-store')
 const {
   createTestServer,
   destroyTestServers
 } = require('./fixtures/test-server')
-const invoke = require('./fixtures/invoke')
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
@@ -45,10 +43,6 @@ const missingStream = (path) => {
 
 const mockContent = (blobStore, path, content) => {
   blobStore.createReadStream.withArgs(path).callsFake(foundStream(content))
-}
-
-const mockMissingContent = (blobStore, path) => {
-  blobStore.createReadStream.withArgs(path).callsFake(missingStream(path))
 }
 
 const mockMissingThenFoundContent = (blobStore, path, content) => {

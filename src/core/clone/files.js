@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const log = require('debug')('ipfs:registry-mirror:files')
 
 function writeJSONFile (name, data, blobStore) {
@@ -28,7 +27,7 @@ const saveJSON = (info, blobStore) => {
     throw error
   }
 
-  const file = `/${path.join(doc.name, 'index.json')}`
+  const file = `/${doc.name}/index.json`
 
   log(`Writing json for ${doc.name} to ${file}`)
 
@@ -43,7 +42,7 @@ const saveJSON = (info, blobStore) => {
           }
 
           const name = json.name || doc.name
-          const file = path.join(name, version, 'index.json')
+          const file = `/${name}/${version}/index.json`
 
           log(`Writing json for ${name}@${version} to ${file}`)
 

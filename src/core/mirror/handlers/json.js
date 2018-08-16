@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const INDEX_JSON = 'index.json'
 const log = require('debug')('ipfs:registry-mirror:handlers:json')
 
@@ -10,7 +9,7 @@ module.exports = (request, response, next) => {
   let file = request.url
 
   if (!file.endsWith(INDEX_JSON)) {
-    file = path.join(file, INDEX_JSON)
+    file = `${file}/${INDEX_JSON}`
   }
 
   log(`Loading ${file}`)

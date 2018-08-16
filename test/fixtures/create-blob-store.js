@@ -1,26 +1,15 @@
 'use strict'
 
 const sinon = require('sinon')
-const createWriteStream = require('./create-write-stream')
+const MemoryBlobStore = require('memory-blob-store')
 
 module.exports = () => {
-  const blobStore = {
-    createWriteStream: sinon.stub(),
-    createReadStream: sinon.stub(),
-    exists: sinon.stub(),
-    remove: sinon.stub()
-  }
+  const blobStore = new MemoryBlobStore()
 
-  blobStore.createWriteStream
-    .callsFake((path, callback) => {
-      const stream = createWriteStream()
-
-      stream.end.callsFake(() => {
-        setImmediate(callback)
-      })
-
-      return stream
-    })
+  sinon.spy(blobStore, 'createWriteStream')
+  sinon.spy(blobStore, 'exists')
+  sinon.spy(blobStore, 'createReadStream')
+  sinon.spy(blobStore, 'remove')
 
   return blobStore
 }

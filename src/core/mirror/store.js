@@ -11,6 +11,8 @@ module.exports = (options, blobStore, app) => {
     createReadStream: (path) => {
       const output = new PassThrough()
 
+      path = `/${(path || '').trim()}`.replace(/^(\/)+/, '/')
+
       const stream = blobStore.createReadStream(path)
       stream.once('error', readError(options, blobStore, path, output, stream, app))
       stream.once('data', (chunk) => {
@@ -102,7 +104,7 @@ const downloadManifest = (options, store, path, app) => {
 
 const downloadTarball = (options, store, path) => {
   return new Promise((resolve, reject) => {
-    const url = `https://registry.npmjs.com${path}`
+    const url = `${options.mirror.registry}${path}`
 
     console.info(`🔽 Downloading tarball from ${url}`)
     const downloadStart = Date.now()

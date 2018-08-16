@@ -3,7 +3,6 @@
 
 const mock = require('mock-require')
 const sinon = require('sinon')
-const Readable = require('stream').Readable
 const request = require('request-promise-native')
 const createBlobStore = require('./fixtures/create-blob-store')
 const {
@@ -13,44 +12,6 @@ const {
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
-
-const foundStream = (content) => {
-  return () => {
-    const stream = new Readable()
-    stream._read = () => {}
-
-    setTimeout(() => {
-      stream.emit('data', content)
-      stream.emit('end')
-    }, 500)
-
-    return stream
-  }
-}
-
-const missingStream = (path) => {
-  return () => {
-    const stream = new Readable()
-    stream._read = () => {}
-
-    setTimeout(() => {
-      stream.emit('error', new Error(`${path} does not exist`))
-    }, 500)
-
-    return stream
-  }
-}
-
-const mockContent = (blobStore, path, content) => {
-  blobStore.createReadStream.withArgs(path).callsFake(foundStream(content))
-}
-
-const mockMissingThenFoundContent = (blobStore, path, content) => {
-  blobStore.createReadStream
-    .withArgs(path)
-    .onFirstCall().callsFake(missingStream(path))
-    .onSecondCall().callsFake(foundStream(content))
-}
 
 describe('mirror', () => {
   let app
@@ -81,8 +42,8 @@ describe('mirror', () => {
     })
 
     const content = 'manifest content'
-
-    mockContent(blobStore, '/my-module/index.json', content)
+    const stream = blobStore.createWriteStream('/my-module/index.json')
+    stream.end(content)
 
     const result = await request.get(`http://127.0.0.1:${app.address().port}/my-module`)
 
@@ -98,7 +59,8 @@ describe('mirror', () => {
 
     const content = 'tarball content'
 
-    mockContent(blobStore, '/my-module/-/1.0.0/my-module.tgz', content)
+    const stream = blobStore.createWriteStream('/my-module/-/1.0.0/my-module.tgz')
+    stream.end(content)
 
     const result = await request.get(`http://127.0.0.1:${app.address().port}/my-module/-/1.0.0/my-module.tgz`)
 
@@ -127,32 +89,17 @@ describe('mirror', () => {
       mirrorRegistry: `http://127.0.0.1:${server.address().port}`
     })
 
-    mockMissingThenFoundContent(blobStore, '/my-module/index.json', data)
-
     const result = await request.get(`http://127.0.0.1:${app.address().port}/my-module`)
 
-    expect(result).to.equal(data)
+    expect(result.trim()).to.equal(data.trim())
   })
 
   it('should download a missing tarball from an existing module', async () => {
     const tarballPath = '/my-module/-/1.0.0/my-module-1.0.0.tgz'
     const tarballContent = 'tarball content'
-    let data
 
-    const server = await createTestServer((server) => {
-      const versions = [{
-        tarball: `http://127.0.0.1:${server.address().port}${tarballPath}`,
-        shasum: '123'
-      }]
-      data = JSON.stringify({
-        name: 'my-module',
-        versions
-      })
-
-      return {
-        '/my-module': data,
-        [tarballPath]: tarballContent
-      }
+    const server = await createTestServer({
+      [tarballPath]: tarballContent
     })
 
     app = await mirror({
@@ -162,10 +109,6 @@ describe('mirror', () => {
       mirrorRegistry: `http://127.0.0.1:${server.address().port}`
     })
 
-    mockContent(blobStore, '/my-module/index.json', data)
-    mockMissingThenFoundContent(blobStore, tarballPath, tarballContent)
-
-    await request.get(`http://127.0.0.1:${app.address().port}/my-module`)
     const result = await request.get(`http://127.0.0.1:${app.address().port}${tarballPath}`)
 
     expect(result).to.equal(tarballContent)

@@ -52,8 +52,6 @@ describe('clone', () => {
     }]
     const data = createModuleUpdate('new-module', versions)
 
-    blobStore.exists.withArgs(tarballPath).callsArgWithAsync(1, null, false)
-
     invoke(handler, data)
 
     return new Promise((resolve, reject) => {
@@ -62,7 +60,7 @@ describe('clone', () => {
           expect(event.json.name).to.equal('new-module')
           expect(event.downloaded.length).to.equal(1)
           expect(event.downloaded[0].tarball).to.equal(`http://127.0.0.1:${server.address().port}${tarballPath}`)
-          expect(blobStore.createWriteStream.calledWith('new-module/index.json')).to.be.ok()
+          expect(blobStore.createWriteStream.calledWith('/new-module/index.json')).to.be.ok()
           expect(blobStore.exists.calledWith(tarballPath)).to.be.ok()
           expect(blobStore.createWriteStream.calledWith(tarballPath)).to.be.ok()
         } catch (error) {
@@ -93,8 +91,6 @@ describe('clone', () => {
     }]
     const data = createModuleUpdate('new-module', versions)
 
-    blobStore.exists.withArgs(tarballPath).callsArgWithAsync(1, null, false)
-
     invoke(handler, data)
 
     return new Promise((resolve, reject) => {
@@ -102,7 +98,7 @@ describe('clone', () => {
         try {
           expect(event.json.name).to.equal('new-module')
           expect(event.downloaded.length).to.equal(0)
-          expect(blobStore.createWriteStream.calledWith('new-module/index.json')).to.be.ok()
+          expect(blobStore.createWriteStream.calledWith('/new-module/index.json')).to.be.ok()
           expect(blobStore.exists.calledWith(tarballPath)).to.not.be.ok()
           expect(blobStore.createWriteStream.calledWith(tarballPath)).to.not.be.ok()
         } catch (error) {

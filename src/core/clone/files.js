@@ -28,7 +28,7 @@ const saveJSON = (info, blobStore) => {
     throw error
   }
 
-  const file = path.join(doc.name, 'index.json')
+  const file = `/${path.join(doc.name, 'index.json')}`
 
   log(`Writing json for ${doc.name} to ${file}`)
 

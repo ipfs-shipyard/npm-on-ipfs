@@ -2,7 +2,9 @@
 
 'use strict'
 
-process.title = 'registry-mirror'
+const pkg = require('../../package')
+
+process.title = pkg.name
 
 const dash = require('appmetrics-dash')
 dash.attach({

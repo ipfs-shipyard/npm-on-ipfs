@@ -7,6 +7,7 @@ const {
 } = require('./files.js')
 const createPool = require('../utils/create-pool')
 const URL = require('url')
+const getExternalUrl = require('../utils/get-external-url')
 
 // shared executor pool so as to not overwhelm the ipfs daemon
 let pool
@@ -46,11 +47,7 @@ const extractTarballsAndUpdatePaths = (options, pkg) => {
     tarballs[version.tarball].locations.push(version)
   })
 
-  let prefix = `${options.mirror.protocol}://${options.mirror.host}`
-
-  if ((options.mirror.protocol === 'https' && options.mirror.port !== 443) || (options.mirror.protocol === 'http' && options.mirror.port !== 80)) {
-    prefix = `${prefix}:${options.mirror.port}`
-  }
+  let prefix = getExternalUrl(options)
 
   Object.keys(tarballs)
     .forEach(key => {

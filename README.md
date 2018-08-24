@@ -84,6 +84,9 @@ Options:
   --mirror-registry         Where to download missing files from
                                          [default: "https://registry.npmjs.com"]
   --ipfs-port               Which port the daemon is listening on[default: null]
+  --external-host           Which host to use when reaching this mirror
+  --external-port           Which port to use when reaching this mirror
+  --external-protocol       Which protocol to use when reaching this mirror
   --ipfs-host               Which host the daemon is listening on[default: null]
   --ipfs-base-dir           Which mfs prefix to use
                                                   [default: "/commons-registry"]
@@ -108,8 +111,8 @@ Options:
 ## Docker
 
 ```
-$ docker build . -t ipfs-npm
-$ docker run -p 50321:50321 ipfs-npm
+$ docker-compose build
+$ docker-compose up -d --scale registry=4
 ```
 
 ## Important

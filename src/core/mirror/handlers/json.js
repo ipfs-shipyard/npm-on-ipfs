@@ -16,6 +16,8 @@ module.exports = (request, response, next) => {
   const readStream = request.app.locals.store.createReadStream(file)
 
   readStream.once('error', (error) => {
+    log(`Error loading ${file} - ${error}`)
+
     if (error.code === 'ECONNREFUSED') {
       response.statusCode = 504
     } else if (error.code === 'ECONNRESET') {
@@ -30,6 +32,8 @@ module.exports = (request, response, next) => {
     next(error)
   })
     .once('data', () => {
+      log(`Loaded ${file}`)
+
       response.statusCode = 200
       response.setHeader('Content-type', 'application/json; charset=utf-8')
       response.setHeader('Content-Disposition', `attachment; filename="${INDEX_JSON}"`)

@@ -38,6 +38,15 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'Which port the daemon is listening on',
       default: null
     })
+    .option('external-host', {
+      describe: 'Which host to use when reaching this mirror'
+    })
+    .option('external-port', {
+      describe: 'Which port to use when reaching this mirror'
+    })
+    .option('external-protocol', {
+      describe: 'Which protocol to use when reaching this mirror'
+    })
     .option('ipfs-host', {
       describe: 'Which host the daemon is listening on',
       default: null
@@ -72,7 +81,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('clone-delay', {
       describe: 'How long in ms to wait between cloning each module',
-      default: 0
+      default: 1000
     })
     .option('clone-upgrade-to-https', {
       describe: 'If a tarball is specifed with an http URL, whether to upgrade it to https',

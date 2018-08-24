@@ -10,11 +10,12 @@ const {
 const clone = require('../clone')
 const store = require('./store')
 const ipfsBlobStore = require('ipfs-blob-store')
+const getExternalUrl = require('../utils/get-external-url')
 
 module.exports = async (options) => {
   options = config(options)
 
-  console.info(`📦 Mirroring npm on ${options.mirror.host}:${options.mirror.port}`)
+  console.info(`📦 Mirroring npm on ${getExternalUrl(options)}`)
 
   const app = express()
   app.use(function (request, response, next) {
@@ -63,12 +64,7 @@ module.exports = async (options) => {
         reject(error)
       }
 
-      let url = `${options.mirror.protocol}://${options.mirror.host}`
-      const port = server.address().port
-
-      if ((options.mirror.protocol === 'https' && port !== 443) || (options.mirror.protocol === 'http' && port !== 80)) {
-        url = `${url}:${port}`
-      }
+      let url = getExternalUrl(options)
 
       console.info('🚀 Server running')
       console.info(`🔧 Please either update your npm config with 'npm config set registry ${url}'`)

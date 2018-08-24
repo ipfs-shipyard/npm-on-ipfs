@@ -4,13 +4,17 @@ const path = require('path')
 const log = require('debug')('ipfs:registry-mirror:handlers:tarball')
 
 module.exports = (request, response, next) => {
-  log(`Requested ${request.url}`)
+  const file = request.url
 
-  log(`Loading ${request.url}`)
+  log(`Requested ${file}`)
 
-  const readStream = request.app.locals.store.createReadStream(request.url)
+  log(`Loading ${file}`)
+
+  const readStream = request.app.locals.store.createReadStream(file)
 
   readStream.once('error', (error) => {
+    log(`Error loading ${file} - ${error}`)
+
     if (error.code === 'ECONNREFUSED') {
       response.statusCode = 504
     } else if (error.code === 'ECONNRESET') {
@@ -25,6 +29,8 @@ module.exports = (request, response, next) => {
     next(error)
   })
     .once('data', () => {
+      log(`Loaded ${file}`)
+
       response.statusCode = 200
       response.setHeader('Content-type', 'application/octet-stream')
       response.setHeader('Content-Disposition', `attachment; filename="${path.basename(request.url)}"`)

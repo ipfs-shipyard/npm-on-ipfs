@@ -1,4 +1,4 @@
-FROM node:8.11.3
+FROM node:10
 
 COPY ./src/cli/bin.js /app/src/cli/bin.js
 COPY ./package.json /app/package.json

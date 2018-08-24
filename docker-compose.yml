@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  proxy:
+    image: jwilder/nginx-proxy:alpine
+    links:
+      - registry
+    ports:
+      - '8080:80'
+      - '8443:443'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: 'always'
+  registry:
+    build: .
+    restart: 'always'
+    environment:
+      - VIRTUAL_HOST=registry-mirror.local
+      - VIRTUAL_PORT=50321
+      - CLONE_EAGER_DOWNLOAD=true
+      - CLONE=true
+      - EXTERNAL_PROTOCOL=http
+      - EXTERNAL_HOST=registry-mirror.local
+      - EXTERNAL_PORT=8080
+      - IPFS_FLUSH=true

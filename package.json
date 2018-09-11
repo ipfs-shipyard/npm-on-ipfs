@@ -12,7 +12,11 @@
     "test": "aegir test -t node",
     "coverage": "aegir coverage",
     "lint": "aegir lint",
-    "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror"
+    "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror",
+    "release": "aegir release",
+    "release-minor": "aegir release --type minor",
+    "release-major": "aegir release --type major",
+    "coverage": "aegir coverage"
   },
   "repository": {
     "type": "git",

@@ -111,7 +111,7 @@ describe('clone', () => {
   })
 
   it('should survive an invalid update', (done) => {
-    const cloner = clone(config({
+    clone(config({
       eagerDownload: true
     }), blobStore)
 
@@ -126,7 +126,7 @@ describe('clone', () => {
   it('should not download a tarball that already exists', (done) => {
     const tarballPath = '/new-module/-/1.0.0/new-module-1.0.0.tar.gz'
 
-    const cloner = clone(config({
+    clone(config({
       eagerDownload: true
     }), blobStore)
 

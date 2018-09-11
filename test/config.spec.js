@@ -1,8 +1,6 @@
 /* eslint-env mocha */
 'use strict'
 
-const mock = require('mock-require')
-const sinon = require('sinon')
 const config = require('../src/core/config')
 const expect = require('chai')
   .use(require('dirty-chai'))

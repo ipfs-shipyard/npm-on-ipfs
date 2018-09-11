@@ -55,7 +55,7 @@ module.exports = (overrides = {}) => {
       upgradeToHttps: option(toBoolean(process.env.CLONE_UPGRADE_TO_HTTPS), overrides.cloneUpgradeToHttps),
       eagerDownload: option(toBoolean(process.env.CLONE_EAGER_DOWNLOAD), overrides.eagerDownload),
       userAgent: option(process.env.CLONE_USER_AGENT, overrides.cloneUserAgent),
-      maxRequests:option(Number(process.env.IPFS_MAX_REQUESTS), overrides.ipfsMaxRequests)
+      maxRequests: option(Number(process.env.IPFS_MAX_REQUESTS), overrides.ipfsMaxRequests)
     },
     request: {
       pool: {

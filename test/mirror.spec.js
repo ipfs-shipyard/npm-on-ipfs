@@ -113,4 +113,31 @@ describe('mirror', () => {
 
     expect(result).to.equal(tarballContent)
   })
+
+  it('should download a manifest from a missing scoped module', async () => {
+    let data
+
+    const server = await createTestServer((server) => {
+      const versions = []
+      data = JSON.stringify({
+        name: '@my-scope/my-module',
+        versions
+      })
+
+      return {
+        '/@my-scope/my-module': data
+      }
+    })
+
+    app = await mirror({
+      mirrorProtocol: 'http',
+      mirrorPort: 0,
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: `http://127.0.0.1:${server.address().port}`
+    })
+
+    const result = await request.get(`http://127.0.0.1:${app.address().port}/@my-scope%2fmy-module`)
+
+    expect(result.trim()).to.equal(data.trim())
+  })
 })

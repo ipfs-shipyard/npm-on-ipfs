@@ -11,7 +11,8 @@
   "scripts": {
     "test": "aegir test -t node",
     "coverage": "aegir coverage",
-    "lint": "aegir lint"
+    "lint": "aegir lint",
+    "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror"
   },
   "repository": {
     "type": "git",

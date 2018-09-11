@@ -13,6 +13,10 @@ module.exports = (options, blobStore, app) => {
 
       path = `/${(path || '').trim()}`.replace(/^(\/)+/, '/')
 
+      if (path.startsWith('/@')) {
+        path = path.replace(/%2f/g, '/')
+      }
+
       const stream = blobStore.createReadStream(path)
       stream.once('error', readError(options, blobStore, path, output, stream, app))
       stream.once('data', (chunk) => {

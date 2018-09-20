@@ -77,7 +77,7 @@ module.exports = async (options) => {
   try {
     blobStore = await ipfsBlobStore(options.store)
   } catch (error) {
-    const message = error && error.message || ''
+    const message = (error && error.message) || ''
 
     if (message.includes('repo.lock') && message.includes('EAGAIN')) {
       console.error('💥 Could not open IPFS repo, is an IPFS node already running?')

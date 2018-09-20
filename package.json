@@ -1,6 +1,6 @@
 {
   "name": "ipfs-npm",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
   "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
   "main": "src/index.js",

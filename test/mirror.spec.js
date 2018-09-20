@@ -38,7 +38,8 @@ describe('mirror', () => {
     app = await mirror({
       mirrorProtocol: 'http',
       mirrorPort: 0,
-      mirrorHost: '127.0.0.1'
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: 'http://127.0.0.1:1234'
     })
 
     const content = 'manifest content'
@@ -54,7 +55,8 @@ describe('mirror', () => {
     app = await mirror({
       mirrorProtocol: 'http',
       mirrorPort: 0,
-      mirrorHost: '127.0.0.1'
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: 'http://127.0.0.1:1234'
     })
 
     const content = 'tarball content'
@@ -137,6 +139,27 @@ describe('mirror', () => {
     })
 
     const result = await request.get(`http://127.0.0.1:${app.address().port}/@my-scope%2fmy-module`)
+
+    expect(result.trim()).to.equal(data.trim())
+  })
+
+  it('should proxy all other requests to the registry', async () => {
+    let data = 'hello world'
+
+    const server = await createTestServer((server) => {
+      return {
+        '/-/user/org.couchdb.user:dave': data
+      }
+    })
+
+    app = await mirror({
+      mirrorProtocol: 'http',
+      mirrorPort: 0,
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: `http://127.0.0.1:${server.address().port}`
+    })
+
+    const result = await request.put(`http://127.0.0.1:${app.address().port}/-/user/org.couchdb.user:dave`)
 
     expect(result.trim()).to.equal(data.trim())
   })

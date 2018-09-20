@@ -11,6 +11,7 @@ const clone = require('../clone')
 const store = require('./store')
 const ipfsBlobStore = require('ipfs-blob-store')
 const getExternalUrl = require('../utils/get-external-url')
+const proxy = require('express-http-proxy')
 
 module.exports = async (options) => {
   options = config(options)
@@ -35,8 +36,18 @@ module.exports = async (options) => {
     next()
   })
 
+  // intercept requests for tarballs and manifests
   app.get('/**/*.tgz', tarball)
   app.get('/*', json)
+
+  // everything else should just proxy for the registry
+  const registry = proxy(options.mirror.registry, {
+    limit: options.mirror.uploadSizeLimit
+  })
+  app.put('/*', registry)
+  app.post('/*', registry)
+  app.patch('/*', registry)
+  app.delete('/*', registry)
 
   app.use(function (error, request, response, next) {
     console.error(`💀 ${request.method} ${request.url} ${response.statusCode} - ${error.stack}`)

@@ -31,8 +31,12 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       default: 'http'
     })
     .option('mirror-registry', {
-      describe: 'Where to download missing files from',
+      describe: 'Where to download missing files from/proxy for non-get requests',
       default: 'https://registry.npmjs.com'
+    })
+    .option('mirror-upload-size-limit', {
+      describe: 'How large a file upload to allow when proxying for the registry',
+      default: '1024mb'
     })
     .option('ipfs-port', {
       describe: 'Which port the daemon is listening on',

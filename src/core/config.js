@@ -32,7 +32,8 @@ module.exports = (overrides = {}) => {
       host: option(process.env.MIRROR_HOST, overrides.mirrorHost),
       port: option(process.env.MIRROR_PORT, overrides.mirrorPort),
       protocol: option(process.env.MIRROR_PROTOCOL, overrides.mirrorProtocol),
-      registry: option(process.env.MIRROR_REGISTRY, overrides.mirrorRegistry)
+      registry: option(process.env.MIRROR_REGISTRY, overrides.mirrorRegistry),
+      uploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.mirrorUploadSizeLimit)
     },
     external: {
       host: option(process.env.EXTERNAL_HOST, overrides.externalHost),

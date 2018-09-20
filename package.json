@@ -36,6 +36,7 @@
     "debug": "^3.1.0",
     "dnscache": "^1.0.1",
     "express": "^4.16.3",
+    "express-http-proxy": "^1.4.0",
     "follow-registry": "achingbrain/follow-registry",
     "ipfs-blob-store": "^2.0.0",
     "once": "^1.4.0",

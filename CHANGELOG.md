@@ -1,3 +1,13 @@
+<a name="0.7.3"></a>
+## [0.7.3](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.7.2...v0.7.3) (2018-09-20)
+
+
+### Bug Fixes
+
+* increase max body size ([d478378](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/d478378))
+
+
+
 <a name="0.7.2"></a>
 ## [0.7.2](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.7.1...v0.7.2) (2018-09-20)
 

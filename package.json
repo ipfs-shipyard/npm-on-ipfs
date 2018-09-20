@@ -15,8 +15,7 @@
     "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror",
     "release": "aegir release -t node",
     "release-minor": "aegir release --type minor",
-    "release-major": "aegir release --type major",
-    "coverage": "aegir coverage"
+    "release-major": "aegir release --type major"
   },
   "repository": {
     "type": "git",
@@ -51,5 +50,14 @@
     "memory-blob-store": "^5.0.1",
     "mock-require": "^3.0.2",
     "request-promise-native": "^1.0.5"
-  }
+  },
+  "contributors": [
+    "Danny Arnold <despair.blue@gmail.com>",
+    "David Dias <daviddias.p@gmail.com>",
+    "Lars-Magnus Skog <ralphtheninja@riseup.net>",
+    "Mateusz Naściszewski <matin1111@wp.pl>",
+    "achingbrain <alex@achingbrain.net>",
+    "dignifiedquire <dignifiedquire@gmail.com>",
+    "gonders <gonders@no.com>"
+  ]
 }

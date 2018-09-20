@@ -12,6 +12,7 @@ const {
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
+const pkg = require('../package.json')
 
 describe('mirror', () => {
   let app
@@ -67,6 +68,20 @@ describe('mirror', () => {
     const result = await request.get(`http://127.0.0.1:${app.address().port}/my-module/-/1.0.0/my-module.tgz`)
 
     expect(result).to.equal(content)
+  })
+
+  it('should serve some basic info', async () => {
+    app = await mirror({
+      mirrorProtocol: 'http',
+      mirrorPort: 0,
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: 'http://127.0.0.1:1234'
+    })
+
+    const result = JSON.parse(await request.get(`http://127.0.0.1:${app.address().port}`))
+
+    expect(result.name).to.equal(pkg.name)
+    expect(result.version).to.equal(pkg.version)
   })
 
   it('should download a manifest from a missing module', async () => {

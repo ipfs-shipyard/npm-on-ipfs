@@ -12,6 +12,7 @@ const store = require('./store')
 const ipfsBlobStore = require('ipfs-blob-store')
 const getExternalUrl = require('../utils/get-external-url')
 const proxy = require('express-http-proxy')
+const pkg = require('../../../package.json')
 
 module.exports = async (options) => {
   options = config(options)
@@ -34,6 +35,14 @@ module.exports = async (options) => {
     })
 
     next()
+  })
+
+  // let the world know what version we are
+  app.get('/', (request, response, next) => {
+    response.send({
+      name: pkg.name,
+      version: pkg.version
+    })
   })
 
   // intercept requests for tarballs and manifests

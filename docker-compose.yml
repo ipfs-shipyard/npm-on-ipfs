@@ -1,26 +1,40 @@
-version: '3'
+version: '2'
 
 services:
+
   proxy:
     image: jwilder/nginx-proxy:alpine
     links:
       - registry
     ports:
-      - '8080:80'
-      - '8443:443'
+      - '80:80'
+      - '443:443'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /etc/nginx/certs
       - ./conf/proxy.conf:/etc/nginx/proxy.conf
     restart: 'always'
+
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - proxy
+
   registry:
     build: .
     restart: 'always'
     environment:
-      - VIRTUAL_HOST=registry-mirror.local
+      - VIRTUAL_HOST=registry.js.ipfs.io
       - VIRTUAL_PORT=50321
-      - CLONE_EAGER_DOWNLOAD=true
-      - CLONE=true
-      - EXTERNAL_PROTOCOL=http
-      - EXTERNAL_HOST=registry-mirror.local
-      - EXTERNAL_PORT=8080
+      - LETSENCRYPT_HOST=registry.js.ipfs.io
+      - LETSENCRYPT_EMAIL=alex@achingbrain.net
+      - CLONE_EAGER_DOWNLOAD=false
+      - CLONE=false
+      - EXTERNAL_PROTOCOL=https
+      - EXTERNAL_HOST=registry.js.ipfs.io
+      - EXTERNAL_PORT=443
       - IPFS_FLUSH=true

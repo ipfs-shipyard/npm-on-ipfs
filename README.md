@@ -87,7 +87,7 @@ Options:
                               non-get requests
                                          [default: "https://registry.npmjs.com"]
   --mirror-upload-size-limit  How large a file upload to allow when proxying for
-                              the registry                   [default: "1024mb"]
+                              the registry                   [default: "1024MB"]
   --ipfs-port                 Which port the daemon is listening on
                                                                  [default: null]
   --external-host             Which host to use when reaching this mirror

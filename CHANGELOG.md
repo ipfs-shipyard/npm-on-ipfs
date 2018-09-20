@@ -1,3 +1,13 @@
+<a name="0.7.2"></a>
+## [0.7.2](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.7.1...v0.7.2) (2018-09-20)
+
+
+### Bug Fixes
+
+* fixes [#59](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/59) and [#60](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/60) with better error detection and messages ([93ad289](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/93ad289))
+
+
+
 <a name="0.7.1"></a>
 ## [0.7.1](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.7.0...v0.7.1) (2018-09-20)
 

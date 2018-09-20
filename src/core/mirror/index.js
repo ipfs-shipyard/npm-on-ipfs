@@ -72,7 +72,22 @@ module.exports = async (options) => {
     console.info('😈 Using in-process IPFS daemon')
   }
 
-  const blobStore = await ipfsBlobStore(options.store)
+  let blobStore
+
+  try {
+    blobStore = await ipfsBlobStore(options.store)
+  } catch (error) {
+    const message = error && error.message || ''
+
+    if (message.includes('repo.lock') && message.includes('EAGAIN')) {
+      console.error('💥 Could not open IPFS repo, is an IPFS node already running?')
+      console.error('💥 If so, please try again with --ipfs-port=5001 (go-ipfs) or --ipfs-port=5002 (js-ipfs)')
+
+      process.exit(1)
+    }
+
+    throw error
+  }
 
   if (options.clone.enabled) {
     clone(options, blobStore)

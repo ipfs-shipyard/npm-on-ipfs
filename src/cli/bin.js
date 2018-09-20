@@ -53,7 +53,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('ipfs-host', {
       describe: 'Which host the daemon is listening on',
-      default: null
+      default: 'localhost'
     })
     .option('ipfs-base-dir', {
       describe: 'Which mfs prefix to use',

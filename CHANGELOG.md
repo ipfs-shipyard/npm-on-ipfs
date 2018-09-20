@@ -1,3 +1,13 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.6.4...v0.7.0) (2018-09-20)
+
+
+### Features
+
+* forward non-get requests to the registry, fixes [#58](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/58) ([b493e4c](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/b493e4c))
+
+
+
 <a name="0.6.4"></a>
 ## [0.6.4](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.5.1...v0.6.4) (2018-09-20)
 

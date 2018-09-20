@@ -14,8 +14,8 @@
     "lint": "aegir lint",
     "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror",
     "release": "aegir release -t node",
-    "release-minor": "aegir release --type minor",
-    "release-major": "aegir release --type major"
+    "release-minor": "aegir release --type minor -t node",
+    "release-major": "aegir release --type major -t node"
   },
   "repository": {
     "type": "git",

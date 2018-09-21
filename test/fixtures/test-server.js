@@ -9,6 +9,10 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const server = http.createServer((request, response) => {
         if (resources[request.url]) {
+          if (typeof resources[request.url] === 'function') {
+            return resources[request.url](response)
+          }
+
           response.statusCode = 200
           return response.end(resources[request.url])
         }

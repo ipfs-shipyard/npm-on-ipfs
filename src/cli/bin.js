@@ -95,5 +95,13 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'How many concurrent http requests to make while cloning the repo',
       default: 10
     })
+    .option('request-retries', {
+      describe: 'How many times to retry when downloading manifests and tarballs from the registry',
+      default: 5
+    })
+    .option('request-retry-delay', {
+      describe: 'How long in ms to wait between retries',
+      default: 1000
+    })
 }, require('../core/mirror'))
   .argv

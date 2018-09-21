@@ -125,8 +125,7 @@ $ docker-compose up -d --scale registry=4
 ### Upgrading
 
 ```
-$ docker-compose stop registry
-$ docker-compose up -d --no-deps --build --scale registry=n registry
+$ ./deploy.sh
 ```
 
 ## Important

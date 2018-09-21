@@ -61,6 +61,16 @@ module.exports = (overrides = {}) => {
     request: {
       pool: {
         maxSockets: option(Number(process.env.REQUEST_MAX_SOCKETS), overrides.requestMaxSockets)
+      },
+      maxAttempts: option(process.env.REQUEST_RETRIES, overrides.requestRetries),
+      retryDelay: option(process.env.REQUEST_RETRY_DELAY, overrides.requestRetryDelay),
+      retryStrategy: (error, response) => {
+        // Sometimes npm returns 404s when it shouldn't 🤷
+        const {
+          statusCode
+        } = response || {}
+
+        return error || statusCode >= 500 || statusCode === 404
       }
     }
   }

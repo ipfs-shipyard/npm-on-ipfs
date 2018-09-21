@@ -4,7 +4,7 @@ const {
   PassThrough
 } = require('stream')
 const add = require('../clone/add')
-const request = require('request')
+const request = require('requestretry')
 
 module.exports = (options, blobStore, app) => {
   return {
@@ -77,7 +77,7 @@ const downloadManifest = (options, store, path, app) => {
 
     const downloadStart = Date.now()
 
-    request(url, options.request, (error, _, json) => {
+    request(url, options.request, (error, response, json) => {
       if (error) {
         return reject(error)
       }

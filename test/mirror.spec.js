@@ -178,4 +178,42 @@ describe('mirror', () => {
 
     expect(result.trim()).to.equal(data.trim())
   })
+
+  it('should retry when 404s are encountered', async () => {
+    const data = JSON.stringify({
+      name: 'my-module',
+      versions: []
+    })
+    let invocations = 0
+
+    const server = await createTestServer((server) => {
+      return {
+        '/my-module': (response) => {
+          invocations++
+
+          if (invocations === 1) {
+            response.statusCode = 404
+            return response.end('404')
+          }
+
+          response.statusCode = 200
+          return response.end(data)
+        }
+      }
+    })
+
+    app = await mirror({
+      mirrorProtocol: 'http',
+      mirrorPort: 0,
+      mirrorHost: '127.0.0.1',
+      mirrorRegistry: `http://127.0.0.1:${server.address().port}`,
+      requestRetries: 5,
+      requestRetryDelay: 100
+    })
+
+    await request.get(`http://127.0.0.1:${app.address().port}/my-module`)
+      .then(() => {
+        expect(invocations).to.equal(2)
+      })
+  })
 })

@@ -2,7 +2,10 @@
 
 'use strict'
 
+require('dnscache')({ enable: true })
+
 const pkg = require('../../package')
+const path = require('path')
 
 process.title = pkg.name
 
@@ -12,6 +15,10 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
   yargs
     .option('clone', {
       describe: 'Whether to clone the registry in the background',
+      default: true
+    })
+    .option('replicate', {
+      describe: 'Whether to replicate the registry in the background',
       default: true
     })
     .option('eager-download', {
@@ -37,6 +44,10 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     .option('mirror-upload-size-limit', {
       describe: 'How large a file upload to allow when proxying for the registry',
       default: '1024MB'
+    })
+    .option('registry-update-interval', {
+      describe: 'Only request the manifest for a given module every so many ms',
+      default: 60000
     })
     .option('ipfs-port', {
       describe: 'Which port the daemon is listening on',
@@ -71,13 +82,17 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: '"proc" to start an in process node, "go" or "js" to connect to a remote daemon (in conjunction with --ipfs-port and --ipfs-host).',
       default: 'proc'
     })
-    .option('clone-skim', {
-      describe: 'Which registry to clone',
-      default: 'https://skimdb.npmjs.com/registry'
+    .option('ipfs-repo', {
+      describe: 'The path to the IPFS repo you wish to use',
+      default: path.join(process.env.HOME, '.jsipfs')
     })
     .option('clone-skim', {
-      describe: 'Which registry to clone',
+      describe: 'Which skimdb to follow',
       default: 'https://replicate.npmjs.com/registry'
+    })
+    .option('clone-registry', {
+      describe: 'Which registry to clone',
+      default: 'replicate.npmjs.com/registry'
     })
     .option('clone-user-agent', {
       describe: 'What user agent to specify when contacting the registry',
@@ -103,5 +118,28 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'How long in ms to wait between retries',
       default: 1000
     })
-}, require('../core/mirror'))
+    .option('request-timeout', {
+      describe: 'How long in ms we should wait when requesting files',
+      default: 30000
+    })
+    .option('store-type', {
+      describe: 'Which type of datastore to use - fs, s3, etc',
+      default: 'fs'
+    })
+    .option('store-s3-region', {
+      describe: 'The s3 region to use'
+    })
+    .option('store-s3-bucket', {
+      describe: 'The s3 bucket to use'
+    })
+    .option('store-s3-path', {
+      describe: 'The path to use in an s3 bucket'
+    })
+    .option('store-s3-access-key-id', {
+      describe: 'The s3 access key id to use'
+    })
+    .option('store-s3-secret-access-key', {
+      describe: 'The s3 secret access key id to use'
+    })
+}, require('../core'))
   .argv

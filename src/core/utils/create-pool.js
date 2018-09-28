@@ -12,7 +12,6 @@ module.exports = (concurrency) => {
     const task = queue.shift()
 
     executing++
-
     task.fn()
       .catch((error) => error)
       .then((result) => {
@@ -30,18 +29,25 @@ module.exports = (concurrency) => {
 
   return {
     addTask: (fn) => {
+      const existingTask = queue.find(other => fn.id && fn.id === other.fn.id)
+
+      if (existingTask) {
+        return existingTask.promise
+      }
+
       const task = {
         fn
       }
-
       queue.push(task)
 
-      return new Promise((resolve, reject) => {
+      task.promise = new Promise((resolve, reject) => {
         task.resolve = resolve
         task.reject = reject
 
-        maybeExecuteNext()
+        setImmediate(() => maybeExecuteNext())
       })
+
+      return task.promise
     }
   }
 }

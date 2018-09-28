@@ -33,7 +33,8 @@ module.exports = (overrides = {}) => {
       port: option(process.env.MIRROR_PORT, overrides.mirrorPort),
       protocol: option(process.env.MIRROR_PROTOCOL, overrides.mirrorProtocol),
       registry: option(process.env.MIRROR_REGISTRY, overrides.mirrorRegistry),
-      uploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.mirrorUploadSizeLimit)
+      uploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.mirrorUploadSizeLimit),
+      registryUpdateInterval: option(process.env.REGISTRY_UPDATE_INTERVAL, overrides.registryUpdateInterval)
     },
     external: {
       host: option(process.env.EXTERNAL_HOST, overrides.externalHost),
@@ -42,11 +43,20 @@ module.exports = (overrides = {}) => {
     },
     ipfs: {
       port: option(process.env.IPFS_PORT, overrides.ipfsPort),
-      host: option(process.env.IPFS_HOST, overrides.ipfsHost)
+      host: option(process.env.IPFS_HOST, overrides.ipfsHost),
+      repo: option(process.env.IPFS_REPO, overrides.ipfsRepo)
     },
     store: {
+      type: option(process.env.STORE_TYPE, overrides.storeType),
       baseDir: option(process.env.IPFS_BASE_DIR, overrides.ipfsBaseDir),
-      flush: option(toBoolean(process.env.IPFS_FLUSH), overrides.ipfsFlush)
+      flush: option(toBoolean(process.env.IPFS_FLUSH), overrides.ipfsFlush),
+      s3: {
+        region: option(process.env.STORE_S3_REGION, overrides.storeS3Region),
+        bucket: option(process.env.STORE_S3_BUCKET, overrides.storeS3Bucket),
+        path: option(process.env.STORE_S3_PATH, overrides.storeS3Path),
+        accessKeyId: option(process.env.STORE_S3_ACCESS_KEY_ID, overrides.storeS3AccessKeyId),
+        secretAccessKey: option(process.env.STORE_S3_SECRET_ACCESS_KEY, overrides.storeS3SecretAccessKey)
+      }
     },
     clone: {
       enabled: option(toBoolean(process.env.CLONE), overrides.clone),
@@ -62,16 +72,9 @@ module.exports = (overrides = {}) => {
       pool: {
         maxSockets: option(Number(process.env.REQUEST_MAX_SOCKETS), overrides.requestMaxSockets)
       },
-      maxAttempts: option(process.env.REQUEST_RETRIES, overrides.requestRetries),
+      retries: option(process.env.REQUEST_RETRIES, overrides.requestRetries),
       retryDelay: option(process.env.REQUEST_RETRY_DELAY, overrides.requestRetryDelay),
-      retryStrategy: (error, response) => {
-        // Sometimes npm returns 404s when it shouldn't 🤷
-        const {
-          statusCode
-        } = response || {}
-
-        return error || statusCode >= 500 || statusCode === 404
-      }
+      timeout: option(process.env.REQUEST_TIMEOUT, overrides.requestTimeout)
     }
   }
 }

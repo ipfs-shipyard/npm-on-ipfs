@@ -2,17 +2,23 @@
 
 const express = require('express')
 const once = require('once')
-const config = require('../config')
+const config = require('./config')
 const {
-  json,
-  tarball
+  files,
+  favicon
 } = require('./handlers')
-const clone = require('../clone')
+const clone = require('./clone')
 const store = require('./store')
-const ipfsBlobStore = require('ipfs-blob-store')
-const getExternalUrl = require('../utils/get-external-url')
+const getExternalUrl = require('./utils/get-external-url')
 const proxy = require('express-http-proxy')
-const pkg = require('../../../package.json')
+const prometheus = require('express-prom-bundle')
+const pkg = require('../../package.json')
+const promisify = require('util').promisify
+const IPFS = require('ipfs')
+const metrics = prometheus({
+  includeMethod: true,
+  autoregister: false
+})
 
 module.exports = async (options) => {
   options = config(options)
@@ -37,6 +43,9 @@ module.exports = async (options) => {
     next()
   })
 
+  app.use(metrics)
+  app.use('/-/metrics', metrics.metricsMiddleware)
+
   // let the world know what version we are
   app.get('/', (request, response, next) => {
     response.send({
@@ -44,10 +53,11 @@ module.exports = async (options) => {
       version: pkg.version
     })
   })
+  app.get('/favicon.ico', favicon)
+  app.get('/favicon.png', favicon)
 
   // intercept requests for tarballs and manifests
-  app.get('/**/*.tgz', tarball)
-  app.get('/*', json)
+  app.get('/*', files)
 
   // everything else should just proxy for the registry
   const registry = proxy(options.mirror.registry, {
@@ -72,25 +82,10 @@ module.exports = async (options) => {
     console.info('😈 Using in-process IPFS daemon')
   }
 
-  let blobStore
-
-  try {
-    blobStore = await ipfsBlobStore(options.store)
-  } catch (error) {
-    const message = (error && error.message) || ''
-
-    if (message.includes('repo.lock') && message.includes('EAGAIN')) {
-      console.error('💥 Could not open IPFS repo, is an IPFS node already running?')
-      console.error('💥 If so, please try again with --ipfs-port=5001 (go-ipfs) or --ipfs-port=5002 (js-ipfs)')
-
-      process.exit(1)
-    }
-
-    throw error
-  }
+  const ipfs = await getAnIPFS(options)
 
   if (options.clone.enabled) {
-    clone(options, blobStore)
+    clone(options, ipfs)
   }
 
   return new Promise(async (resolve, reject) => {
@@ -99,18 +94,46 @@ module.exports = async (options) => {
         reject(error)
       }
 
+      if (!options.mirror.port) {
+        options.mirror.port = server.address().port
+      }
+
       let url = getExternalUrl(options)
 
       console.info('🚀 Server running')
       console.info(`🔧 Please either update your npm config with 'npm config set registry ${url}'`)
       console.info(`🔧 or use the '--registry' flag, eg: 'npm install --registry=${url}'`)
 
-      resolve(server)
+      resolve({
+        server,
+        app,
+        stop: () => {
+          return Promise.all([
+            promisify(server.close.bind(server))(),
+            ipfs.stop()
+          ])
+            .then(() => {
+              console.info('✋ Server stopped')
+            })
+        }
+      })
     })
 
     let server = app.listen(options.mirror.port, callback)
     server.once('error', callback)
 
-    app.locals.store = store(options, blobStore, server)
+    app.locals.ipfs = ipfs
+    app.locals.store = store(options, ipfs, app)
   })
 }
+
+const getAnIPFS = promisify((options, callback) => {
+  console.info(`🏁 Starting an IPFS instance`)
+  callback = once(callback)
+
+  const ipfs = new IPFS({
+    repo: options.ipfs.repo
+  })
+  ipfs.once('ready', () => callback(null, ipfs))
+  ipfs.once('error', (error) => callback(error))
+})

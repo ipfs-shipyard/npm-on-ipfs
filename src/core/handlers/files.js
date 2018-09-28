@@ -1,18 +1,17 @@
 'use strict'
 
+const log = require('debug')('ipfs:registry-mirror:handlers:files')
 const path = require('path')
-const log = require('debug')('ipfs:registry-mirror:handlers:tarball')
 
-module.exports = (request, response, next) => {
-  const file = request.url
+module.exports = async (request, response, next) => {
+  log(`Requested ${request.url}`)
 
-  log(`Requested ${file}`)
+  let file = request.url
 
   log(`Loading ${file}`)
-
   const readStream = request.app.locals.store.createReadStream(file)
 
-  readStream.once('error', (error) => {
+  readStream.on('error', (error) => {
     log(`Error loading ${file} - ${error}`)
 
     if (error.code === 'ECONNREFUSED') {
@@ -32,8 +31,11 @@ module.exports = (request, response, next) => {
       log(`Loaded ${file}`)
 
       response.statusCode = 200
-      response.setHeader('Content-type', 'application/octet-stream')
-      response.setHeader('Content-Disposition', `attachment; filename="${path.basename(request.url)}"`)
+      response.setHeader('Content-type', 'application/json; charset=utf-8')
+
+      if (request.url.endsWith('.tgz')) {
+        response.setHeader('Content-Disposition', `attachment; filename="${path.basename(request.url)}"`)
+      }
     })
     .pipe(response)
 }

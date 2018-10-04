@@ -5,11 +5,7 @@
 module.exports = (name, versions) => {
   return {
     seq: 5,
-    json: {
-      name: name,
-      versions
-    },
-    versions,
-    tarballs: versions
+    name: name,
+    versions
   }
 }

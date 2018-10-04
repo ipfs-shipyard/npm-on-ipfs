@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "aegir test -t node",
+    "test:node": "aegir test -t node",
     "coverage": "aegir coverage",
     "lint": "aegir lint",
     "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror",
@@ -33,24 +34,28 @@
   },
   "homepage": "https://github.com/ipfs-shipyard/npm-on-ipfs#readme",
   "dependencies": {
-    "debug": "^3.1.0",
+    "aws-sdk": "^2.325.0",
+    "datastore-s3": "~0.2.0",
+    "debug": "^4.0.1",
     "dnscache": "^1.0.1",
     "express": "^4.16.3",
     "express-http-proxy": "^1.4.0",
+    "express-prom-bundle": "^4.2.1",
     "follow-registry": "achingbrain/follow-registry",
-    "ipfs-blob-store": "^2.0.0",
+    "ipfs": "~0.32.2",
     "once": "^1.4.0",
-    "requestretry": "^2.0.2",
-    "sinon": "^6.1.5",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
     "aegir": "^15.0.0",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
-    "memory-blob-store": "^5.0.1",
+    "hat": "0.0.3",
     "mock-require": "^3.0.2",
-    "request-promise-native": "^1.0.5"
+    "promise-delay": "^2.1.0",
+    "sinon": "^6.1.5"
   },
   "contributors": [
     "Danny Arnold <despair.blue@gmail.com>",

@@ -10,7 +10,7 @@ module.exports = {
       const server = http.createServer((request, response) => {
         if (resources[request.url]) {
           if (typeof resources[request.url] === 'function') {
-            return resources[request.url](response)
+            return resources[request.url](request, response)
           }
 
           response.statusCode = 200

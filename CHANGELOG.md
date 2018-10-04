@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.9.0...v0.10.0) (2018-10-04)
+
+
+### Features
+
+* add s3 storage option ([6a522c8](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/6a522c8))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.8.0...v0.9.0) (2018-10-04)
 

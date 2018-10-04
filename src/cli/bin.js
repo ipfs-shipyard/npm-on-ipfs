@@ -141,5 +141,9 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     .option('store-s3-secret-access-key', {
       describe: 'The s3 secret access key id to use'
     })
+    .option('store-s3-create-if-missing', {
+      describe: 'Whether to create the bucket if it is missing',
+      default: false
+    })
 }, require('../core'))
   .argv

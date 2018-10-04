@@ -55,7 +55,8 @@ module.exports = (overrides = {}) => {
         bucket: option(process.env.STORE_S3_BUCKET, overrides.storeS3Bucket),
         path: option(process.env.STORE_S3_PATH, overrides.storeS3Path),
         accessKeyId: option(process.env.STORE_S3_ACCESS_KEY_ID, overrides.storeS3AccessKeyId),
-        secretAccessKey: option(process.env.STORE_S3_SECRET_ACCESS_KEY, overrides.storeS3SecretAccessKey)
+        secretAccessKey: option(process.env.STORE_S3_SECRET_ACCESS_KEY, overrides.storeS3SecretAccessKey),
+        createIfMissing: option(process.env.STORE_S3_CREATE_IF_MISSING, overrides.createIfMissing)
       }
     },
     clone: {

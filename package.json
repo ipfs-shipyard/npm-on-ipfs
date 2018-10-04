@@ -42,6 +42,7 @@
     "express-http-proxy": "^1.4.0",
     "express-prom-bundle": "^4.2.1",
     "follow-registry": "achingbrain/follow-registry",
+    "hat": "~0.0.3",
     "ipfs": "~0.32.2",
     "once": "^1.4.0",
     "request": "^2.88.0",
@@ -52,7 +53,6 @@
     "aegir": "^15.0.0",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
-    "hat": "0.0.3",
     "mock-require": "^3.0.2",
     "promise-delay": "^2.1.0",
     "sinon": "^6.1.5"

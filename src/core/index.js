@@ -19,11 +19,25 @@ const metrics = prometheus({
   includeMethod: true,
   autoregister: false
 })
+const s3Repo = require('./utils/s3-repo')
 
 module.exports = async (options) => {
   options = config(options)
 
   console.info(`📦 Mirroring npm on ${getExternalUrl(options)}`)
+
+  if (options.store.type === 's3') {
+    console.info(`☁️  Using s3 storage`)
+
+    options.ipfs.repo = s3Repo({
+      region: options.store.s3.region,
+      path: options.store.s3.path,
+      bucket: options.store.s3.bucket,
+      accessKeyId: options.store.s3.accessKeyId,
+      secretAccessKey: options.store.s3.secretAccessKey,
+      createIfMissing: options.store.s3.createIfMissing
+    })
+  }
 
   const ipfs = await getAnIPFS(options)
 

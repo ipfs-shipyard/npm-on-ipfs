@@ -1,3 +1,18 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.8.0...v0.9.0) (2018-10-04)
+
+
+### Bug Fixes
+
+* friendlier error pages ([747320d](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/747320d))
+
+
+### Features
+
+* use ipfs to fetch files if available ([5e135fe](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/5e135fe))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.7.4...v0.8.0) (2018-09-21)
 

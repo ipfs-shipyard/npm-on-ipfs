@@ -33,21 +33,23 @@ const makeRequest = (options) => {
 
 const retryRequest = (options, attempt = 1) => {
   const maxAttempts = options.retries || 1
-  const method = (options.method || 'GET').toUpperCase()
-
-  if (attempt > maxAttempts) {
-    return Promise.reject(new Error(`Gave up requesting ${method} ${options.uri} after ${attempt} attempts`))
-  }
-
   const delay = options.retryDelay || 0
 
   return makeRequest(options)
     .catch(error => {
+      const method = (options.method || 'GET').toUpperCase()
+
       console.info(`🚨 Request to ${method} ${options.uri} failed on attempt ${attempt} - ${error}`)
+
+      attempt += 1
+
+      if (attempt > maxAttempts) {
+        return Promise.reject(new Error(`Gave up requesting ${method} ${options.uri} after ${attempt} attempts`))
+      }
 
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          retryRequest(options, attempt + 1)
+          retryRequest(options, attempt)
             .then(resolve)
             .catch(reject)
         }, delay)

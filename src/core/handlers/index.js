@@ -1,6 +1,8 @@
 'use strict'
 
 module.exports = {
-  files: require('./files'),
-  favicon: require('./favicon')
+  tarball: require('./tarball'),
+  manifest: require('./manifest'),
+  favicon: require('./favicon'),
+  root: require('./root')
 }

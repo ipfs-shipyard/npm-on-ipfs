@@ -4,15 +4,15 @@ const express = require('express')
 const once = require('once')
 const config = require('./config')
 const {
-  files,
-  favicon
+  tarball,
+  manifest,
+  favicon,
+  root
 } = require('./handlers')
 const clone = require('./clone')
-const store = require('./store')
 const getExternalUrl = require('./utils/get-external-url')
 const proxy = require('express-http-proxy')
 const prometheus = require('express-prom-bundle')
-const pkg = require('../../package.json')
 const promisify = require('util').promisify
 const IPFS = require('ipfs')
 const metrics = prometheus({
@@ -24,6 +24,8 @@ module.exports = async (options) => {
   options = config(options)
 
   console.info(`📦 Mirroring npm on ${getExternalUrl(options)}`)
+
+  const ipfs = await getAnIPFS(options)
 
   const app = express()
   app.use(function (request, response, next) {
@@ -47,17 +49,13 @@ module.exports = async (options) => {
   app.use('/-/metrics', metrics.metricsMiddleware)
 
   // let the world know what version we are
-  app.get('/', (request, response, next) => {
-    response.send({
-      name: pkg.name,
-      version: pkg.version
-    })
-  })
-  app.get('/favicon.ico', favicon)
-  app.get('/favicon.png', favicon)
+  app.get('/', root(options, ipfs, app))
+  app.get('/favicon.ico', favicon(options, ipfs, app))
+  app.get('/favicon.png', favicon(options, ipfs, app))
 
   // intercept requests for tarballs and manifests
-  app.get('/*', files)
+  app.get('/*.tgz', tarball(options, ipfs, app))
+  app.get('/*', manifest(options, ipfs, app))
 
   // everything else should just proxy for the registry
   const registry = proxy(options.mirror.registry, {
@@ -81,8 +79,6 @@ module.exports = async (options) => {
   } else {
     console.info('😈 Using in-process IPFS daemon')
   }
-
-  const ipfs = await getAnIPFS(options)
 
   if (options.clone.enabled) {
     clone(options, ipfs)
@@ -123,7 +119,6 @@ module.exports = async (options) => {
     server.once('error', callback)
 
     app.locals.ipfs = ipfs
-    app.locals.store = store(options, ipfs, app)
   })
 }
 

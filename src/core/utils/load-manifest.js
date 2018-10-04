@@ -40,7 +40,7 @@ const loadManifest = async (options, ipfs, packageName) => {
   }
 
   if (!mfsVersion._rev && !npmVersion._rev) {
-    throw new Error(`Not found, tried npm: ${willDownload}` + JSON.stringify(mfsVersion))
+    throw new Error(`Not found, tried npm: ${willDownload}`)
   }
 
   if (mfsVersion._rev && (!npmVersion._rev || npmVersion._rev === mfsVersion._rev)) {

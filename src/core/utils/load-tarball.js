@@ -41,6 +41,10 @@ const extractPackageDetails = (path) => {
     packageName, fileName
   ] = path.split('/-/')
 
+  if (packageName.startsWith('/')) {
+    packageName = packageName.substring(1)
+  }
+
   let moduleName = packageName
 
   if (packageName.startsWith('@')) {

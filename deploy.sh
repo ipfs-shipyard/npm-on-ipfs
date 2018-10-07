@@ -1,13 +1,15 @@
 #!/bin/bash -eux
 
 # Get the latest
-git pull
+# git pull
 
 # Build a Docker image
-docker-compose build --no-cache registry
+docker-compose build --no-cache registry replicate
 
 # Shut down the registry containers
-docker-compose stop registry
+docker-compose stop registry replicate
 
 # Restart using the new image
-docker-compose up -d --no-deps --force-recreate --scale registry=5 registry
+# docker-compose up -d --no-deps --force-recreate --scale registry=5 --scale replicate=1 registry replicate
+
+docker-compose up --no-deps --force-recreate --scale registry=1 --scale replicate=1 registry replicate

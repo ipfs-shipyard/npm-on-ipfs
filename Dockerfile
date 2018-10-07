@@ -9,6 +9,6 @@ COPY ./src /app/src
 
 EXPOSE 50321
 
-RUN export STORE_S3_PATH=$HOSTNAME
+RUN export STORE_S3_PATH="${STORE_S3_PATH:-$HOSTNAME}"
 
 CMD ipfs-npm

@@ -16,6 +16,7 @@ const saveTarballs = async (options, pkg, ipfs, emitter) => {
             const stream = saveTarball(options, pkg.name, versionNumber, ipfs, emitter)
             stream.once('finish', () => resolve())
             stream.once('error', (error) => reject(error))
+            stream.on('data', () => {})
           })
         }
 

@@ -15,15 +15,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
   yargs
     .option('clone', {
       describe: 'Whether to clone the registry in the background',
-      default: true
-    })
-    .option('replicate', {
-      describe: 'Whether to replicate the registry in the background',
-      default: true
-    })
-    .option('eager-download', {
-      describe: 'Whether to eagerly download tarballs',
-      default: true
+      default: false
     })
     .option('mirror-host', {
       describe: 'Which host to listen to requests on',
@@ -49,10 +41,6 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'Only request the manifest for a given module every so many ms',
       default: 60000
     })
-    .option('ipfs-port', {
-      describe: 'Which port the daemon is listening on',
-      default: null
-    })
     .option('external-host', {
       describe: 'Which host to use when reaching this mirror'
     })
@@ -61,6 +49,10 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('external-protocol', {
       describe: 'Which protocol to use when reaching this mirror'
+    })
+    .option('ipfs-port', {
+      describe: 'Which port the daemon is listening on',
+      default: null
     })
     .option('ipfs-host', {
       describe: 'Which host the daemon is listening on',
@@ -100,11 +92,19 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('clone-delay', {
       describe: 'How long in ms to wait between cloning each module',
-      default: 1000
+      default: 0
     })
     .option('clone-upgrade-to-https', {
       describe: 'If a tarball is specifed with an http URL, whether to upgrade it to https',
       default: true
+    })
+    .option('clone-pubsub-master', {
+      describe: 'A URL to download the public key of the pubsub topic master',
+      default: 'https://replication.registry.js.ipfs.io'
+    })
+    .option('clone-pubsub-topic', {
+      describe: 'The name of the pubsub topic',
+      default: 'ipfs-js-registry-replication'
     })
     .option('request-max-sockets', {
       describe: 'How many concurrent http requests to make while cloning the repo',

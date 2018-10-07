@@ -20,6 +20,8 @@ const metrics = prometheus({
   autoregister: false
 })
 const s3Repo = require('./utils/s3-repo')
+const replicationMaster = require('./replication/master')
+const replicationWorker = require('./replication/worker')
 
 module.exports = async (options) => {
   options = config(options)
@@ -95,7 +97,10 @@ module.exports = async (options) => {
   }
 
   if (options.clone.enabled) {
-    clone(options, ipfs)
+    clone(options, ipfs, app)
+    replicationMaster(options, ipfs, app)
+  } else {
+    replicationWorker(options, ipfs)
   }
 
   return new Promise(async (resolve, reject) => {
@@ -141,8 +146,15 @@ const getAnIPFS = promisify((options, callback) => {
   callback = once(callback)
 
   const ipfs = new IPFS({
-    repo: options.ipfs.repo
+    repo: options.ipfs.repo,
+    EXPERIMENTAL: {
+      pubsub: true
+    }
   })
   ipfs.once('ready', () => callback(null, ipfs))
   ipfs.once('error', (error) => callback(error))
+
+  process.on('exit', () => {
+    ipfs.stop()
+  })
 })

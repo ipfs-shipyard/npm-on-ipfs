@@ -49,7 +49,7 @@ const loadManifest = async (options, ipfs, packageName) => {
     return mfsVersion
   }
 
-  console.info(`🆕 New version of ${packageName} detected`)
+  console.info(`🆕 New version of ${packageName} detected`, mfsVersion._rev, 'vs', npmVersion._rev)
 
   npmVersion = replaceTarballUrls(options, npmVersion)
 

@@ -13,7 +13,8 @@
     "test:node": "aegir test -t node",
     "coverage": "aegir coverage",
     "lint": "aegir lint",
-    "start": "CLONE_EAGER_DOWNLOAD=false CLONE=false IPFS_FLUSH=true registry-mirror",
+    "start": "registry-mirror --no-clone",
+    "clone": "registry-mirror --clone",
     "release": "aegir release -t node",
     "release-minor": "aegir release --type minor -t node",
     "release-major": "aegir release --type major -t node"
@@ -45,6 +46,7 @@
     "hat": "~0.0.3",
     "ipfs": "~0.32.2",
     "once": "^1.4.0",
+    "promise-delay": "^2.1.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "yargs": "^12.0.1"
@@ -54,7 +56,6 @@
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
     "mock-require": "^3.0.2",
-    "promise-delay": "^2.1.0",
     "sinon": "^6.1.5"
   },
   "contributors": [

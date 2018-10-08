@@ -1,70 +1,18 @@
 {
-  "name": "ipfs-npm",
-  "version": "0.10.0",
-  "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
-  "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
-  "main": "src/index.js",
-  "bin": {
-    "registry-mirror": "src/cli/bin.js",
-    "ipfs-npm": "src/cli/bin.js"
-  },
+  "name": "npm-on-ipfs",
+  "version": "1.0.0",
+  "description": "Install your dependencies from IPFS",
   "scripts": {
-    "test": "aegir test -t node",
-    "test:node": "aegir test -t node",
-    "coverage": "aegir coverage",
-    "lint": "aegir lint",
-    "start": "registry-mirror --no-clone",
-    "clone": "registry-mirror --clone",
-    "release": "aegir release -t node",
-    "release-minor": "aegir release --type minor -t node",
-    "release-major": "aegir release --type major -t node"
+    "postinstall": "lerna bootstrap",
+    "reset": "lerna run --parallel clean && rm -rf packages/*/node_modules packages/*/package-lock.json && rm -rf node_modules",
+    "test": "lerna run --parallel test",
+    "build": "lerna run --parallel build",
+    "deploy": "lerna run --parallel deploy",
+    "start": "NODE_ENV=development lerna run --parallel start",
+    "clean": "lerna run --parallel clean",
+    "lint": "lerna run --parallel lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ipfs-shipyard/npm-on-ipfs.git"
-  },
-  "keywords": [
-    "IPFS",
-    "npm",
-    "cache",
-    "offline"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ipfs-shipyard/npm-on-ipfs/issues"
-  },
-  "homepage": "https://github.com/ipfs-shipyard/npm-on-ipfs#readme",
   "dependencies": {
-    "aws-sdk": "^2.325.0",
-    "datastore-s3": "~0.2.0",
-    "debug": "^4.0.1",
-    "dnscache": "^1.0.1",
-    "express": "^4.16.3",
-    "express-http-proxy": "^1.4.0",
-    "express-prom-bundle": "^4.2.1",
-    "follow-registry": "achingbrain/follow-registry",
-    "hat": "~0.0.3",
-    "ipfs": "~0.32.2",
-    "once": "^1.4.0",
-    "promise-delay": "^2.1.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "yargs": "^12.0.1"
-  },
-  "devDependencies": {
-    "aegir": "^15.0.0",
-    "chai": "^4.1.2",
-    "dirty-chai": "^2.0.1",
-    "mock-require": "^3.0.2",
-    "sinon": "^6.1.5"
-  },
-  "contributors": [
-    "Danny Arnold <despair.blue@gmail.com>",
-    "David Dias <daviddias.p@gmail.com>",
-    "Lars-Magnus Skog <ralphtheninja@riseup.net>",
-    "Mateusz Naściszewski <matin1111@wp.pl>",
-    "achingbrain <alex@achingbrain.net>",
-    "dignifiedquire <dignifiedquire@gmail.com>",
-    "gonders <gonders@no.com>"
-  ]
+    "lerna": "^3.1.4"
+  }
 }

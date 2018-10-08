@@ -1,0 +1,38 @@
+'use strict'
+
+const toBoolean = require('registry-mirror-common/utils/to-boolean')
+const option = require('registry-mirror-common/utils/option')
+
+module.exports = (overrides = {}) => {
+  return {
+    packageManager: option(process.env.PACKAGE_MANAGER, overrides.packageManager),
+    registry: option(process.env.IPFS_REGISTRY_INDEX, overrides.ipfsRegistry),
+    registryUpdateInterval: option(Number(process.env.REGISTRY_UPDATE_INTERVAL), overrides.registryUpdateInterval),
+    registryUploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.registryUploadSizeLimit),
+
+    ipfs: {
+      index: option(process.env.IPFS_REGISTRY_INDEX, overrides.ipfsRegistryIndex),
+
+      host: option(process.env.IPFS_HOST, overrides.ipfsHost),
+      port: option(Number(process.env.IPFS_PORT), overrides.ipfsPort),
+      node: option(process.env.IPFS_NODE, overrides.ipfsNode),
+      prefix: option(process.env.IPFS_MFS_PREFIX, overrides.ipfsMfsPrefix),
+    },
+
+    http: {
+      host: 'localhost'
+    },
+
+    request: {
+      pool: {
+        maxSockets: option(Number(process.env.REQUEST_MAX_SOCKETS), overrides.requestMaxSockets)
+      },
+      retries: option(process.env.REQUEST_RETRIES, overrides.requestRetries),
+      retryDelay: option(process.env.REQUEST_RETRY_DELAY, overrides.requestRetryDelay),
+      timeout: option(process.env.REQUEST_TIMEOUT, overrides.requestTimeout)
+    }
+  }
+}
+
+module.exports.option = option
+module.exports.toBoolean = toBoolean

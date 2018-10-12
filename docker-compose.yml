@@ -39,6 +39,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=replicate.registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=localhost
       - EXTERNAL_PORT=443
@@ -63,7 +64,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
-      - CLONE=false
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
@@ -91,7 +92,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
-      - CLONE=false
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
@@ -119,7 +120,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
-      - CLONE=false
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
@@ -147,7 +148,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
-      - CLONE=false
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
@@ -175,7 +176,7 @@ services:
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
-      - CLONE=false
+      - NODE_ENV=production
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443

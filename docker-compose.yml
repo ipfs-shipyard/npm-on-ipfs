@@ -43,7 +43,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=localhost
       - EXTERNAL_PORT=443
-      - EXTERNAL_IP=127.0.0.1
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_REGION=${STORE_S3_REGION}
       - STORE_S3_BUCKET=${STORE_S3_BUCKET}
@@ -68,6 +68,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_PATH=registry-1
       - STORE_S3_REGION=${STORE_S3_REGION}
@@ -96,6 +97,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_PATH=registry-2
       - STORE_S3_REGION=${STORE_S3_REGION}
@@ -124,6 +126,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_PATH=registry-3
       - STORE_S3_REGION=${STORE_S3_REGION}
@@ -152,6 +155,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_PATH=registry-4
       - STORE_S3_REGION=${STORE_S3_REGION}
@@ -180,6 +184,7 @@ services:
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
+      - EXTERNAL_IP=35.178.192.119
       - IPFS_STORE_TYPE=s3
       - STORE_S3_PATH=registry-5
       - STORE_S3_REGION=${STORE_S3_REGION}

@@ -15,6 +15,11 @@ const findInfo = async (config, ipfs) => {
       ipfs.swarm.addrs()
     ])
 
+    id.addresses = [
+      `/ip4/${config.external.ip}/tcp/${config.ipfs.port}/ipfs/${id.id}`,
+      `/dns4/${config.external.host}/tcp/${config.ipfs.port}/ipfs/${id.id}`
+    ]
+
     info = {
       name: pkg.name,
       version: pkg.version,

@@ -36,7 +36,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('http-port', {
       describe: 'Which port to listen to requests on',
-      default: 8081
+      default: 8080
     })
 
     .option('external-protocol', {
@@ -49,6 +49,10 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
       describe: 'Which port to use when reaching this mirror'
     })
 
+    .option('ipfs-port', {
+      describe: 'Which port to accept IPFS connections on',
+      default: 40020
+    })
     .option('ipfs-mfs-prefix', {
       describe: 'Which mfs prefix to use',
       default: '/commons-registry'

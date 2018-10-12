@@ -5,7 +5,12 @@ services:
   proxy:
     image: jwilder/nginx-proxy:alpine
     links:
-      - registry
+      - replicate
+      - registry_1
+      - registry_2
+      - registry_3
+      - registry_4
+      - registry_5
     ports:
       - '80:80'
       - '443:443'
@@ -38,7 +43,7 @@ services:
       - EXTERNAL_HOST=localhost
       - EXTERNAL_PORT=443
       - EXTERNAL_IP=127.0.0.1
-      - STORE_TYPE=fs
+      - STORE_TYPE=s3
       - STORE_S3_REGION=${STORE_S3_REGION}
       - STORE_S3_BUCKET=${STORE_S3_BUCKET}
       - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
@@ -48,25 +53,142 @@ services:
       - "8080:8080"
       - "40020:40020"
 
-  registry:
+  registry_1:
     build:
       context: .
       dockerfile: packages/registry-mirror/Dockerfile
     restart: 'always'
     environment:
       - VIRTUAL_HOST=registry.js.ipfs.io
-      - VIRTUAL_PORT=8081
+      - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
       - CLONE=false
       - EXTERNAL_PROTOCOL=https
       - EXTERNAL_HOST=registry.js.ipfs.io
       - EXTERNAL_PORT=443
-      - STORE_TYPE=fs
+      - STORE_TYPE=s3
+      - STORE_S3_PATH=registry-1
       - STORE_S3_REGION=${STORE_S3_REGION}
       - STORE_S3_BUCKET=${STORE_S3_BUCKET}
       - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
       - STORE_S3_SECRET_ACCESS_KEY=${STORE_S3_SECRET_ACCESS_KEY}
       - PUBSUB_MASTER=http://replicate:8080
+      - IPFS_SWARM_PORT=50021
     links:
       - replicate
+    ports:
+      - "8081:8080"
+      - "50021:50021"
+
+  registry_2:
+    build:
+      context: .
+      dockerfile: packages/registry-mirror/Dockerfile
+    restart: 'always'
+    environment:
+      - VIRTUAL_HOST=registry.js.ipfs.io
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=registry.js.ipfs.io
+      - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
+      - CLONE=false
+      - EXTERNAL_PROTOCOL=https
+      - EXTERNAL_HOST=registry.js.ipfs.io
+      - EXTERNAL_PORT=443
+      - STORE_TYPE=s3
+      - STORE_S3_PATH=registry-2
+      - STORE_S3_REGION=${STORE_S3_REGION}
+      - STORE_S3_BUCKET=${STORE_S3_BUCKET}
+      - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
+      - STORE_S3_SECRET_ACCESS_KEY=${STORE_S3_SECRET_ACCESS_KEY}
+      - PUBSUB_MASTER=http://replicate:8080
+      - IPFS_SWARM_PORT=50022
+    links:
+      - replicate
+    ports:
+      - "8082:8080"
+      - "50022:50022"
+
+  registry_3:
+    build:
+      context: .
+      dockerfile: packages/registry-mirror/Dockerfile
+    restart: 'always'
+    environment:
+      - VIRTUAL_HOST=registry.js.ipfs.io
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=registry.js.ipfs.io
+      - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
+      - CLONE=false
+      - EXTERNAL_PROTOCOL=https
+      - EXTERNAL_HOST=registry.js.ipfs.io
+      - EXTERNAL_PORT=443
+      - STORE_TYPE=s3
+      - STORE_S3_PATH=registry-3
+      - STORE_S3_REGION=${STORE_S3_REGION}
+      - STORE_S3_BUCKET=${STORE_S3_BUCKET}
+      - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
+      - STORE_S3_SECRET_ACCESS_KEY=${STORE_S3_SECRET_ACCESS_KEY}
+      - PUBSUB_MASTER=http://replicate:8080
+      - IPFS_SWARM_PORT=50023
+    links:
+      - replicate
+    ports:
+      - "8083:8080"
+      - "50023:50023"
+
+  registry_4:
+    build:
+      context: .
+      dockerfile: packages/registry-mirror/Dockerfile
+    restart: 'always'
+    environment:
+      - VIRTUAL_HOST=registry.js.ipfs.io
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=registry.js.ipfs.io
+      - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
+      - CLONE=false
+      - EXTERNAL_PROTOCOL=https
+      - EXTERNAL_HOST=registry.js.ipfs.io
+      - EXTERNAL_PORT=443
+      - STORE_TYPE=s3
+      - STORE_S3_PATH=registry-4
+      - STORE_S3_REGION=${STORE_S3_REGION}
+      - STORE_S3_BUCKET=${STORE_S3_BUCKET}
+      - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
+      - STORE_S3_SECRET_ACCESS_KEY=${STORE_S3_SECRET_ACCESS_KEY}
+      - PUBSUB_MASTER=http://replicate:8080
+      - IPFS_SWARM_PORT=50024
+    links:
+      - replicate
+    ports:
+      - "8084:8080"
+      - "50024:50024"
+
+  registry_5:
+    build:
+      context: .
+      dockerfile: packages/registry-mirror/Dockerfile
+    restart: 'always'
+    environment:
+      - VIRTUAL_HOST=registry.js.ipfs.io
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=registry.js.ipfs.io
+      - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai
+      - CLONE=false
+      - EXTERNAL_PROTOCOL=https
+      - EXTERNAL_HOST=registry.js.ipfs.io
+      - EXTERNAL_PORT=443
+      - STORE_TYPE=s3
+      - STORE_S3_PATH=registry-5
+      - STORE_S3_REGION=${STORE_S3_REGION}
+      - STORE_S3_BUCKET=${STORE_S3_BUCKET}
+      - STORE_S3_ACCESS_KEY_ID=${STORE_S3_ACCESS_KEY_ID}
+      - STORE_S3_SECRET_ACCESS_KEY=${STORE_S3_SECRET_ACCESS_KEY}
+      - PUBSUB_MASTER=http://replicate:8080
+      - IPFS_SWARM_PORT=50025
+    links:
+      - replicate
+    ports:
+      - "8085:8080"
+      - "50025:50025"

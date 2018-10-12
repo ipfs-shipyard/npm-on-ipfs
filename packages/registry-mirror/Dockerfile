@@ -1,6 +1,6 @@
 FROM node:10
 
-EXPOSE 8081
+EXPOSE 8080
 
 RUN export NODE_ENV=production
 RUN npm set unsafe-perm true
@@ -20,7 +20,5 @@ COPY ./packages/common/server.js /app/packages/common/server.js
 COPY ./packages/registry-mirror/src /app/packages/registry-mirror/src
 
 WORKDIR /app/packages/registry-mirror
-
-RUN export STORE_S3_PATH="${STORE_S3_PATH:-$HOSTNAME}"
 
 CMD node .

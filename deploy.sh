@@ -5,15 +5,13 @@ docker rm $(docker ps -q -f 'status=exited')
 docker rmi $(docker images -q -f "dangling=true")
 
 # Get the latest
-# git pull
+git pull
 
 # Build a Docker image
-docker-compose build --no-cache registry replicate
+docker-compose build --no-cache replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
 
 # Shut down the registry containers
-docker-compose stop registry replicate
+docker-compose stop replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
 
 # Restart using the new image
-# docker-compose up -d --no-deps --force-recreate --scale registry=5 --scale replicate=1 registry replicate
-
-docker-compose up --no-deps --force-recreate registry replicate
+docker-compose up --no-deps --force-recreate replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5

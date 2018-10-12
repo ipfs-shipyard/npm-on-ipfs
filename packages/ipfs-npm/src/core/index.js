@@ -48,9 +48,23 @@ module.exports = async (options) => {
 
   }
 
-  console.info('☎️  Dialing replication master', master.ipfs.addresses[master.ipfs.addresses.length - 1])
+  console.info('☎️  Dialing replication master', master.ipfs.addresses.join(','))
 
-  await ipfs.api.swarm.connect(master.ipfs.addresses[master.ipfs.addresses.length - 1])
+  let connected
+
+  await Promise.all(
+    master.ipfs.addresses.map(addr => {
+      return ipfs.api.swarm.connect(master.ipfs.addresses[0])
+        .then(() => {
+          connected = true
+        })
+        .catch(() => {})
+    })
+  )
+
+  if (!connected) {
+    throw new Error('💥 Could not connect to replication master - tried ' + master.ipfs.addresses.join(','))
+  }
 
   console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix)
 

@@ -8,10 +8,10 @@ docker rmi $(docker images -q -f "dangling=true")
 git pull
 
 # Build a Docker image
-docker-compose build --no-cache replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
+docker-compose build --no-cache replicate registry_1 registry_2 registry_3 registry_4 registry_5
 
 # Shut down the registry containers
-docker-compose stop replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
+docker-compose stop replicate registry_1 registry_2 registry_3 registry_4 registry_5
 
 # Restart using the new image
-docker-compose up -d --no-deps --force-recreate replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
+docker-compose up -d --no-deps --force-recreate replicate registry_1 registry_2 registry_3 registry_4 registry_5

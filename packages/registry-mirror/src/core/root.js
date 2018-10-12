@@ -1,6 +1,7 @@
 'use strict'
 
 const pkg = require('../../package.json')
+const findBaseDir = require('registry-mirror-common/utils/find-base-dir')
 
 let info
 let lastUpdate
@@ -24,7 +25,9 @@ const findInfo = async (config, ipfs) => {
       name: pkg.name,
       version: pkg.version,
       ipfs: id,
-      peers: peers.map(peer => peer.id.toB58String())
+      peers: peers.map(peer => peer.id.toB58String()),
+      // until js can resolve IPNS names remotely, just use the raw hash
+      root: `/ipfs/${await findBaseDir(config, ipfs)}`
     }
 
     lastUpdate = Date.now()

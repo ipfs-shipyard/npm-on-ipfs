@@ -35,7 +35,7 @@ services:
       dockerfile: packages/replication-master/Dockerfile
     restart: 'always'
     environment:
-      - VIRTUAL_HOST=replicate.registry.js.ipfs.io
+      - VIRTUAL_HOST=replication.registry.js.ipfs.io
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=replicate.registry.js.ipfs.io
       - LETSENCRYPT_EMAIL=alex.potsides@protocol.ai

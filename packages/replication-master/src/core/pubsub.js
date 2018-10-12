@@ -1,7 +1,7 @@
 'use strict'
 
 const hat = require('hat')
-const findBaseDir = require('./find-base-dir')
+const findBaseDir = require('registry-mirror-common/utils/find-base-dir')
 
 const topic = `ipfs-registry-pubsub-${hat()}`
 

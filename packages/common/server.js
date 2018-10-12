@@ -84,12 +84,12 @@ const getAnIPFS = promisify((config, callback) => {
     console.info(`☁️  Using s3 storage`) // eslint-disable-line no-console
 
     config.ipfs.repo = s3Repo({
-      region: config.store.s3.region,
-      path: config.store.s3.path,
-      bucket: config.store.s3.bucket,
-      accessKeyId: config.store.s3.accessKeyId,
-      secretAccessKey: config.store.s3.secretAccessKey,
-      createIfMissing: config.store.s3.createIfMissing
+      region: config.ipfs.s3.region,
+      path: config.ipfs.s3.path,
+      bucket: config.ipfs.s3.bucket,
+      accessKeyId: config.ipfs.s3.accessKeyId,
+      secretAccessKey: config.ipfs.s3.secretAccessKey,
+      createIfMissing: config.ipfs.s3.createIfMissing
     })
   }
 

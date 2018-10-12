@@ -14,4 +14,4 @@ docker-compose build --no-cache replicate replicate_1 replicate_2 replicate_3 re
 docker-compose stop replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
 
 # Restart using the new image
-docker-compose up --no-deps --force-recreate replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5
+docker-compose up -d --no-deps --force-recreate replicate replicate_1 replicate_2 replicate_3 replicate_4 replicate_5

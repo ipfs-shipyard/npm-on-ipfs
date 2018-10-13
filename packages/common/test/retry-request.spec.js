@@ -15,15 +15,8 @@ describe('retry-request', () => {
   let retryRequest
   let request
   let requestPromise
-  let config
 
   beforeEach(async () => {
-    config = {
-      request: {
-
-      }
-    }
-
     requestPromise = sinon.stub()
     request = sinon.stub()
 
@@ -59,10 +52,6 @@ describe('retry-request', () => {
   })
 
   it('should retry a streaming request', (done) => {
-    const pkg = {
-      name: `module-${hat()}`
-    }
-
     request
       .onFirstCall()
       .callsFake(() => {
@@ -110,10 +99,6 @@ describe('retry-request', () => {
   })
 
   it('should retry a streaming request that fails load', (done) => {
-    const pkg = {
-      name: `module-${hat()}`
-    }
-
     request
       .onFirstCall()
       .callsFake(() => {

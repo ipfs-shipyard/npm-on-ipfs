@@ -2,7 +2,6 @@
 'use strict'
 
 const mock = require('mock-require')
-const sinon = require('sinon')
 const path = require('path')
 const os = require('os')
 const {
@@ -16,6 +15,7 @@ const expect = require('chai')
 const hat = require('hat')
 const saveManifest = require('registry-mirror-common/utils/save-manifest')
 const delay = require('promise-delay')
+const request = require('registry-mirror-common/utils/retry-request')
 
 const baseDir = '/commons-registry-clone-test'
 
@@ -44,9 +44,10 @@ describe('replication', function () {
       followConcurrency: 1,
       followUserAgent: 'test UA',
       followSeqFile: path.join(os.tmpdir(), hat()),
-      externalHost: 'localhost',
-      externalPort: registry.address().port,
-      externalProtocol: 'http'
+      externalHost: 'replication.registry.ipfs.io',
+      externalPort: 443,
+      externalProtocol: 'https',
+      externalIp: '35.178.192.119'
     }, config)
   }
 
@@ -73,6 +74,25 @@ describe('replication', function () {
     if (replicationMaster && replicationMaster.stop) {
       await replicationMaster.stop()
     }
+  })
+
+  it('should publish some info about this node', async () => {
+    const info = await request({
+      uri: replicationMasterUrl,
+      json: true
+    })
+
+    expect(info.ipfs).to.be.ok()
+    expect(info.ipfs.id).to.be.ok()
+    expect(info.ipfs.addresses).to.be.ok()
+    expect(info.ipfs.addresses.length).to.be.ok()
+    expect(info.root).to.be.ok()
+    expect(info.topic).to.be.ok()
+
+    info.ipfs.addresses.forEach(address => {
+      expect(address).to.not.contain('127.0.0.1')
+      expect(address).to.not.contain('localhost')
+    })
   })
 
   it('should download a new module', async () => {
@@ -109,7 +129,7 @@ describe('replication', function () {
           expect(event.name).to.equal(module.name)
           expect(Object.keys(event.versions).length).to.equal(1)
           expect(event.versions[module.version].dist.source).to.equal(`${config.registry}${tarball.path}`)
-          expect(event.versions[module.version].dist.tarball).to.equal(`${config.externalProtocol}://${config.externalHost}:${config.externalPort}${tarball.path}`)
+          expect(event.versions[module.version].dist.tarball).to.equal(`${config.externalProtocol}://${config.externalHost}${tarball.path}`)
         } catch (error) {
           return reject(error)
         }
@@ -179,7 +199,7 @@ describe('replication', function () {
 
     const data = {
       name: module.name,
-      json: '<html><body><h1>504 Gateway Time-out</h1>\nThe server didn\'t respond in time.\n</body></html>\n\n',
+      json: '<html><body><h1>504 Gateway Time-out</h1>\nThe server didn\'t respond in time.\n</body></html>\n\n'
     }
 
     skim.publish(data, tarball)

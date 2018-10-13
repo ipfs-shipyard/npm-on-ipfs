@@ -41,7 +41,7 @@ describe('mirror', function () {
       ipfsRepo: path.join(os.tmpdir(), hat()),
       ipfsFlush: true,
       registryUpdateInterval: 0,
-      pubsubMaster: `http://127.0.0.1:${replication.address().port}`,
+      pubsubMaster: `http://127.0.0.1:${replication.address().port}`
     }, config)
   }
 

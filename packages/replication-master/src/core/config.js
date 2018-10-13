@@ -48,7 +48,7 @@ module.exports = (overrides = {}) => {
       concurrency: option(Number(process.env.FOLLOW_CONCURRENCY), overrides.followConcurrency),
       protocol: option(Number(process.env.FOLLOW_PROTOCOL), overrides.followProtocol),
       port: option(Number(process.env.FOLLOW_PORT), overrides.followPort),
-      seqFile: option(Number(process.env.FOLLOW_SEQ_FILE), overrides.followSeqFile),
+      seqFile: option(Number(process.env.FOLLOW_SEQ_FILE), overrides.followSeqFile)
     },
 
     clone: {

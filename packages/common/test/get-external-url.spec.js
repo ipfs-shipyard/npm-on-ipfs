@@ -1,12 +1,9 @@
 /* eslint-env mocha */
 'use strict'
 
-const mock = require('mock-require')
-const sinon = require('sinon')
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
-const hat = require('hat')
 const getExternalUrl = require('../utils/get-external-url')
 
 describe('get-external-url', () => {

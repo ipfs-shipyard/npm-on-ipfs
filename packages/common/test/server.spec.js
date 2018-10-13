@@ -2,12 +2,10 @@
 'use strict'
 
 const mock = require('mock-require')
-const sinon = require('sinon')
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
 const EventEmitter = require('events').EventEmitter
-const util = require('util')
 const request = require('../utils/retry-request')
 
 class IPFS extends EventEmitter {

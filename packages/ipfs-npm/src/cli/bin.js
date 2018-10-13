@@ -5,7 +5,6 @@
 require('dnscache')({ enable: true })
 
 const pkg = require('../../package')
-const path = require('path')
 
 process.title = pkg.name
 

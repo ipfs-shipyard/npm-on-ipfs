@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 'use strict'
 
-const mock = require('mock-require')
 const sinon = require('sinon')
 const expect = require('chai')
   .use(require('dirty-chai'))
@@ -53,9 +52,9 @@ describe('find-base-dir', () => {
     ipfs.files.ls = sinon.stub()
       .onFirstCall().returns([])
       .onSecondCall().returns([{
-      name: dirName,
-      hash: dirHash
-    }])
+        name: dirName,
+        hash: dirHash
+      }])
 
     const result = await findBaseDir(config, ipfs)
 

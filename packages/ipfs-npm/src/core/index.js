@@ -38,7 +38,7 @@ module.exports = async (options) => {
     json: true
   }))
 
-  console.info('🗑️  Removing old registry if it exists')
+  console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
 
   try {
     await ipfs.api.files.rm(options.ipfs.prefix, {
@@ -48,7 +48,7 @@ module.exports = async (options) => {
 
   }
 
-  console.info('☎️  Dialing replication master', master.ipfs.addresses.join(','))
+  console.info('☎️  Dialing replication master', master.ipfs.addresses.join(',')) // eslint-disable-line no-console
 
   let connected
 
@@ -66,11 +66,11 @@ module.exports = async (options) => {
     throw new Error('💥 Could not connect to replication master - tried ' + master.ipfs.addresses.join(','))
   }
 
-  console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix)
+  console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
 
   await ipfs.api.files.cp(master.root, options.ipfs.prefix)
 
-  console.info('👩‍🚀 Starting local webserver')
+  console.info('👩‍🚀 Starting local webserver') // eslint-disable-line no-console
 
   const server = await startServer(options, ipfs.api)
 
@@ -85,12 +85,12 @@ module.exports = async (options) => {
 
   const packageManager = await which(options.packageManager)
 
-  console.info(`🎁 Installing dependencies with ${packageManager}`)
+  console.info(`🎁 Installing dependencies with ${packageManager}`) // eslint-disable-line no-console
 
-  const proc = spawn(packageManager, ['install', `--registry=http://localhost:${options.http.port}`, '--loglevel=http']);
+  const proc = spawn(packageManager, ['install', `--registry=http://localhost:${options.http.port}`, '--loglevel=http'])
 
   const buffer = new OutputBuffer((line) => {
-    console.info(`🐨 ${line}`)
+    console.info(`🐨 ${line}`) // eslint-disable-line no-console
   })
 
   proc.stdout.on('data', (data) => {
@@ -104,7 +104,7 @@ module.exports = async (options) => {
   proc.on('close', async (code) => {
     buffer.flush()
 
-    console.log(`🎁 ${packageManager} exited with code ${code}`)
+    console.log(`🎁 ${packageManager} exited with code ${code}`) // eslint-disable-line no-console
 
     await cleanUp()
 

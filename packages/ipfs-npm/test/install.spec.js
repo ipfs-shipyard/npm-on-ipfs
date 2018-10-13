@@ -26,7 +26,6 @@ describe('install', function () {
     await fs.copyFile(path.resolve(__dirname, './fixtures/package.json'), path.join(projectDirectory, 'package.json'))
   })
 
-
   it('should install a project', (done) => {
     const installer = spawn(
       process.argv[0], [
@@ -36,7 +35,7 @@ describe('install', function () {
       })
 
     const buffer = new OutputBuffer((line) => {
-      console.info(`🐨 ${line}`)
+      console.info(`🐨 ${line}`) // eslint-disable-line no-console
     })
 
     installer.stdout.on('data', (data) => {

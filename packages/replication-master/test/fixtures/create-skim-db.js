@@ -1,13 +1,10 @@
 'use strict'
 
-const hat = require('hat')
 const {
   createTestServer
 } = require('registry-mirror-common/test/fixtures/test-server')
 
 const createSkimDb = async (registry) => {
-  const id = hat()
-  const topic = `topic-${hat()}`
   const updates = []
   let seq = 0
 
@@ -24,7 +21,7 @@ const createSkimDb = async (registry) => {
         data_size: 19122199289
       },
       data_size: 5606706136,
-      sizes:{
+      sizes: {
         file: 6156660994,
         active: 5606706136,
         external: 19122199289
@@ -36,10 +33,8 @@ const createSkimDb = async (registry) => {
       uuid: '370e266567ec9d1242acc2612839d6a7'
     }),
     '/_changes': (request, response, next) => {
-      console.info('updates', updates)
-
       try {
-        while(updates.length) {
+        while (updates.length) {
           const update = updates.shift()
 
           seq++
@@ -50,7 +45,7 @@ const createSkimDb = async (registry) => {
           }) + '\n')
         }
       } catch (error) {
-        console.error(error)
+        console.error(error) // eslint-disable-line no-console
       }
 
       response.end()

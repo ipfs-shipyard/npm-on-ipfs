@@ -2,8 +2,7 @@
 
 const hat = require('hat')
 const {
-  createTestServer,
-  destroyTestServers
+  createTestServer
 } = require('registry-mirror-common/test/fixtures/test-server')
 
 const createReplicationMaster = async () => {

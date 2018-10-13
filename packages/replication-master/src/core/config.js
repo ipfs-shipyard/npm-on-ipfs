@@ -45,7 +45,10 @@ module.exports = (overrides = {}) => {
       ua: option(process.env.FOLLOW_USER_AGENT, overrides.followUserAgent),
       skim: option(process.env.FOLLOW_SKIM, overrides.followSkim),
       registry: option(process.env.FOLLOW_REGISTTRY, overrides.followRegistry),
-      concurrency: option(Number(process.env.FOLLOW_CONCURRENCY), overrides.followConcurrency)
+      concurrency: option(Number(process.env.FOLLOW_CONCURRENCY), overrides.followConcurrency),
+      protocol: option(Number(process.env.FOLLOW_PROTOCOL), overrides.followProtocol),
+      port: option(Number(process.env.FOLLOW_PORT), overrides.followPort),
+      seqFile: option(Number(process.env.FOLLOW_SEQ_FILE), overrides.followSeqFile),
     },
 
     clone: {

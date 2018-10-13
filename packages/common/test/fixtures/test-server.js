@@ -8,13 +8,19 @@ module.exports = {
   createTestServer: (resources) => {
     return new Promise((resolve, reject) => {
       const server = http.createServer((request, response) => {
-        if (resources[request.url]) {
-          if (typeof resources[request.url] === 'function') {
-            return resources[request.url](request, response)
+        let url = request.url
+
+        if (url.includes('?')) {
+          url = url.split('?')[0]
+        }
+
+        if (resources[url]) {
+          if (typeof resources[url] === 'function') {
+            return resources[url](request, response)
           }
 
           response.statusCode = 200
-          return response.end(resources[request.url])
+          return response.end(resources[url])
         }
 
         response.statusCode = 404

@@ -15,7 +15,14 @@ module.exports = async (options) => {
     app.get('/', root(options, ipfs, app, res.root, res.topic))
   })
 
-  clone(options, result.ipfs, result.app)
+  const feed = await clone(options, result.ipfs, result.app)
+
+  const stop = result.stop
+
+  result.stop = () => {
+    feed.stop()
+    stop()
+  }
 
   return result
 }

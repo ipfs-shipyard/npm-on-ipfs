@@ -46,10 +46,11 @@ describe('load-manifest', () => {
     }
 
     request = sinon.stub()
-
     saveManifest = sinon.stub()
+
     mock('../utils/retry-request', request)
     mock('../utils/save-manifest', saveManifest)
+
     loadManifest = mock.reRequire('../utils/load-manifest')
 
     ipfs = {

@@ -27,48 +27,52 @@ const add = async (config, pkg, ipfs) => {
   return pkg
 }
 
-module.exports = (config, ipfs, emitter) => {
+module.exports = async (config, ipfs, emitter) => {
   console.info('🦎 Replicating registry...') // eslint-disable-line no-console
 
-  follow(Object.assign({}, config.follow, {
-    handler: async (data, callback) => {
-      if (!data.json || !data.json.name) {
-        return callback() // Bail, something is wrong with this change
-      }
-
-      console.info(`🎉 Updated version of ${data.json.name}`) // eslint-disable-line no-console
-
-      const pkg = replaceTarballUrls(config, data.json)
-      const mfsPath = `${config.ipfs.prefix}/${data.json.name}`
-
-      let mfsVersion = {}
-
-      try {
-        mfsVersion = JSON.parse(await ipfs.files.read(mfsPath))
-      } catch (error) {
-        if (error.message.includes('file does not exist')) {
-          log(`${mfsPath} not in MFS`)
-        } else {
-          log(`Could not read ${mfsPath}`, error)
+  return new Promise((resolve) => {
+    follow(Object.assign({}, config.follow, {
+      handler: async (data, callback) => {
+        if (!data.json || !data.json.name) {
+          return callback() // Bail, something is wrong with this change
         }
+
+        console.info(`🎉 Updated version of ${data.json.name}`) // eslint-disable-line no-console
+
+        const pkg = replaceTarballUrls(config, data.json)
+        const mfsPath = `${config.ipfs.prefix}/${data.json.name}`
+
+        let mfsVersion = {}
+
+        try {
+          mfsVersion = JSON.parse(await ipfs.files.read(mfsPath))
+        } catch (error) {
+          if (error.message.includes('file does not exist')) {
+            log(`${mfsPath} not in MFS`)
+          } else {
+            log(`Could not read ${mfsPath}`, error)
+          }
+        }
+
+        // save our existing versions so we don't re-download tarballs we already have
+        Object.keys(mfsVersion.versions || {}).forEach(versionNumber => {
+          pkg.versions[versionNumber] = mfsVersion.versions[versionNumber]
+        })
+
+        try {
+          await add(config, pkg, ipfs)
+          const manifest = await loadManifest(config, ipfs, pkg.name)
+          console.log(`🦕 [${data.seq}] processed ${manifest.name}`) // eslint-disable-line no-console
+          emitter.emit('processed', manifest)
+        } catch (error) {
+          log(error)
+          console.error(`💥 [${data.seq}] error processing ${pkg.name} - ${error}`) // eslint-disable-line no-console
+        }
+
+        callback()
       }
-
-      // save our existing versions so we don't re-download tarballs we already have
-      Object.keys(mfsVersion.versions || {}).forEach(versionNumber => {
-        pkg.versions[versionNumber] = mfsVersion.versions[versionNumber]
-      })
-
-      try {
-        await add(config, pkg, ipfs)
-        const manifest = await loadManifest(config, ipfs, pkg.name)
-        console.log(`🦕 [${data.seq}] processed ${manifest.name}`) // eslint-disable-line no-console
-        emitter.emit('processed', manifest)
-      } catch (error) {
-        log(error)
-        console.error(`💥 [${data.seq}] error processing ${pkg.name} - ${error}`) // eslint-disable-line no-console
-      }
-
-      callback()
-    }
-  }))
+    }), (stream) => {
+      resolve(stream)
+    })
+  })
 }

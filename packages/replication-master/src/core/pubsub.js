@@ -10,7 +10,8 @@ const publishIpnsName = async (config, ipfs) => {
 
   console.info(`🗞️  Publishing IPNS update, base dir is /ipfs/${baseDir}`) // eslint-disable-line no-console
 
-  return `/ipns/${await ipfs.name.publish(`/ipfs/${baseDir}`)}`
+  // No point until js-ipfs can resolve remote ipns names.  also seems to cause the process to hang.
+  // return `/ipns/${await ipfs.name.publish(`/ipfs/${baseDir}`)}`
 }
 
 const publishUpdate = async (config, ipfs, pkg) => {

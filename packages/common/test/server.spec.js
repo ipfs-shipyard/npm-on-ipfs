@@ -6,11 +6,37 @@ const sinon = require('sinon')
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
-const server = require('../server')
+const EventEmitter = require('events').EventEmitter
+const util = require('util')
 const request = require('../utils/retry-request')
+
+class IPFS extends EventEmitter {
+  constructor () {
+    super()
+
+    setTimeout(() => {
+      this.emit('ready')
+    }, 100)
+  }
+
+  stop () {
+
+  }
+}
 
 describe('server', function () {
   this.timeout(10000)
+  let server
+
+  beforeEach(async () => {
+    mock('ipfs', IPFS)
+
+    server = mock.reRequire('../server')
+  })
+
+  afterEach(async () => {
+    mock.stopAll()
+  })
 
   it('should create a server', async () => {
     const config = {

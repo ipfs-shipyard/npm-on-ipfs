@@ -4,56 +4,61 @@
 const promisify = require('util').promisify
 const mock = require('mock-require')
 const request = require('request-promise')
-const {
-  createTestServer,
-  destroyTestServers
-} = require('./fixtures/test-server')
 const expect = require('chai')
   .use(require('dirty-chai'))
   .expect
 const createDagNode = promisify(require('ipld-dag-pb').DAGNode.create)
 const UnixFS = require('ipfs-unixfs')
+const {
+  createTestServer,
+  destroyTestServers
+} = require('registry-mirror-common/test/fixtures/test-server')
+const createReplicationMaster = require('./fixtures/create-replication-master')
 const pkg = require('../package.json')
 const path = require('path')
 const os = require('os')
 const hat = require('hat')
 const delay = require('promise-delay')
 
-describe('core', function () {
+describe('mirror', function () {
   this.timeout(10000)
-  const baseDir = '/commons-registry-test'
+  let baseDir
   let startMirror
   let mirror
   let mirrorUrl
   let upstreamModules = {}
   let config
 
-  const serverconfig = (registry, config = {}) => {
+  const serverConfig = (registry, replication, config = {}) => {
     return Object.assign({}, {
-      mirrorProtocol: 'http',
-      mirrorHost: '127.0.0.1',
-      mirrorRegistry: `http://127.0.0.1:${registry.address().port}`,
+      httpProtocol: 'http',
+      httpHost: '127.0.0.1',
+      registry: `http://127.0.0.1:${registry.address().port}`,
       requestRetries: 5,
       requestRetryDelay: 100,
-      ipfsBaseDir: baseDir,
+      ipfsMfsPrefix: baseDir,
       requestTimeout: 1000,
       ipfsRepo: path.join(os.tmpdir(), hat()),
       ipfsFlush: true,
-      registryUpdateInterval: 0
+      registryUpdateInterval: 0,
+      pubsubMaster: `http://127.0.0.1:${replication.address().port}`,
     }, config)
   }
 
   before(async () => {
+    baseDir = `/commons-registry-test-${hat()}`
+
     startMirror = mock.reRequire('../src/core')
 
-    let registryServer = await createTestServer(upstreamModules)
-    config = serverconfig(registryServer)
+    const registryServer = await createTestServer(upstreamModules)
+    const replicationMaster = await createReplicationMaster()
+    config = serverConfig(registryServer, replicationMaster)
 
     mirror = await startMirror(config)
 
-    config.mirrorPort = mirror.server.address().port
+    config.httpPort = mirror.server.address().port
 
-    mirrorUrl = `${config.mirrorProtocol}://${config.mirrorHost}:${config.mirrorPort}`
+    mirrorUrl = `${config.httpProtocol}://${config.httpHost}:${config.httpPort}`
   })
 
   after(async function () {
@@ -162,7 +167,7 @@ describe('core', function () {
       versions: {
         '1.0.0': {
           dist: {
-            tarball: `${config.mirrorRegistry}/${tarballPath}`,
+            tarball: `${config.registry}/${tarballPath}`,
             shasum: '15d0e36e27c69bc758231f8e9add837f40a40cd0'
           }
         }
@@ -193,7 +198,7 @@ describe('core', function () {
       versions: {}
     })
 
-    upstreamModules[`/${moduleName}`] = (request, response) => {
+    upstreamModules[`/${moduleName.replace('/', '%2f')}`] = (request, response) => {
       response.statusCode = 200
       response.end(data)
     }
@@ -218,7 +223,7 @@ describe('core', function () {
         '1.0.0': {
           dist: {
             shasum: '669965318736dfe855479a6dd441d81f101ae5ae',
-            tarball: `${config.mirrorRegistry}/${tarball1Path}`
+            tarball: `${config.registry}/${tarball1Path}`
           }
         }
       }
@@ -230,13 +235,13 @@ describe('core', function () {
         '1.0.0': {
           dist: {
             shasum: '669965318736dfe855479a6dd441d81f101ae5ae',
-            tarball: `${config.mirrorRegistry}/${tarball1Path}`
+            tarball: `${config.registry}/${tarball1Path}`
           }
         },
         '2.0.0': {
           dist: {
             shasum: '4e9dab818d5f0a45e4ded14021cf0bc28c456f74',
-            tarball: `${config.mirrorRegistry}/${tarball2Path}`
+            tarball: `${config.registry}/${tarball2Path}`
           }
         }
       }
@@ -324,7 +329,7 @@ describe('core', function () {
       versions: {
         '1.0.0': {
           dist: {
-            tarball: `${config.mirrorRegistry}/${tarballPath}`,
+            tarball: `${config.registry}/${tarballPath}`,
             shasum: 'nope!'
           }
         }

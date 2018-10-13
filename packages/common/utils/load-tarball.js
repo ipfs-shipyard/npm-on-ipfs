@@ -4,7 +4,7 @@ const saveTarball = require('./save-tarball')
 const CID = require('cids')
 const loadManifest = require('../utils/load-manifest')
 
-const readOrDownloadTarball = async (config, ipfs, path, emitter) => {
+const readOrDownloadTarball = async (config, ipfs, path) => {
   const {
     packageName,
     packageVersion
@@ -18,7 +18,7 @@ const readOrDownloadTarball = async (config, ipfs, path, emitter) => {
   }
 
   if (!version.dist.cid) {
-    return saveTarball(config, manifest.name, packageVersion, ipfs, emitter)
+    return saveTarball(config, manifest.name, packageVersion, ipfs)
   }
 
   if (!version.dist.cid) {

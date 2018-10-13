@@ -7,7 +7,7 @@ const saveManifest = require('registry-mirror-common/utils/save-manifest')
 const loadManifest = require('registry-mirror-common/utils/load-manifest')
 const saveTarballs = require('./save-tarballs')
 
-const add = async (config, pkg, ipfs, emitter) => {
+const add = async (config, pkg, ipfs) => {
   log(`Adding ${pkg.name}`)
 
   try {
@@ -17,7 +17,7 @@ const add = async (config, pkg, ipfs, emitter) => {
   }
 
   try {
-    await saveTarballs(config, pkg, ipfs, emitter)
+    await saveTarballs(config, pkg, ipfs)
 
     log(`Added ${pkg.name}`)
   } catch (error) {
@@ -59,7 +59,7 @@ module.exports = (config, ipfs, emitter) => {
       })
 
       try {
-        await add(config, pkg, ipfs, emitter)
+        await add(config, pkg, ipfs)
         const manifest = await loadManifest(config, ipfs, pkg.name)
         console.log(`🦕 [${data.seq}] processed ${manifest.name}`) // eslint-disable-line no-console
         emitter.emit('processed', manifest)

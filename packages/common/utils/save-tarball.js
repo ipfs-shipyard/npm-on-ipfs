@@ -10,7 +10,7 @@ const {
   PassThrough
 } = require('stream')
 
-const saveTarball = (config, packageName, versionNumber, ipfs, emitter, done) => {
+const saveTarball = (config, packageName, versionNumber, ipfs, done) => {
   const outputStream = new PassThrough()
 
   loadManifest(config, ipfs, packageName)
@@ -23,7 +23,7 @@ const saveTarball = (config, packageName, versionNumber, ipfs, emitter, done) =>
         log(`Skipping version ${versionNumber} of ${packageName} - already downloaded`)
         outputStream.end()
 
-        return
+        return done()
       }
 
       const startTime = Date.now()

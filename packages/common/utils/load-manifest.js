@@ -1,6 +1,6 @@
 'use strict'
 
-const request = require('../utils/retry-request')
+const request = require('./retry-request')
 const log = require('debug')('ipfs:registry-mirror:utils:load-manifest')
 const saveManifest = require('./save-manifest')
 const replaceTarballUrls = require('./replace-tarball-urls')

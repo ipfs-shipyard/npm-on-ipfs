@@ -1,0 +1,17 @@
+'use strict'
+
+require('./create-pool.spec')
+require('./error-message.spec')
+require('./find-base-dir.spec')
+require('./get-external-url.spec')
+require('./load-manifest.spec')
+require('./load-tarball.spec')
+require('./option.spec')
+require('./replace-tarball-urls.spec')
+require('./retry-request.spec')
+require('./sanitise-name.spec')
+require('./save-manifest.spec')
+require('./save-tarball.spec')
+require('./server.spec')
+require('./timeout-promise.spec')
+require('./to-boolean.spec')

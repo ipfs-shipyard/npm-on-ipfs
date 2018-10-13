@@ -14,7 +14,7 @@ module.exports = (config, ipfs, app) => {
     log(`Loading ${file}`)
 
     try {
-      const readStream = await loadTarball(config, ipfs, file, app)
+      const readStream = await loadTarball(config, ipfs, file)
 
       readStream.on('error', (error) => {
         log(`Error loading ${file} - ${error}`)

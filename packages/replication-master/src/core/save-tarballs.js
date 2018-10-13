@@ -21,7 +21,7 @@ const getPool = (config) => {
   return pool
 }
 
-const saveTarballs = async (config, pkg, ipfs, emitter) => {
+const saveTarballs = async (config, pkg, ipfs) => {
   const pool = getPool(config)
 
   return Promise.all(
@@ -31,7 +31,7 @@ const saveTarballs = async (config, pkg, ipfs, emitter) => {
 
         const fn = () => {
           return new Promise((resolve, reject) => {
-            const stream = saveTarball(config, pkg.name, versionNumber, ipfs, emitter, resolve)
+            const stream = saveTarball(config, pkg.name, versionNumber, ipfs, resolve)
             stream.once('error', (error) => reject(error))
             stream.on('data', () => {})
           })

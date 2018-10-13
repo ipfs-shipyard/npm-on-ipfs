@@ -41,11 +41,11 @@ const retryRequest = (config, attempt = 1) => {
 
       console.info(`🚨 Request to ${method} ${config.uri} failed on attempt ${attempt} - ${error}`)
 
-      attempt += 1
-
       if (attempt > maxAttempts) {
         return Promise.reject(new Error(`Gave up requesting ${method} ${config.uri} after ${attempt} attempts`))
       }
+
+      attempt += 1
 
       return new Promise((resolve, reject) => {
         setTimeout(() => {

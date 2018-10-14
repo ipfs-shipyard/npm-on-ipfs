@@ -12,6 +12,46 @@ npm on IPFS
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
+# Usage
+
+Use the `ipfs-npm` command to start a local IPFS node instead of using the http gateway:
+
+```console
+$ npm install -g ipfs-npm
+$ cd /to/project/dir
+$ ipfs-npm
+```
+
+You can configure it to connect to an existing IPFS node, or perhaps use `yarn` instead of `npm` - see the [README](./packages/ipfs-npm/README.md) for more.
+
+## npm registry mirror
+
+You can also use our `npm` -> `ipfs` -> `http` gateway:
+
+```console
+$ npm install --registry=https://registry.js.ipfs.io
+```
+
+or for all your requests (non-get requests will be proxied to the main `npm` registry):
+
+```console
+$ npm config set registry https://registry.js.ipfs.io
+$ npm install
+```
+
+## Run your own gateway:
+
+What if you want to run your own `npm` -> `ipfs` -> `http` gateway?
+
+```console
+# with docker installed
+$ git clone https://github.com/ipfs-shipyard/npm-on-ipfs.git
+$ cd npm-on-ipfs
+$ ./deploy.sh
+```
+
+See the [replication-master](./packages/replication-master/README.md) and [registry-mirror](./packages/registry-mirror/README.md) READMEs for more.
+
 # Resources
 
 - [The original demo video](https://vimeo.com/147968322)
@@ -21,116 +61,6 @@ npm on IPFS
 ## Lead Maintainer
 
 [Alex Potsides](https://github.com/achingbrain)
-
-# Quick setup (probably all that you need)
-
-## Install this module
-
-```bash
-> npm i ipfs-npm -g
-```
-
-# Usage
-
-Wait for the `Server running` message:
-
-```bash
-$ docker run ipfs-npm
-📦 Mirroring npm on localhost:50321
-😈 Using in-process IPFS daemon
-Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/ipfs/Qm...
-Swarm listening on /ip4/127.0.0.1/tcp/4002/ipfs/Qm...
-Swarm listening on /ip4/172.17.0.2/tcp/4002/ipfs/Qm...
-🚀 Server running
-🔧 Please either update your npm config with 'npm config set registry http://localhost:50321'
-🔧 or use the '--registry' flag, eg: 'npm install --registry=http://localhost:50321'
-```
-
-Port `50321` is default and can be set with `--port`.
-
-## Configure npm
-
-Set up your npm to use `ipfs-npm` with the default port through:
-
-```bash
-$ npm config set registry http://localhost:50321
-```
-
-If you picked another `--port` you need to adjust accordingly.
-
-Good to npm install away! :)
-
-# Usage
-
-## CLI
-
-```bash
-$ ipfs-npm --help
-ipfs-npm
-
-Starts a registry server that uses IPFS to fetch js dependencies
-
-config:
-  --help                      Show help                                [boolean]
-  --version                   Show version number                      [boolean]
-  --clone                     Whether to clone the registry in the background
-                                                                 [default: true]
-  --eager-download            Whether to eagerly download tarballs
-                                                                 [default: true]
-  --mirror-host               Which host to listen to requests on
-                                                          [default: "localhost"]
-  --mirror-port               Which port to listen to requests on
-                                                                [default: 50321]
-  --mirror-protocol           Which protocol to use with the server
-                                                               [default: "http"]
-  --mirror-registry           Where to download missing files from/proxy for
-                              non-get requests
-                                         [default: "https://registry.npmjs.com"]
-  --mirror-upload-size-limit  How large a file upload to allow when proxying for
-                              the registry                   [default: "1024MB"]
-  --ipfs-port                 Which port the daemon is listening on
-                                                                 [default: null]
-  --external-host             Which host to use when reaching this mirror
-  --external-port             Which port to use when reaching this mirror
-  --external-protocol         Which protocol to use when reaching this mirror
-  --ipfs-host                 Which host the daemon is listening on
-                                                          [default: "localhost"]
-  --ipfs-base-dir             Which mfs prefix to use
-                                                  [default: "/commons-registry"]
-  --ipfs-flush                Whether to flush the MFS cache     [default: true]
-  --ipfs-max-requests         How many concurrent requests to make to the IPFS
-                              daemon                                [default: 5]
-  --ipfs-type                 "proc" to start an in process node, "go" or "js"
-                              to connect to a remote daemon (in conjunction with
-                              --ipfs-port and --ipfs-host).    [default: "proc"]
-  --clone-skim                Which registry to clone
-                               [default: "https://replicate.npmjs.com/registry"]
-  --clone-user-agent          What user agent to specify when contacting the
-                              registry  [default: "IPFS registry-mirror worker"]
-  --clone-delay               How long in ms to wait between cloning each module
-                                                                 [default: 1000]
-  --clone-upgrade-to-https    If a tarball is specifed with an http URL, whether
-                              to upgrade it to https             [default: true]
-  --request-max-sockets       How many concurrent http requests to make while
-                              cloning the repo                     [default: 10]
-```
-
-## Docker
-
-```
-$ docker-compose build
-$ docker-compose up -d --scale registry=4
-```
-
-### Upgrading
-
-```
-$ ./deploy.sh
-```
-
-## Important
-
-If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
 
 # Acknowledgements
 

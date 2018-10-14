@@ -52,23 +52,23 @@ module.exports = async (options) => {
     })
   )
 
-  if (!connected) {
-    throw new Error('💥 Could not connect to replication master - tried ' + master.ipfs.addresses.join(','))
+  if (connected) {
+    console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
+
+    try {
+      await ipfs.api.files.rm(options.ipfs.prefix, {
+        recursive: true
+      })
+    } catch (error) {
+
+    }
+
+    console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
+
+    await ipfs.api.files.cp(master.root, options.ipfs.prefix)
+  } else {
+    console.info('⚰️  Could not dial master, running without latest registry index') // eslint-disable-line no-console
   }
-
-  console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
-
-  try {
-    await ipfs.api.files.rm(options.ipfs.prefix, {
-      recursive: true
-    })
-  } catch (error) {
-
-  }
-
-  console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
-
-  await ipfs.api.files.cp(master.root, options.ipfs.prefix)
 
   console.info('👩‍🚀 Starting local webserver') // eslint-disable-line no-console
 

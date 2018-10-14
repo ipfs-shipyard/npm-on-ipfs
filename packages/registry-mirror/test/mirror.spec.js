@@ -21,7 +21,8 @@ const hat = require('hat')
 const delay = require('promise-delay')
 
 describe('mirror', function () {
-  this.timeout(10000)
+  this.timeout(120000)
+
   let baseDir
   let startMirror
   let mirror
@@ -38,6 +39,7 @@ describe('mirror', function () {
       requestRetryDelay: 100,
       ipfsMfsPrefix: baseDir,
       requestTimeout: 1000,
+      ipfsStoreType: 'fs',
       ipfsRepo: path.join(os.tmpdir(), hat()),
       ipfsFlush: true,
       registryUpdateInterval: 0,

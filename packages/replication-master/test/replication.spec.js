@@ -20,7 +20,8 @@ const request = require('registry-mirror-common/utils/retry-request')
 const baseDir = '/commons-registry-clone-test'
 
 describe('replication', function () {
-  this.timeout(10000)
+  this.timeout(120000)
+
   let replicationMaster
   let upstreamModules = {}
   let replicationMasterUrl
@@ -36,6 +37,7 @@ describe('replication', function () {
       requestRetryDelay: 100,
       ipfsMfsPrefix: baseDir,
       requestTimeout: 1000,
+      ipfsStoreType: 'fs',
       ipfsRepo: path.join(os.tmpdir(), hat()),
       ipfsFlush: true,
       registryUpdateInterval: 0,

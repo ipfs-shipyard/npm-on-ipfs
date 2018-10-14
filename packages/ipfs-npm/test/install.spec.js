@@ -15,7 +15,7 @@ const {
 var OutputBuffer = require('output-buffer')
 
 describe('install', function () {
-  this.timeout(10000)
+  this.timeout(120000)
 
   let projectDirectory
 
@@ -29,7 +29,8 @@ describe('install', function () {
   it('should install a project', (done) => {
     const installer = spawn(
       process.argv[0], [
-        path.resolve(__dirname, '../src/cli/bin.js')
+        path.resolve(__dirname, '../src/cli/bin.js'),
+        `--ipfs-repo=${path.join(os.tmpdir(), hat())}`
       ], {
         cwd: projectDirectory
       })

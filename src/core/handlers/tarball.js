@@ -2,8 +2,8 @@
 
 const log = require('debug')('ipfs:ipfs-npm:handlers:tarball')
 const path = require('path')
-const loadTarball = require('registry-mirror-common/utils/load-tarball')
-const lol = require('registry-mirror-common/utils/error-message')
+const loadTarball = require('ipfs-registry-mirror-common/utils/load-tarball')
+const lol = require('ipfs-registry-mirror-common/utils/error-message')
 
 module.exports = (config, ipfs, app) => {
   return async (request, response, next) => {

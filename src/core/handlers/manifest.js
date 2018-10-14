@@ -1,9 +1,9 @@
 'use strict'
 
 const log = require('debug')('ipfs:ipfs-npm:handlers:manifest')
-const loadManifest = require('registry-mirror-common/utils/load-manifest')
-const sanitiseName = require('registry-mirror-common/utils/sanitise-name')
-const lol = require('registry-mirror-common/utils/error-message')
+const loadManifest = require('ipfs-registry-mirror-common/utils/load-manifest')
+const sanitiseName = require('ipfs-registry-mirror-common/utils/sanitise-name')
+const lol = require('ipfs-registry-mirror-common/utils/error-message')
 
 module.exports = (config, ipfs, app) => {
   return async (request, response, next) => {

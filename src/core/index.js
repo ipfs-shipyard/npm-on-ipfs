@@ -3,7 +3,7 @@
 const config = require('./config')
 const startIpfs = require('./start-ipfs')
 const startServer = require('./start-server')
-const request = require('registry-mirror-common/utils/retry-request')
+const request = require('ipfs-registry-mirror-common/utils/retry-request')
 const { spawn } = require('child_process')
 const which = require('which-promise')
 var OutputBuffer = require('output-buffer')
@@ -38,16 +38,6 @@ module.exports = async (options) => {
     json: true
   }))
 
-  console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
-
-  try {
-    await ipfs.api.files.rm(options.ipfs.prefix, {
-      recursive: true
-    })
-  } catch (error) {
-
-  }
-
   console.info('☎️  Dialing replication master', master.ipfs.addresses.join(',')) // eslint-disable-line no-console
 
   let connected
@@ -64,6 +54,16 @@ module.exports = async (options) => {
 
   if (!connected) {
     throw new Error('💥 Could not connect to replication master - tried ' + master.ipfs.addresses.join(','))
+  }
+
+  console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
+
+  try {
+    await ipfs.api.files.rm(options.ipfs.prefix, {
+      recursive: true
+    })
+  } catch (error) {
+
   }
 
   console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console

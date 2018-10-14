@@ -1,7 +1,7 @@
 'use strict'
 
-const toBoolean = require('registry-mirror-common/utils/to-boolean')
-const option = require('registry-mirror-common/utils/option')
+const toBoolean = require('ipfs-registry-mirror-common/utils/to-boolean')
+const option = require('ipfs-registry-mirror-common/utils/option')
 
 module.exports = (overrides = {}) => {
   return {

@@ -1,5 +1,4 @@
-npm on IPFS
-===========
+# npm on IPFS
 
 ![Alt text](./img/npm-on-ipfs.svg)
 
@@ -12,47 +11,7 @@ npm on IPFS
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
-# Usage
-
-Use the `ipfs-npm` command to start a local IPFS node instead of using the http gateway:
-
-```console
-$ npm install -g ipfs-npm
-$ cd /to/project/dir
-$ ipfs-npm
-```
-
-You can configure it to connect to an existing IPFS node, or perhaps use `yarn` instead of `npm` - see the [README](./packages/ipfs-npm/README.md) for more.
-
-## npm registry mirror
-
-You can also use our `npm` -> `ipfs` -> `http` gateway:
-
-```console
-$ npm install --registry=https://registry.js.ipfs.io
-```
-
-or for all your requests (non-get requests will be proxied to the main `npm` registry):
-
-```console
-$ npm config set registry https://registry.js.ipfs.io
-$ npm install
-```
-
-## Run your own gateway:
-
-What if you want to run your own `npm` -> `ipfs` -> `http` gateway?
-
-```console
-# with docker installed
-$ git clone https://github.com/ipfs-shipyard/npm-on-ipfs.git
-$ cd npm-on-ipfs
-$ ./deploy.sh
-```
-
-See the [replication-master](./packages/replication-master/README.md) and [registry-mirror](./packages/registry-mirror/README.md) READMEs for more.
-
-# Resources
+## Resources
 
 - [The original demo video](https://vimeo.com/147968322)
 - [Lengthy introduction in a blog post](http://daviddias.me/blog/stellar-module-management/)
@@ -61,6 +20,71 @@ See the [replication-master](./packages/replication-master/README.md) and [regis
 ## Lead Maintainer
 
 [Alex Potsides](https://github.com/achingbrain)
+
+## Install this module
+
+```bash
+> npm i ipfs-npm -g
+```
+
+# Usage
+
+Run the `ipfs-npm` command in the directory with your `package.json` and it will pull your dependencies from ipfs!
+
+```bash
+$ ipfs-npm
+👿 Spawning a go-IPFS node
+🗑️  Removing old registry if it exists
+☎️  Dialing replication master /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
+📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /commons-registry
+👩‍🚀 Starting local webserver
+🚀 Server running on port 57314
+🎁 Installing dependencies with /Users/alex/.nvm/versions/node/v10.8.0/bin/npm
+🆕 New version of express detected undefined vs 3864-53d75cca2a8eae32408fce2fd43f4c87
+📄 GET /express 200 993ms
+🐨 npm http fetch GET 200 http://localhost:57314/express 1029ms
+...
+```
+
+## CLI
+
+```bash
+$ ipfs-npm --help
+ipfs-npm
+
+Installs your js dependencies using IPFS
+
+Options:
+  --help                        Show help                              [boolean]
+  --version                     Show version number                    [boolean]
+  --package-manager             Which package manager to use - eg. npm or yarn
+                                                                [default: "npm"]
+  --ipfs-registry-index         Where to download the registry index from if we
+                                do not have it
+                            [default: "https://replication.registry.js.ipfs.io"]
+  --ipfs-registry               Where to download any packages that haven't made
+                                it into the registry index yet from
+                                        [default: "https://registry.js.ipfs.io"]
+  --registry-upload-size-limit  How large a file upload to allow when proxying
+                                for the registry             [default: "1024MB"]
+  --registry-update-interval    Only request the manifest for a given module
+                                every so many ms                [default: 60000]
+  --ipfs-mfs-prefix             Which mfs prefix to use
+                                                  [default: "/commons-registry"]
+  --ipfs-node                   "proc" to start an in-process IPFS node, "go" or
+                                "js" to spawn an IPFS node as a separate process
+                                or a multiaddr that resolves to a running node
+                                                               [default: "proc"]
+  --request-max-sockets         How many concurrent http requests to make while
+                                cloning the repo                   [default: 10]
+  --request-retries             How many times to retry when downloading
+                                manifests and tarballs from the registry
+                                                                    [default: 5]
+  --request-retry-delay         How long in ms to wait between retries
+                                                                 [default: 1000]
+  --request-timeout             How long in ms we should wait when requesting
+                                files                           [default: 30000]
+```
 
 # Acknowledgements
 

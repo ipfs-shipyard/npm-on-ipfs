@@ -23,7 +23,7 @@ yargs.command('$0', 'Starts a registry server that uses IPFS to fetch js depende
     })
     .option('eager-download', {
       describe: 'Whether to eagerly download tarballs',
-      default: true
+      default: false
     })
     .option('mirror-host', {
       describe: 'Which host to listen to requests on',

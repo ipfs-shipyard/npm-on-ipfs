@@ -1,11 +1,10 @@
 {
   "name": "ipfs-npm",
   "version": "0.10.0",
-  "description": "Set up a NPM registry mirror, using your favourite storage, IPFS! :D",
+  "description": "Install your npm dependencies using IPFS and the distributed web! :D",
   "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
   "main": "src/cli/bin.js",
   "bin": {
-    "registry-mirror": "src/cli/bin.js",
     "ipfs-npm": "src/cli/bin.js"
   },
   "scripts": {

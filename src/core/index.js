@@ -53,7 +53,7 @@ module.exports = async (options) => {
   )
 
   if (connected) {
-    console.info('🗑️  Removing old registry if it exists') // eslint-disable-line no-console
+    console.info('🗑️  Replacing old registry index if it exists') // eslint-disable-line no-console
 
     try {
       await ipfs.api.files.rm(options.ipfs.prefix, {
@@ -70,7 +70,7 @@ module.exports = async (options) => {
     console.info('⚰️  Could not dial master, running without latest registry index') // eslint-disable-line no-console
   }
 
-  console.info('👩‍🚀 Starting local webserver') // eslint-disable-line no-console
+  console.info('👩‍🚀 Starting local proxy') // eslint-disable-line no-console
 
   const server = await startServer(options, ipfs.api)
 

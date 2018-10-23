@@ -36,7 +36,7 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
 
     .option('ipfs-mfs-prefix', {
       describe: 'Which mfs prefix to use',
-      default: '/commons-registry'
+      default: '/npm-registry'
     })
     .option('ipfs-node', {
       describe: '"proc" to start an in-process IPFS node, "go" or "js" to spawn an IPFS node as a separate process or a multiaddr that resolves to a running node',

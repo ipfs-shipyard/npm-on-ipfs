@@ -33,16 +33,13 @@ Run the `ipfs-npm` command in the directory with your `package.json` and it will
 
 ```bash
 $ ipfs-npm
-👿 Spawning a go-IPFS node
-🗑️  Removing old registry if it exists
-☎️  Dialing replication master /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
-📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /commons-registry
-👩‍🚀 Starting local webserver
+👿 Spawning an in-process IPFS node
+🗑️ Replacing old registry index if it exist
+☎️ Dialing replication master /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
+📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /npm-registry
+👩‍🚀 Starting local proxy
 🚀 Server running on port 57314
 🎁 Installing dependencies with /Users/alex/.nvm/versions/node/v10.8.0/bin/npm
-🆕 New version of express detected undefined vs 3864-53d75cca2a8eae32408fce2fd43f4c87
-📄 GET /express 200 993ms
-🐨 npm http fetch GET 200 http://localhost:57314/express 1029ms
 ...
 ```
 

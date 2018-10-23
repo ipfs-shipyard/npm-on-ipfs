@@ -1,8 +1,8 @@
 # npm on IPFS
 
-<div align='center'>
-  ![npm on IPFS logo](./img/npm-on-ipfs.svg)
-</div>
+<p align="center">
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.svg?sanitize=true" alt="npm on IPFS logo" width="256" />
+</p>
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai)
 [![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://ipfs.io/)
@@ -13,9 +13,9 @@
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
-<div align='center'>
-  ![npm distributed on top of lots of connected IPFS nodes worldwide](/img/ip-npm-small.png)
-</div>
+<p align="center">
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/ip-npm-small.png" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
+</p>
 
 ## Resources
 

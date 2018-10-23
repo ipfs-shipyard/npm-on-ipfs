@@ -15,7 +15,7 @@
 
 <div align='center'>
   ![npm distributed on top of lots of connected IPFS nodes worldwide](/img/ip-npm-small.png)
-</div
+</div>
 
 ## Resources
 

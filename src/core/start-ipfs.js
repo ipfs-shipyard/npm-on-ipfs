@@ -46,7 +46,10 @@ const startIpfs = async (config) => {
 
   console.info(`👿 Connecting to a remote IPFS node at ${config.ipfs.node}`) // eslint-disable-line no-console
 
-  return new IpfsApi(config.ipfs.node)
+  return {
+    api: new IpfsApi(config.ipfs.node),
+    stop: (cb) => cb()
+  }
 }
 
 module.exports = startIpfs

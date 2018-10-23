@@ -11,9 +11,12 @@ var OutputBuffer = require('output-buffer')
 const cleanUpOps = []
 
 const cleanUp = async () => {
-  return Promise.all(
+  Promise.all(
     cleanUpOps.map(op => op())
   )
+    .then(() => {
+      process.exit(0)
+    })
 }
 
 process.on('SIGTERM', cleanUp)
@@ -33,6 +36,8 @@ module.exports = async (options) => {
     })
   })
 
+  console.info('👂 Loading replication master id from', options.ipfs.index) // eslint-disable-line no-console
+
   const master = await request(Object.assign({}, options.request, {
     url: options.ipfs.index,
     json: true
@@ -48,7 +53,9 @@ module.exports = async (options) => {
         .then(() => {
           connected = true
         })
-        .catch(() => {})
+        .catch((error) => {
+          console.info(error)
+        })
     })
   )
 
@@ -66,6 +73,8 @@ module.exports = async (options) => {
     console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
 
     await ipfs.api.files.cp(master.root, options.ipfs.prefix)
+
+    console.info('💌 Copied registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
   } else {
     console.info('⚰️  Could not dial master, running without latest registry index') // eslint-disable-line no-console
   }
@@ -87,7 +96,9 @@ module.exports = async (options) => {
 
   console.info(`🎁 Installing dependencies with ${packageManager}`) // eslint-disable-line no-console
 
-  const proc = spawn(packageManager, ['install', `--registry=http://localhost:${options.http.port}`, '--loglevel=http'])
+  const proc = spawn(packageManager, [
+    `--registry=http://localhost:${options.http.port}`
+  ].concat(process.argv.slice(2)))
 
   const buffer = new OutputBuffer((line) => {
     console.info(`🐨 ${line}`) // eslint-disable-line no-console

@@ -1,6 +1,6 @@
 # npm on IPFS
 
-![Alt text](./img/npm-on-ipfs.svg)
+![npm on IPFS logo](./img/npm-on-ipfs.svg)
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai)
 [![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://ipfs.io/)
@@ -10,6 +10,8 @@
 [![Dependency Status](https://david-dm.org/ipfs-shipyard/npm-on-ipfs.svg?style=flat-square)](https://david-dm.org/ipfs-shipyard/npm-on-ipfs)
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
+
+![npm distributed on top of lots of connected IPFS nodes worldwide](/img/ip-npm-small.png)
 
 ## Resources
 
@@ -29,12 +31,14 @@
 
 # Usage
 
-Run the `ipfs-npm` command in the directory with your `package.json` and it will pull your dependencies from ipfs!
+`ipfs-npm` wraps your chosen package manager (e.g. npm or yarn) with configuration to use IPFS to retrieve your dependences instead of over HTTP from the central npm registry.
+
+In the directory with your `package.json` file, run:
 
 ```bash
-$ ipfs-npm
+$ ipfs-npm install
 👿 Spawning an in-process IPFS node
-🗑️ Replacing old registry index if it exist
+🗑️ Replacing old registry index if it exists
 ☎️ Dialing replication master /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
 📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /npm-registry
 👩‍🚀 Starting local proxy

@@ -1,4 +1,4 @@
-# npm on IPFS
+# npm on IPFS
 
 ![Alt text](./img/npm-on-ipfs.svg)
 

@@ -39,7 +39,7 @@ module.exports = async (options) => {
   console.info('👂 Loading replication master id from', options.ipfs.index) // eslint-disable-line no-console
 
   const master = await request(Object.assign({}, options.request, {
-    url: options.ipfs.index,
+    uri: options.ipfs.index,
     json: true
   }))
 

@@ -67,7 +67,7 @@ Options:
   --registry-update-interval    Only request the manifest for a given module
                                 every so many ms                [default: 60000]
   --ipfs-mfs-prefix             Which mfs prefix to use
-                                                  [default: "/commons-registry"]
+                                                      [default: "/npm-registry"]
   --ipfs-node                   "proc" to start an in-process IPFS node, "go" or
                                 "js" to spawn an IPFS node as a separate process
                                 or a multiaddr that resolves to a running node

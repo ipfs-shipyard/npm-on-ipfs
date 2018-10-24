@@ -42,6 +42,10 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       describe: '"proc" to start an in-process IPFS node, "go" or "js" to spawn an IPFS node as a separate process or a multiaddr that resolves to a running node',
       default: 'proc'
     })
+    .option('ipfs-flush', {
+      describe: 'Whether to flush the MFS cache',
+      default: true
+    })
 
     .option('request-max-sockets', {
       describe: 'How many concurrent http requests to make while cloning the repo',

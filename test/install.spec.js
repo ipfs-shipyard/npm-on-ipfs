@@ -30,13 +30,14 @@ describe('install', function () {
     const installer = spawn(
       process.argv[0], [
         path.resolve(__dirname, '../src/cli/bin.js'),
-        `--ipfs-repo=${path.join(os.tmpdir(), hat())}`
+        `--ipfs-repo=${path.join(os.tmpdir(), hat())}`,
+        'install'
       ], {
         cwd: projectDirectory
       })
 
     const buffer = new OutputBuffer((line) => {
-      console.info(`🐨 ${line}`) // eslint-disable-line no-console
+      console.info(line) // eslint-disable-line no-console
     })
 
     installer.stdout.on('data', (data) => {

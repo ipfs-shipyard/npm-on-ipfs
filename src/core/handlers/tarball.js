@@ -1,11 +1,11 @@
 'use strict'
 
-const log = require('debug')('ipfs:registry-mirror:handlers:tarball')
+const log = require('debug')('ipfs:ipfs-npm:handlers:tarball')
 const path = require('path')
-const loadTarball = require('../utils/load-tarball')
-const lol = require('../utils/error-message')
+const loadTarball = require('ipfs-registry-mirror-common/utils/load-tarball')
+const lol = require('ipfs-registry-mirror-common/utils/error-message')
 
-module.exports = (options, ipfs, app) => {
+module.exports = (config, ipfs, app) => {
   return async (request, response, next) => {
     log(`Requested ${request.path}`)
 
@@ -14,7 +14,7 @@ module.exports = (options, ipfs, app) => {
     log(`Loading ${file}`)
 
     try {
-      const readStream = await loadTarball(options, ipfs, file, app)
+      const readStream = await loadTarball(config, ipfs, file)
 
       readStream.on('error', (error) => {
         log(`Error loading ${file} - ${error}`)
@@ -38,7 +38,7 @@ module.exports = (options, ipfs, app) => {
         })
         .pipe(response)
     } catch (error) {
-      console.error(`💥 Could not load tarball for ${file}`, error)
+      console.error(`💥 Could not load tarball for ${file}`, error) // eslint-disable-line no-console
 
       if (error.message.includes('Not found')) {
         response.statusCode = 404

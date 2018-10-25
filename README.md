@@ -1,7 +1,8 @@
-npm on IPFS
-===========
+<p align="center">
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.svg?sanitize=true" alt="npm on IPFS logo" width="256" />
+</p>
 
-![](/img/ip-npm-small.png)
+# npm on IPFS
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai)
 [![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://ipfs.io/)
@@ -12,7 +13,11 @@ npm on IPFS
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
-# Resources
+<p align="center">
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/ip-npm-small.png" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
+</p>
+
+## Resources
 
 - [The original demo video](https://vimeo.com/147968322)
 - [Lengthy introduction in a blog post](http://daviddias.me/blog/stellar-module-management/)
@@ -22,8 +27,6 @@ npm on IPFS
 
 [Alex Potsides](https://github.com/achingbrain)
 
-# Quick setup (probably all that you need)
-
 ## Install this module
 
 ```bash
@@ -32,35 +35,22 @@ npm on IPFS
 
 # Usage
 
-Wait for the `Server running` message:
+`ipfs-npm` wraps your chosen package manager (e.g. npm or yarn) with configuration to use IPFS to retrieve your dependences instead of over HTTP from the central npm registry.
+
+In the directory with your `package.json` file, run:
 
 ```bash
-$ docker run ipfs-npm
-📦 Mirroring npm on localhost:50321
-😈 Using in-process IPFS daemon
-Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/ipfs/Qm...
-Swarm listening on /ip4/127.0.0.1/tcp/4002/ipfs/Qm...
-Swarm listening on /ip4/172.17.0.2/tcp/4002/ipfs/Qm...
-🚀 Server running
-🔧 Please either update your npm config with 'npm config set registry http://localhost:50321'
-🔧 or use the '--registry' flag, eg: 'npm install --registry=http://localhost:50321'
+$ ipfs-npm install
+👿 Spawning an in-process IPFS node
+👂 Loading registry index from https://registry.js.ipfs.io
+☎️ Dialling registry mirror /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
+🗑️ Replacing old registry index if it exists
+📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /npm-registry
+👩‍🚀 Starting local proxy
+🚀 Server running on port 57314
+🎁 Installing dependencies with /Users/alex/.nvm/versions/node/v10.8.0/bin/npm
+...
 ```
-
-Port `50321` is default and can be set with `--port`.
-
-## Configure npm
-
-Set up your npm to use `ipfs-npm` with the default port through:
-
-```bash
-$ npm config set registry http://localhost:50321
-```
-
-If you picked another `--port` you need to adjust accordingly.
-
-Good to npm install away! :)
-
-# Usage
 
 ## CLI
 
@@ -68,69 +58,36 @@ Good to npm install away! :)
 $ ipfs-npm --help
 ipfs-npm
 
-Starts a registry server that uses IPFS to fetch js dependencies
+Installs your js dependencies using IPFS
 
 Options:
-  --help                      Show help                                [boolean]
-  --version                   Show version number                      [boolean]
-  --clone                     Whether to clone the registry in the background
-                                                                 [default: true]
-  --eager-download            Whether to eagerly download tarballs
-                                                                 [default: true]
-  --mirror-host               Which host to listen to requests on
-                                                          [default: "localhost"]
-  --mirror-port               Which port to listen to requests on
-                                                                [default: 50321]
-  --mirror-protocol           Which protocol to use with the server
-                                                               [default: "http"]
-  --mirror-registry           Where to download missing files from/proxy for
-                              non-get requests
-                                         [default: "https://registry.npmjs.com"]
-  --mirror-upload-size-limit  How large a file upload to allow when proxying for
-                              the registry                   [default: "1024MB"]
-  --ipfs-port                 Which port the daemon is listening on
-                                                                 [default: null]
-  --external-host             Which host to use when reaching this mirror
-  --external-port             Which port to use when reaching this mirror
-  --external-protocol         Which protocol to use when reaching this mirror
-  --ipfs-host                 Which host the daemon is listening on
-                                                          [default: "localhost"]
-  --ipfs-base-dir             Which mfs prefix to use
-                                                  [default: "/commons-registry"]
-  --ipfs-flush                Whether to flush the MFS cache     [default: true]
-  --ipfs-max-requests         How many concurrent requests to make to the IPFS
-                              daemon                                [default: 5]
-  --ipfs-type                 "proc" to start an in process node, "go" or "js"
-                              to connect to a remote daemon (in conjunction with
-                              --ipfs-port and --ipfs-host).    [default: "proc"]
-  --clone-skim                Which registry to clone
-                               [default: "https://replicate.npmjs.com/registry"]
-  --clone-user-agent          What user agent to specify when contacting the
-                              registry  [default: "IPFS registry-mirror worker"]
-  --clone-delay               How long in ms to wait between cloning each module
+  --help                        Show help                              [boolean]
+  --version                     Show version number                    [boolean]
+  --package-manager             Which package manager to use - eg. npm or yarn
+                                                                [default: "npm"]
+  --ipfs-registry               Where to download any packages that haven't made
+                                it into the registry index yet from
+                                        [default: "https://registry.js.ipfs.io"]
+  --registry-upload-size-limit  How large a file upload to allow when proxying
+                                for the registry             [default: "1024MB"]
+  --registry-update-interval    Only request the manifest for a given module
+                                every so many ms                [default: 60000]
+  --ipfs-mfs-prefix             Which mfs prefix to use
+                                                      [default: "/npm-registry"]
+  --ipfs-node                   "proc" to start an in-process IPFS node, "go" or
+                                "js" to spawn an IPFS node as a separate process
+                                or a multiaddr that resolves to a running node
+                                                               [default: "proc"]
+  --request-max-sockets         How many concurrent http requests to make while
+                                cloning the repo                   [default: 10]
+  --request-retries             How many times to retry when downloading
+                                manifests and tarballs from the registry
+                                                                    [default: 5]
+  --request-retry-delay         How long in ms to wait between retries
                                                                  [default: 1000]
-  --clone-upgrade-to-https    If a tarball is specifed with an http URL, whether
-                              to upgrade it to https             [default: true]
-  --request-max-sockets       How many concurrent http requests to make while
-                              cloning the repo                     [default: 10]
+  --request-timeout             How long in ms we should wait when requesting
+                                files                           [default: 30000]
 ```
-
-## Docker
-
-```
-$ docker-compose build
-$ docker-compose up -d --scale registry=4
-```
-
-### Upgrading
-
-```
-$ ./deploy.sh
-```
-
-## Important
-
-If you are on Mac OS X, make sure to increase the limit of files open (with `ulimit -Sn 4096`), otherwise the ipfs daemon will be sad and throw 502 replies.
 
 # Acknowledgements
 

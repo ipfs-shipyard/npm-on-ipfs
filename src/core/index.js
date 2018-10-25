@@ -3,6 +3,7 @@
 const config = require('./config')
 const startIpfs = require('./start-ipfs')
 const startServer = require('./start-server')
+const rewriteLockfile = require('./rewrite-lock-file')
 const request = require('ipfs-registry-mirror-common/utils/retry-request')
 const { spawn } = require('child_process')
 const which = require('which-promise')
@@ -36,7 +37,7 @@ module.exports = async (options) => {
     })
   })
 
-  console.info('👂 Loading registry index from', options.registry) // eslint-disable-line no-console
+  console.info('🗂️  Loading registry index from', options.registry) // eslint-disable-line no-console
 
   const mirror = await request(Object.assign({}, options.request, {
     uri: options.registry,
@@ -76,7 +77,7 @@ module.exports = async (options) => {
 
     console.info('💌 Copied registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
   } else {
-    console.info('⚰️  Could not dial mirror, running without latest registry index') // eslint-disable-line no-console
+    console.info('📴 Could not dial mirror, running without latest registry index') // eslint-disable-line no-console
   }
 
   console.info('👩‍🚀 Starting local proxy') // eslint-disable-line no-console
@@ -116,6 +117,8 @@ module.exports = async (options) => {
     buffer.flush()
 
     console.log(`🎁 ${packageManager} exited with code ${code}`) // eslint-disable-line no-console
+
+    await rewriteLockfile(options)
 
     await cleanUp()
 

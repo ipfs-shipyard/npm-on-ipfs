@@ -42,8 +42,9 @@ In the directory with your `package.json` file, run:
 ```bash
 $ ipfs-npm install
 👿 Spawning an in-process IPFS node
-👂 Loading registry index from https://registry.js.ipfs.io
-☎️ Dialling registry mirror /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
+Swarm listening on /ip4/127.0.0.1/tcp/57029/ipfs/QmVDtTRCoYyYu5JFdtrtBMS4ekPn8f9NndymoHdWuuJ7N2
+🗂️  Loading registry index from https://registry.js.ipfs.io
+☎️  Dialling registry mirror /ip4/35.178.192.119/tcp/10015/ipfs/QmWBaYSnmgZi6F6D69JuZGhyL8rm6pt8GX5r7Atc6Gd7vR,/dns4/registry.js.ipfs.io/tcp/10015/ipfs/QmWBaYSnmgZi6F6D69JuZGhyL8rm6pt8GX5r7Atc6Gd7vR
 🗑️ Replacing old registry index if it exists
 📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /npm-registry
 👩‍🚀 Starting local proxy
@@ -61,32 +62,33 @@ ipfs-npm
 Installs your js dependencies using IPFS
 
 Options:
-  --help                        Show help                              [boolean]
-  --version                     Show version number                    [boolean]
-  --package-manager             Which package manager to use - eg. npm or yarn
-                                                                [default: "npm"]
-  --ipfs-registry               Where to download any packages that haven't made
-                                it into the registry index yet from
-                                        [default: "https://registry.js.ipfs.io"]
-  --registry-upload-size-limit  How large a file upload to allow when proxying
-                                for the registry             [default: "1024MB"]
-  --registry-update-interval    Only request the manifest for a given module
-                                every so many ms                [default: 60000]
-  --ipfs-mfs-prefix             Which mfs prefix to use
-                                                      [default: "/npm-registry"]
-  --ipfs-node                   "proc" to start an in-process IPFS node, "go" or
-                                "js" to spawn an IPFS node as a separate process
-                                or a multiaddr that resolves to a running node
-                                                               [default: "proc"]
-  --request-max-sockets         How many concurrent http requests to make while
-                                cloning the repo                   [default: 10]
-  --request-retries             How many times to retry when downloading
-                                manifests and tarballs from the registry
-                                                                    [default: 5]
-  --request-retry-delay         How long in ms to wait between retries
-                                                                 [default: 1000]
-  --request-timeout             How long in ms we should wait when requesting
-                                files                           [default: 30000]
+--help                        Show help                              [boolean]
+--version                     Show version number                    [boolean]
+--package-manager             Which package manager to use - eg. npm or yarn
+                                                              [default: "npm"]
+--ipfs-registry               Where to download any packages that haven't made
+                              it into the registry index yet from
+                                      [default: "https://registry.js.ipfs.io"]
+--registry-upload-size-limit  How large a file upload to allow when proxying
+                              for the registry             [default: "1024MB"]
+--registry-update-interval    Only request the manifest for a given module
+                              every so many ms                [default: 60000]
+--ipfs-mfs-prefix             Which mfs prefix to use
+                                                    [default: "/npm-registry"]
+--ipfs-node                   "proc" to start an in-process IPFS node, "go" or
+                              "js" to spawn an IPFS node as a separate process
+                              or a multiaddr that resolves to a running node
+                                                             [default: "proc"]
+--ipfs-flush                  Whether to flush the MFS cache   [default: true]
+--request-max-sockets         How many concurrent http requests to make while
+                              cloning the repo                   [default: 10]
+--request-retries             How many times to retry when downloading
+                              manifests and tarballs from the registry
+                                                                  [default: 5]
+--request-retry-delay         How long in ms to wait between retries
+                                                               [default: 1000]
+--request-timeout             How long in ms we should wait when requesting
+                              files                           [default: 30000]
 ```
 
 # Acknowledgements

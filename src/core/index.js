@@ -36,20 +36,20 @@ module.exports = async (options) => {
     })
   })
 
-  console.info('👂 Loading replication master id from', options.ipfs.index) // eslint-disable-line no-console
+  console.info('👂 Loading registry index from', options.registry) // eslint-disable-line no-console
 
-  const master = await request(Object.assign({}, options.request, {
-    uri: options.ipfs.index,
+  const mirror = await request(Object.assign({}, options.request, {
+    uri: options.registry,
     json: true
   }))
 
-  console.info('☎️  Dialing replication master', master.ipfs.addresses.join(',')) // eslint-disable-line no-console
+  console.info('☎️  Dialling registry mirror', mirror.ipfs.addresses.join(',')) // eslint-disable-line no-console
 
   let connected
 
   await Promise.all(
-    master.ipfs.addresses.map(addr => {
-      return ipfs.api.swarm.connect(master.ipfs.addresses[0])
+    mirror.ipfs.addresses.map(addr => {
+      return ipfs.api.swarm.connect(mirror.ipfs.addresses[0])
         .then(() => {
           connected = true
         })
@@ -70,13 +70,13 @@ module.exports = async (options) => {
 
     }
 
-    console.info('📠 Copying registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
+    console.info('📠 Copying registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
 
-    await ipfs.api.files.cp(master.root, options.ipfs.prefix)
+    await ipfs.api.files.cp(mirror.root, options.ipfs.prefix)
 
-    console.info('💌 Copied registry index', master.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
+    console.info('💌 Copied registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
   } else {
-    console.info('⚰️  Could not dial master, running without latest registry index') // eslint-disable-line no-console
+    console.info('⚰️  Could not dial mirror, running without latest registry index') // eslint-disable-line no-console
   }
 
   console.info('👩‍🚀 Starting local proxy') // eslint-disable-line no-console

@@ -42,8 +42,9 @@ In the directory with your `package.json` file, run:
 ```bash
 $ ipfs-npm install
 👿 Spawning an in-process IPFS node
+👂 Loading registry index from https://registry.js.ipfs.io
+☎️ Dialling registry mirror /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
 🗑️ Replacing old registry index if it exists
-☎️ Dialing replication master /ip4/127.0.0.1/tcp/40020/ipfs/QmeXyYCLSivUn5Ju31jjPBYNKdncbzzEf6zdN2DyrdLAbe
 📠 Copying registry index /ipfs/QmQmVsNFw3stJky7agrETeB9kZqkcvLSLRnFFMrhiR8zG1 to /npm-registry
 👩‍🚀 Starting local proxy
 🚀 Server running on port 57314
@@ -64,9 +65,6 @@ Options:
   --version                     Show version number                    [boolean]
   --package-manager             Which package manager to use - eg. npm or yarn
                                                                 [default: "npm"]
-  --ipfs-registry-index         Where to download the registry index from if we
-                                do not have it
-                            [default: "https://replication.registry.js.ipfs.io"]
   --ipfs-registry               Where to download any packages that haven't made
                                 it into the registry index yet from
                                         [default: "https://registry.js.ipfs.io"]

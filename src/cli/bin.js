@@ -17,10 +17,6 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       default: 'npm'
     })
 
-    .option('ipfs-registry-index', {
-      describe: 'Where to download the registry index from if we do not have it',
-      default: 'https://replication.registry.js.ipfs.io'
-    })
     .option('ipfs-registry', {
       describe: 'Where to download any packages that haven\'t made it into the registry index yet from',
       default: 'https://registry.js.ipfs.io'

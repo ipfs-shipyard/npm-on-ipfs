@@ -11,8 +11,6 @@ module.exports = (overrides = {}) => {
     registryUploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.registryUploadSizeLimit),
 
     ipfs: {
-      index: option(process.env.IPFS_REGISTRY_INDEX, overrides.ipfsRegistryIndex),
-
       host: option(process.env.IPFS_HOST, overrides.ipfsHost),
       port: option(Number(process.env.IPFS_PORT), overrides.ipfsPort),
       node: option(process.env.IPFS_NODE, overrides.ipfsNode),

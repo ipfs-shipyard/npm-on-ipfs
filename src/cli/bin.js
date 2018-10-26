@@ -5,6 +5,8 @@
 require('dnscache')({ enable: true })
 
 const pkg = require('../../package')
+const path = require('path')
+const os = require('os')
 
 process.title = pkg.name
 
@@ -29,14 +31,22 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       describe: 'Only request the manifest for a given module every so many ms',
       default: 60000
     })
+    .option('registry-connect-timeout', {
+      describe: 'How long to wait before timeing out',
+      default: 5000
+    })
 
     .option('ipfs-mfs-prefix', {
       describe: 'Which mfs prefix to use',
       default: '/npm-registry'
     })
     .option('ipfs-node', {
-      describe: '"proc" to start an in-process IPFS node, "go" or "js" to spawn an IPFS node as a separate process or a multiaddr that resolves to a running node',
+      describe: '"proc" to start an in-process IPFS node, "disposable" to start an in-process disposable node, "go" or "js" to spawn an IPFS node as a separate process or a multiaddr that resolves to a running node',
       default: 'proc'
+    })
+    .option('ipfs-repo', {
+      describe: 'If --ipfs-node is set to "proc", this is the path that contains the IPFS repo to use',
+      default: path.join(os.homedir(), '.jsipfs')
     })
     .option('ipfs-flush', {
       describe: 'Whether to flush the MFS cache',

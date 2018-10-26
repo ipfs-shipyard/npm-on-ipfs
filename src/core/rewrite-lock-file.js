@@ -1,3 +1,5 @@
+'use strict'
+
 const {
   readFileSync,
   writeFileSync,

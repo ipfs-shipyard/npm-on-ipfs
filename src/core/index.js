@@ -7,6 +7,7 @@ const rewriteLockfile = require('./rewrite-lock-file')
 const request = require('ipfs-registry-mirror-common/utils/retry-request')
 const { spawn } = require('child_process')
 const which = require('which-promise')
+const { timeout } = require('promise-timeout')
 var OutputBuffer = require('output-buffer')
 
 const cleanUpOps = []
@@ -48,17 +49,21 @@ module.exports = async (options) => {
 
   let connected
 
-  await Promise.all(
-    mirror.ipfs.addresses.map(addr => {
-      return ipfs.api.swarm.connect(mirror.ipfs.addresses[0])
-        .then(() => {
-          connected = true
-        })
-        .catch((error) => {
-          console.info(error)
-        })
-    })
+  await timeout(
+    Promise.race(
+      mirror.ipfs.addresses.map(addr => {
+        return ipfs.api.swarm.connect(mirror.ipfs.addresses[0])
+
+      })
+    ),
+    options.registryConnectTimeout
   )
+    .then(() => {
+      connected = true
+    })
+    .catch(() => {
+      connected = false
+    })
 
   if (connected) {
     console.info('🗑️  Replacing old registry index if it exists') // eslint-disable-line no-console
@@ -68,7 +73,7 @@ module.exports = async (options) => {
         recursive: true
       })
     } catch (error) {
-
+      // eslint-disable-line no-empty
     }
 
     console.info('📠 Copying registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console

@@ -9,13 +9,15 @@ module.exports = (overrides = {}) => {
     registry: option(process.env.IPFS_REGISTRY, overrides.ipfsRegistry),
     registryUpdateInterval: option(Number(process.env.REGISTRY_UPDATE_INTERVAL), overrides.registryUpdateInterval),
     registryUploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.registryUploadSizeLimit),
+    registryConnectTimeout: option(Number(process.env.REGISTRY_CONNECT_TIMEOUT), overrides.registryConnectTimeout),
 
     ipfs: {
       host: option(process.env.IPFS_HOST, overrides.ipfsHost),
       port: option(Number(process.env.IPFS_PORT), overrides.ipfsPort),
       node: option(process.env.IPFS_NODE, overrides.ipfsNode),
       prefix: option(process.env.IPFS_MFS_PREFIX, overrides.ipfsMfsPrefix),
-      flush: option(process.env.IPFS_FLUSH, overrides.ipfsFlush)
+      flush: option(process.env.IPFS_FLUSH, overrides.ipfsFlush),
+      repo: option(process.env.IPFS_REPO, overrides.ipfsRepo),
     },
 
     http: {

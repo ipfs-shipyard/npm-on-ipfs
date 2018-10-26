@@ -12,10 +12,10 @@ const hat = require('hat')
 const {
   spawn
 } = require('child_process')
-var OutputBuffer = require('output-buffer')
+const OutputBuffer = require('output-buffer')
 
 describe('install', function () {
-  this.timeout(120000)
+  this.timeout(30 * 60000)
 
   let projectDirectory
 
@@ -30,7 +30,7 @@ describe('install', function () {
     const installer = spawn(
       process.argv[0], [
         path.resolve(__dirname, '../src/cli/bin.js'),
-        `--ipfs-repo=${path.join(os.tmpdir(), hat())}`,
+        `--ipfs-node=disposable`,
         'install'
       ], {
         cwd: projectDirectory

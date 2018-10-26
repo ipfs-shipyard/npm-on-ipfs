@@ -32,7 +32,11 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       default: 60000
     })
     .option('registry-connect-timeout', {
-      describe: 'How long to wait before timeing out',
+      describe: 'How long to wait while dialling the mirror before timing out',
+      default: 5000
+    })
+    .option('registry-read-timeout', {
+      describe: 'How long to wait for individual packages before timing out',
       default: 5000
     })
 
@@ -68,6 +72,11 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
     .option('request-timeout', {
       describe: 'How long in ms we should wait when requesting files',
       default: 30000
+    })
+
+    .option('npm-registry', {
+      describe: 'Where to download any packages that haven\'t made it into the registry index yet from',
+      default: 'https://registry.npmjs.com'
     })
 }, require('../core'))
   .argv

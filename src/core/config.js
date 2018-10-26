@@ -10,6 +10,7 @@ module.exports = (overrides = {}) => {
     registryUpdateInterval: option(Number(process.env.REGISTRY_UPDATE_INTERVAL), overrides.registryUpdateInterval),
     registryUploadSizeLimit: option(process.env.MIRROR_UPLOAD_SIZE_LIMIT, overrides.registryUploadSizeLimit),
     registryConnectTimeout: option(Number(process.env.REGISTRY_CONNECT_TIMEOUT), overrides.registryConnectTimeout),
+    registryReadTimeout: option(Number(process.env.REGISTRY_READ_TIMEOUT), overrides.registryReadTimeout),
 
     ipfs: {
       host: option(process.env.IPFS_HOST, overrides.ipfsHost),
@@ -17,7 +18,11 @@ module.exports = (overrides = {}) => {
       node: option(process.env.IPFS_NODE, overrides.ipfsNode),
       prefix: option(process.env.IPFS_MFS_PREFIX, overrides.ipfsMfsPrefix),
       flush: option(process.env.IPFS_FLUSH, overrides.ipfsFlush),
-      repo: option(process.env.IPFS_REPO, overrides.ipfsRepo),
+      repo: option(process.env.IPFS_REPO, overrides.ipfsRepo)
+    },
+
+    npm: {
+      registry: option(process.env.NPM_REGISTRY, overrides.npmRegistry),
     },
 
     http: {

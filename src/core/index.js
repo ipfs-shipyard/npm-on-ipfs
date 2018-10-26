@@ -5,10 +5,12 @@ const startIpfs = require('./start-ipfs')
 const startServer = require('./start-server')
 const rewriteLockfile = require('./rewrite-lock-file')
 const request = require('ipfs-registry-mirror-common/utils/retry-request')
-const { spawn } = require('child_process')
+const {
+  spawn
+} = require('child_process')
 const which = require('which-promise')
-const { timeout } = require('promise-timeout')
-var OutputBuffer = require('output-buffer')
+const timeout = require('ipfs-registry-mirror-common/utils/timeout-promise')
+const OutputBuffer = require('output-buffer')
 
 const cleanUpOps = []
 

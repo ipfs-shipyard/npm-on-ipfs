@@ -62,33 +62,44 @@ ipfs-npm
 Installs your js dependencies using IPFS
 
 Options:
---help                        Show help                              [boolean]
---version                     Show version number                    [boolean]
---package-manager             Which package manager to use - eg. npm or yarn
-                                                              [default: "npm"]
---ipfs-registry               Where to download any packages that haven't made
-                              it into the registry index yet from
-                                      [default: "https://registry.js.ipfs.io"]
---registry-upload-size-limit  How large a file upload to allow when proxying
-                              for the registry             [default: "1024MB"]
---registry-update-interval    Only request the manifest for a given module
-                              every so many ms                [default: 60000]
---ipfs-mfs-prefix             Which mfs prefix to use
-                                                    [default: "/npm-registry"]
---ipfs-node                   "proc" to start an in-process IPFS node, "go" or
-                              "js" to spawn an IPFS node as a separate process
-                              or a multiaddr that resolves to a running node
-                                                             [default: "proc"]
---ipfs-flush                  Whether to flush the MFS cache   [default: true]
---request-max-sockets         How many concurrent http requests to make while
-                              cloning the repo                   [default: 10]
---request-retries             How many times to retry when downloading
-                              manifests and tarballs from the registry
-                                                                  [default: 5]
---request-retry-delay         How long in ms to wait between retries
-                                                               [default: 1000]
---request-timeout             How long in ms we should wait when requesting
-                              files                           [default: 30000]
+  --help                        Show help                              [boolean]
+  --version                     Show version number                    [boolean]
+  --package-manager             Which package manager to use - eg. npm or yarn
+                                                                [default: "npm"]
+  --ipfs-registry               Where to download any packages that haven't made
+                                it into the registry index yet from
+                                        [default: "https://registry.js.ipfs.io"]
+  --registry-upload-size-limit  How large a file upload to allow when proxying
+                                for the registry             [default: "1024MB"]
+  --registry-update-interval    Only request the manifest for a given module
+                                every so many ms                [default: 60000]
+  --registry-connect-timeout    How long to wait while dialling the mirror
+                                before timing out                [default: 5000]
+  --registry-read-timeout       How long to wait for individual packages before
+                                timing out                       [default: 5000]
+  --ipfs-mfs-prefix             Which mfs prefix to use
+                                                      [default: "/npm-registry"]
+  --ipfs-node                   "proc" to start an in-process IPFS node,
+                                "disposable" to start an in-process disposable
+                                node, "go" or "js" to spawn an IPFS node as a
+                                separate process or a multiaddr that resolves to
+                                a running node                 [default: "proc"]
+  --ipfs-repo                   If --ipfs-node is set to "proc", this is the
+                                path that contains the IPFS repo to use
+                                                [default: "/Users/alex/.jsipfs"]
+  --ipfs-flush                  Whether to flush the MFS cache   [default: true]
+  --request-max-sockets         How many concurrent http requests to make while
+                                cloning the repo                   [default: 10]
+  --request-retries             How many times to retry when downloading
+                                manifests and tarballs from the registry
+                                                                    [default: 5]
+  --request-retry-delay         How long in ms to wait between retries
+                                                                 [default: 1000]
+  --request-timeout             How long in ms we should wait when requesting
+                                files                           [default: 30000]
+  --npm-registry                Where to download any packages that haven't made
+                                it into the registry index yet from
+                                         [default: "https://registry.npmjs.com"]
 ```
 
 # Acknowledgements

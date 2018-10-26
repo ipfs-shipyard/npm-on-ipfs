@@ -55,7 +55,6 @@ module.exports = async (options) => {
     Promise.race(
       mirror.ipfs.addresses.map(addr => {
         return ipfs.api.swarm.connect(mirror.ipfs.addresses[0])
-
       })
     ),
     options.registryConnectTimeout

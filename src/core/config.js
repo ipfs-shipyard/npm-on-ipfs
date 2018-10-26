@@ -22,7 +22,7 @@ module.exports = (overrides = {}) => {
     },
 
     npm: {
-      registry: option(process.env.NPM_REGISTRY, overrides.npmRegistry),
+      registry: option(process.env.NPM_REGISTRY, overrides.npmRegistry)
     },
 
     http: {

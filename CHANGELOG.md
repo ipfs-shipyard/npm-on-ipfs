@@ -1,3 +1,19 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.10.0...v0.11.0) (2018-10-26)
+
+
+### Features
+
+* add logo ([1cf85b9](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/1cf85b9))
+* allow using non-disposable ipfs nodes ([101e630](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/101e630))
+
+
+### Performance Improvements
+
+* fall back to npm if ipfs is too slow ([f96a751](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/f96a751))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.9.0...v0.10.0) (2018-10-04)
 

@@ -2,7 +2,7 @@ tests/t-run*
 # Logs
 logs
 *.log
-
+dist
 
 registry
 # Runtime data

@@ -29,7 +29,7 @@
 
 ## Install this module
 
-```bash
+```console
 > npm i ipfs-npm -g
 ```
 
@@ -39,7 +39,7 @@
 
 In the directory with your `package.json` file, run:
 
-```bash
+```console
 $ ipfs-npm install
 👿 Spawning an in-process IPFS node
 Swarm listening on /ip4/127.0.0.1/tcp/57029/ipfs/QmVDtTRCoYyYu5JFdtrtBMS4ekPn8f9NndymoHdWuuJ7N2
@@ -53,9 +53,20 @@ Swarm listening on /ip4/127.0.0.1/tcp/57029/ipfs/QmVDtTRCoYyYu5JFdtrtBMS4ekPn8f9
 ...
 ```
 
+You can use any command you'd use with npm/yarn with ipfs-npm in exactly the same way:
+
+```console
+$ ipfs-npm install
+$ ipfs-npm version minor
+$ ipfs-npm publish
+
+$ ipfs-npm --package-manager=yarn
+// etc
+```
+
 ## CLI
 
-```bash
+```console
 $ ipfs-npm --help
 ipfs-npm
 

@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "A really nice project",
   "dependencies": {
-    "express": "^4.16.4"
+    "bignumber": "^1.0.0"
   }
 }

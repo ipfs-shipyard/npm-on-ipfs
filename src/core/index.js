@@ -79,9 +79,20 @@ module.exports = async (options) => {
 
     console.info('📠 Copying registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
 
-    await ipfs.api.files.cp(mirror.root, options.ipfs.prefix)
+    try {
+      await timeout(
+        ipfs.api.files.cp(mirror.root, options.ipfs.prefix),
+        options.registryConnectTimeout
+      )
 
-    console.info('💌 Copied registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
+      console.info('💌 Copied registry index', mirror.root, 'to', options.ipfs.prefix) // eslint-disable-line no-console
+    } catch (error) {
+      if (error.code === 'ETIMEOUT') {
+        console.info('🕑 Copying latest registry index timed out, running without latest registry index') // eslint-disable-line no-console
+      } else {
+        console.error(`💥 Error copying latest registry index - ${error.stack}`)
+      }
+    }
   } else {
     console.info('📴 Could not dial mirror, running without latest registry index') // eslint-disable-line no-console
   }

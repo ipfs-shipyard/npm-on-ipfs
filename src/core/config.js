@@ -25,6 +25,10 @@ module.exports = (overrides = {}) => {
       registry: option(process.env.NPM_REGISTRY, overrides.npmRegistry)
     },
 
+    clone: {
+      pin: option(Number(process.env.CLONE_PIN), overrides.clonePin)
+    },
+
     http: {
       host: 'localhost'
     },

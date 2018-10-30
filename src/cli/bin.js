@@ -57,6 +57,11 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       default: true
     })
 
+    .option('clone-pin', {
+      describe: 'Whether to pin cloned modules',
+      default: false
+    })
+
     .option('request-max-sockets', {
       describe: 'How many concurrent http requests to make while cloning the repo',
       default: 10

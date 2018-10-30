@@ -19,7 +19,38 @@ describe('install', function () {
 
   let projectDirectory
 
-  before(async () => {
+  const runInstall = (args, callback) => {
+    const installer = spawn(
+      process.argv[0], [
+        path.resolve(__dirname, '../src/cli/bin.js')
+      ].concat(args), {
+      cwd: projectDirectory
+    })
+
+    const buffer = new OutputBuffer((line) => {
+      console.info(line) // eslint-disable-line no-console
+    })
+
+    installer.stdout.on('data', (data) => {
+      buffer.append(data.toString())
+    })
+
+    installer.stderr.on('data', (data) => {
+      buffer.append(data.toString())
+    })
+
+    installer.on('close', async (code) => {
+      buffer.flush()
+
+      if (code === 0) {
+        return callback()
+      }
+
+      callback(new Error(`Unexpected exit code ${code}`))
+    })
+  }
+
+  beforeEach(async () => {
     projectDirectory = path.join(os.tmpdir(), hat())
 
     await fs.mkdir(projectDirectory)
@@ -27,70 +58,32 @@ describe('install', function () {
   })
 
   it('should install a project with npm', (done) => {
-    const installer = spawn(
-      process.argv[0], [
-        path.resolve(__dirname, '../src/cli/bin.js'),
-        '--ipfs-node=disposable',
-        '--package-manager=npm',
-        'install'
-      ], {
-        cwd: projectDirectory
-      })
-
-    const buffer = new OutputBuffer((line) => {
-      console.info(line) // eslint-disable-line no-console
-    })
-
-    installer.stdout.on('data', (data) => {
-      buffer.append(data.toString())
-    })
-
-    installer.stderr.on('data', (data) => {
-      buffer.append(data.toString())
-    })
-
-    installer.on('close', async (code) => {
-      buffer.flush()
-
-      if (code === 0) {
-        return done()
-      }
-
-      done(new Error(`Unexpected exit code ${code}`))
-    })
+    runInstall([
+      '--ipfs-node=disposable',
+      '--package-manager=npm',
+      'install'
+    ], done)
   })
 
   it('should install a project with yarn', (done) => {
-    const installer = spawn(
-      process.argv[0], [
-        path.resolve(__dirname, '../src/cli/bin.js'),
-        '--ipfs-node=disposable',
-        '--package-manager=yarn',
-        'install'
-      ], {
-        cwd: projectDirectory
-      })
+    runInstall([
+      '--ipfs-node=disposable',
+      '--package-manager=yarn',
+      'install'
+    ], done)
+  })
 
-    const buffer = new OutputBuffer((line) => {
-      console.info(line) // eslint-disable-line no-console
-    })
+  it('should install a project using go-ipfs', (done) => {
+    runInstall([
+      '--ipfs-node=go',
+      'install'
+    ], done)
+  })
 
-    installer.stdout.on('data', (data) => {
-      buffer.append(data.toString())
-    })
-
-    installer.stderr.on('data', (data) => {
-      buffer.append(data.toString())
-    })
-
-    installer.on('close', async (code) => {
-      buffer.flush()
-
-      if (code === 0) {
-        return done()
-      }
-
-      done(new Error(`Unexpected exit code ${code}`))
-    })
+  it('should install a project using js-ipfs', (done) => {
+    runInstall([
+      '--ipfs-node=js',
+      'install'
+    ], done)
   })
 })

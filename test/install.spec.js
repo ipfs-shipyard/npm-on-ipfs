@@ -21,7 +21,8 @@ describe('install', function () {
 
   const runInstall = (args, callback) => {
     const installer = spawn(
-      process.argv[0], [
+      'nyc', [
+        '--reporter=lcov',
         path.resolve(__dirname, '../src/cli/bin.js')
       ].concat(args), {
       cwd: projectDirectory

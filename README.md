@@ -14,7 +14,7 @@
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
 <p align="center">
-  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/ip-npm-small.png" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.jpg" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
 </p>
 
 ## Resources

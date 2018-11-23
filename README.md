@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.svg?sanitize=true" alt="npm on IPFS logo" width="256" />
+  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.jpg" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
 </p>
 
 # npm on IPFS
@@ -12,10 +12,6 @@
 [![Dependency Status](https://david-dm.org/ipfs-shipyard/npm-on-ipfs.svg?style=flat-square)](https://david-dm.org/ipfs-shipyard/npm-on-ipfs)
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
-
-<p align="center">
-  <img src="https://github.com/ipfs-shipyard/npm-on-ipfs/raw/master/img/npm-on-ipfs.jpg" alt="npm distributed on top of lots of connected IPFS nodes worldwide" />
-</p>
 
 ## Resources
 

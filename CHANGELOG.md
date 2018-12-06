@@ -1,3 +1,13 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.11.0...v0.12.0) (2018-12-06)
+
+
+### Features
+
+* do not delete old registry index for speed ([96ff811](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/96ff811))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.10.0...v0.11.0) (2018-10-26)
 

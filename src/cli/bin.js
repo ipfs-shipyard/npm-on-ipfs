@@ -90,7 +90,7 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
     })
 
     .option('npm-registry', {
-      describe: 'Where to download any packages that haven\'t made it into the registry index yet from',
+      describe: 'A fallback to use if the IPFS npm registry is unavailable',
       default: 'https://registry.npmjs.com'
     })
 }, require('../core'))

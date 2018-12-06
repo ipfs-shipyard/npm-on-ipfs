@@ -105,8 +105,8 @@ Options:
                                                                  [default: 1000]
   --request-timeout             How long in ms we should wait when requesting
                                 files                           [default: 30000]
-  --npm-registry                Where to download any packages that haven't made
-                                it into the registry index yet from
+  --npm-registry                A fallback to use if the IPFS npm registry is
+                                unavailable
                                          [default: "https://registry.npmjs.com"]
 ```
 

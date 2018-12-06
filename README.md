@@ -117,7 +117,3 @@ By default we keep a local copy of the npm registry index in your [`mfs`](https:
 ```console
 $ ipfs-npm update-registry-index
 ```
-
-# Acknowledgements
-
-This module takes a lot of inspiration from [reginabox](https://www.npmjs.com/package/reginabox). Big thank you to everyone that contributed with code or to the [discussion](https://github.com/ipfs/notes/issues/2) to make this happen.

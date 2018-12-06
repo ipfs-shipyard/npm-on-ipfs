@@ -1,11 +1,11 @@
 'use strict'
 
-const IpfsApi = require('ipfs-api')
+const IpfsApi = require('ipfs-http-client')
 const ipfsdCtrl = require('ipfsd-ctl')
 const which = require('which-promise')
 const promisify = require('util').promisify
 
-const spawn = (createArgs, spawnArgs = {init: true}) => {
+const spawn = (createArgs, spawnArgs = { init: true }) => {
   return new Promise((resolve, reject) => {
     ipfsdCtrl
       .create(createArgs)

@@ -25,8 +25,8 @@ describe('install', function () {
         '--reporter=lcov',
         path.resolve(__dirname, '../src/cli/bin.js')
       ].concat(args), {
-      cwd: projectDirectory
-    })
+        cwd: projectDirectory
+      })
 
     const buffer = new OutputBuffer((line) => {
       console.info(line) // eslint-disable-line no-console

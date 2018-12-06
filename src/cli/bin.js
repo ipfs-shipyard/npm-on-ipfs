@@ -2,6 +2,16 @@
 
 'use strict'
 
+try {
+  const url = '/-/dashboard'
+  require('@achingbrain/appmetrics-dash').attach({
+    url
+  })
+  console.info(`🔍 Profiling enabled at ${url}`) // eslint-disable-line no-console
+} catch (e) {
+  // ignore
+}
+
 require('dnscache')({ enable: true })
 
 const pkg = require('../../package')

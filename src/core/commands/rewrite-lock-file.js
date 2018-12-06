@@ -18,6 +18,7 @@ const replaceRegistryPath = (dependencies, registry) => {
 
         url.protocol = registry.protocol
         url.host = registry.host
+        url.port = registry.protocol === 'https:' ? 443 : 80
 
         dependency.resolved = url.toString()
       }

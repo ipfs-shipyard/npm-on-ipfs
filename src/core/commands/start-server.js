@@ -6,9 +6,9 @@ const once = require('once')
 const requestLog = require('ipfs-registry-mirror-common/handlers/request-log')
 const errorLog = require('ipfs-registry-mirror-common/handlers/error-log')
 const favicon = require('ipfs-registry-mirror-common/handlers/favicon')
-const root = require('./handlers/root')
-const tarball = require('./handlers/tarball')
-const manifest = require('./handlers/manifest')
+const root = require('../handlers/root')
+const tarball = require('../handlers/tarball')
+const manifest = require('../handlers/manifest')
 
 const startServer = (config, ipfs) => {
   const app = express()

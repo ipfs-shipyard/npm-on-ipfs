@@ -1,3 +1,13 @@
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.15.0...v0.16.0) (2018-12-07)
+
+
+### Features
+
+* inherit stdin so we can interact with package manager ([267b73d](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/267b73d))
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.14.0...v0.15.0) (2018-12-07)
 

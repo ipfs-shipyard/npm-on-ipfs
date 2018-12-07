@@ -2,16 +2,6 @@
 
 'use strict'
 
-try {
-  const url = '/-/dashboard'
-  require('@achingbrain/appmetrics-dash').attach({
-    url
-  })
-  console.info(`🔍 Profiling enabled at ${url}`) // eslint-disable-line no-console
-} catch (e) {
-  // ignore
-}
-
 require('dnscache')({ enable: true })
 
 const pkg = require('../../package')
@@ -26,7 +16,7 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
   yargs
     .option('package-manager', {
       describe: 'Which package manager to use - eg. npm or yarn',
-      default: 'npm'
+      default: process.argv[1].indexOf('yarn') === -1 ? 'npm' : 'yarn'
     })
 
     .option('ipfs-registry', {

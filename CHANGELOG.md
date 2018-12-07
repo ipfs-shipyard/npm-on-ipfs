@@ -1,3 +1,13 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.12.0...v0.13.0) (2018-12-07)
+
+
+### Features
+
+* default to yarn for yarn and npm for npm ([011baad](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/011baad))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.11.0...v0.12.0) (2018-12-06)
 

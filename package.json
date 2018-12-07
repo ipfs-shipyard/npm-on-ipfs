@@ -1,6 +1,6 @@
 {
   "name": "ipfs-npm",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Install your npm dependencies using IPFS and the distributed web! :D",
   "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
   "main": "src/cli/bin.js",

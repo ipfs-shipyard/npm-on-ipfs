@@ -10,7 +10,6 @@ const {
 } = require('child_process')
 const which = require('which-promise')
 const timeout = require('ipfs-registry-mirror-common/utils/timeout-promise')
-const OutputBuffer = require('output-buffer')
 
 const cleanUpOps = []
 
@@ -83,27 +82,14 @@ module.exports = async (options) => {
 
   const proc = spawn(packageManager, [
     `--registry=http://localhost:${options.http.port}`
-  ].concat(process.argv.slice(2)))
-
-  const buffer = new OutputBuffer((line) => {
-    console.info(`🐨 ${line}`) // eslint-disable-line no-console
-  })
-
-  proc.stdout.on('data', (data) => {
-    buffer.append(data.toString())
-  })
-
-  proc.stderr.on('data', (data) => {
-    buffer.append(data.toString())
+  ].concat(process.argv.slice(2)), {
+    stdio: 'inherit'
   })
 
   proc.on('close', async (code) => {
-    buffer.flush()
-
     console.log(`🎁 ${packageManager} exited with code ${code}`) // eslint-disable-line no-console
 
     await rewriteLockfile(options)
-
     await cleanUp()
 
     process.exit(code)

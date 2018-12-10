@@ -41,27 +41,23 @@ module.exports = async (options) => {
 
   console.info('🗂️  Loading registry index from', options.registry) // eslint-disable-line no-console
 
-  const mirror = await request(Object.assign({}, options.request, {
-    uri: options.registry,
-    json: true
-  }))
+  try {
+    const mirror = await request(Object.assign({}, options.request, {
+      uri: options.registry,
+      json: true
+    }))
 
-  console.info('☎️  Dialling registry mirror', mirror.ipfs.addresses.join(',')) // eslint-disable-line no-console
+    console.info('☎️  Dialling registry mirror', mirror.ipfs.addresses.join(',')) // eslint-disable-line no-console
 
-  await timeout(
-    Promise.race(
-      mirror.ipfs.addresses.map(addr => {
-        return ipfs.api.swarm.connect(mirror.ipfs.addresses[0])
-      })
-    ),
-    options.registryConnectTimeout
-  )
-    .then(() => {
-      console.info('📱️  Connected to registry') // eslint-disable-line no-console
-    })
-    .catch(() => {
+    await timeout(
+      ipfs.api.swarm.connect(mirror.ipfs.addresses[0]),
+      options.registryConnectTimeout
+    )
 
-    })
+    console.info('📱️ Connected to registry') // eslint-disable-line no-console
+  } catch (error) {
+    console.info('📴 Not connected to registry') // eslint-disable-line no-console
+  }
 
   console.info('👩‍🚀 Starting local proxy') // eslint-disable-line no-console
 

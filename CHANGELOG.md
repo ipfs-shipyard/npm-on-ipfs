@@ -1,3 +1,13 @@
+<a name="0.16.1"></a>
+## [0.16.1](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.16.0...v0.16.1) (2018-12-10)
+
+
+### Bug Fixes
+
+* catch errors when connecting to the registry ([a412f98](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/a412f98))
+
+
+
 <a name="0.16.0"></a>
 # [0.16.0](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.15.0...v0.16.0) (2018-12-07)
 

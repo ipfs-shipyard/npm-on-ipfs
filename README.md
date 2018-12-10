@@ -13,7 +13,7 @@
 
 > Install your favourite modules from the Distributed Web using IPFS. Have a cache always ready and share them in all your local networks.
 
-## PRERELEASE WARNING:
+## PRE-RELEASE WARNING
 
 This module depends on features in the upcoming [v0.34.0](https://github.com/ipfs/js-ipfs/issues/1721) release of [js-ipfs](https://github.com/ipfs/js-ipfs) (due by the end of December 2018).
 

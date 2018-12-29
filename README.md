@@ -17,7 +17,7 @@
 
 This module depends on features in the upcoming [v0.34.0](https://github.com/ipfs/js-ipfs/issues/1721) release of [js-ipfs](https://github.com/ipfs/js-ipfs) (due by the end of December 2018).
 
-If you use this module, please aslo upgrade your IPFS install with
+If you use this module, please also upgrade your IPFS install with
 
 ```console
 npm install -g ipfs@0.34.0-pre.0

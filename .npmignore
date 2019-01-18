@@ -1,1 +1,4 @@
-tests/ipfs-repo-tests
+test
+dist
+img
+ci

@@ -1,3 +1,8 @@
+<a name="0.16.2"></a>
+## [0.16.2](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.16.1...v0.16.2) (2019-01-18)
+
+
+
 <a name="0.16.1"></a>
 ## [0.16.1](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.16.0...v0.16.1) (2018-12-10)
 

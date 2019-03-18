@@ -53,8 +53,6 @@
   },
   "devDependencies": {
     "aegir": "^18.0.3",
-    "chai": "^4.1.2",
-    "dirty-chai": "^2.0.1",
     "go-ipfs-dep": "~0.4.17",
     "mock-require": "^3.0.2",
     "npm-run-all": "^4.1.3",

@@ -41,7 +41,7 @@
     "dnscache": "^1.0.1",
     "express": "^4.16.4",
     "express-http-proxy": "^1.4.0",
-    "ipfs": "0.34.0",
+    "ipfs": "0.35.0",
     "ipfs-http-client": "^29.0.0",
     "ipfsd-ctl": "~0.40.1",
     "ipfs-registry-mirror-common": "^1.0.13",

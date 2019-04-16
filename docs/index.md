@@ -1,4 +1,4 @@
-# npm-on-ipfs docs
+# Advanced npm-on-ipfs features
 
 ## Updating your registry index
 

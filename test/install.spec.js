@@ -28,7 +28,7 @@ describe('install', function () {
         cwd: projectDirectory,
         env: {
           ...process.env,
-          PATH: `${path.resolve(path.join(__dirname, '../node_modules/go-ipfs-dep/go-ipfs'))}:${process.env.PATH}`
+          PATH: `${path.dirname(require.resolve('go-ipfs-dep/go-ipfs/ipfs'))}:${process.env.PATH}`
         }
       })
 

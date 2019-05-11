@@ -25,7 +25,11 @@ describe('install', function () {
         '--reporter=lcov',
         path.resolve(__dirname, '../src/cli/bin.js')
       ].concat(args), {
-        cwd: projectDirectory
+        cwd: projectDirectory,
+        env: {
+          ...process.env,
+          PATH: `${path.resolve(path.join(__dirname, '../node_modules/go-ipfs-dep/go-ipfs'))}:${process.env.PATH}`
+        }
       })
 
     const buffer = new OutputBuffer((line) => {

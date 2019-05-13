@@ -32,6 +32,10 @@ module.exports = async (options) => {
 
   cleanUpOps.push(() => {
     return new Promise((resolve) => {
+      if (options.ipfs.node !== 'proc') {
+        return resolve()
+      }
+
       ipfs.stop(() => {
         console.info('👿 IPFS node stopped') // eslint-disable-line no-console
         resolve()

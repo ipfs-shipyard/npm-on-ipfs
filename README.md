@@ -119,3 +119,15 @@ Options:
                                 unavailable
                                          [default: "https://registry.npmjs.com"]
 ```
+
+## Configuration File
+
+We use [`rc`](https://github.com/dominictarr/rc) to parse configuration files. Please see the [`rc` repository](https://github.com/dominictarr/rc#standards) for the order of precedence used when searching for configuration files. Our app is `ipfs-npm`.
+
+For instance, if you want to always use a remote daemon, you could create a `~/.ipfs-npmrc` file like this:
+
+```json
+{
+  "ipfsNode": "/ip4/127.0.0.1/tcp/5001"
+}
+```

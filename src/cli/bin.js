@@ -7,10 +7,12 @@ require('dnscache')({ enable: true })
 const pkg = require('../../package')
 const path = require('path')
 const os = require('os')
+const rc = require('rc')
 
 process.title = pkg.name
 
 const yargs = require('yargs')
+  .config(rc(pkg.name, null, {}))
 
 yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // eslint-disable-line no-unused-expressions
   yargs

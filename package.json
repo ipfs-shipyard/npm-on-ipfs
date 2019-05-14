@@ -46,6 +46,7 @@
     "ipfsd-ctl": "~0.40.1",
     "ipfs-registry-mirror-common": "^1.0.13",
     "once": "^1.4.0",
+    "rc": "^1.2.8",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "which-promise": "^1.0.0",

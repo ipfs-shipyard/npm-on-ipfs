@@ -124,8 +124,6 @@ Options:
 
 We use [`rc`](https://github.com/dominictarr/rc) to parse configuration files. Please see the [`rc` repository](https://github.com/dominictarr/rc#standards) for the order of precedence used when searching for configuration files. Our app is `ipfs-npm`.
 
-Please see the rc repository for the order of precedence used when searching for configuration files.
-
 For instance, if you want to always use a remote daemon, you could create a `~/.ipfs-npmrc` file like this:
 
 ```json

@@ -12,7 +12,7 @@ const rc = require('rc')
 process.title = pkg.name
 
 const yargs = require('yargs')
-  .config(rc('ipfsnpm', null, {}))
+  .config(rc(pkg.name, null, {}))
 
 yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // eslint-disable-line no-unused-expressions
   yargs

@@ -2,3 +2,5 @@ test
 dist
 img
 ci
+.dockerignore
+Dockerfile

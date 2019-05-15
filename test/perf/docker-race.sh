@@ -31,7 +31,7 @@ fi
 
 echo ""
 echo "---- ipfs-npm flavour ----"
-time docker run $IPFS_NPM_IMAGE ipfs-npm install -g $MODULE
+time docker run --rm --net=host $IPFS_NPM_IMAGE ipfs-npm install -g $MODULE
 
 echo ""
 echo "---- npm flavour ----"

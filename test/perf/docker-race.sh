@@ -18,20 +18,21 @@
 #    docker image rm ipfs-npm -f
 #
 MODULE=${1:-iim}
-IMAGE=ipfs-npm
+IPFS_NPM_IMAGE=ipfs-npm
+REFERENCE_IMAGE=node:10.15.3
 
-if $(docker image ls | grep -q $IMAGE)
+if $(docker image ls | grep -q $IPFS_NPM_IMAGE)
 then
   echo "found ipfs-npm Docker image"
 else
   echo "building docker image for ipfs-npm, this will take a moment"
-  docker build -t $IMAGE ../../
+  docker build -t $IPFS_NPM_IMAGE ../../
 fi
 
 echo ""
 echo "---- ipfs-npm flavour ----"
-time docker run $IMAGE ipfs-npm install -g $MODULE
+time docker run $IPFS_NPM_IMAGE ipfs-npm install -g $MODULE
 
 echo ""
 echo "---- npm flavour ----"
-time docker run node:10.15.3 npm install -g $MODULE
+time docker run $REFERENCE_IMAGE npm install -g $MODULE

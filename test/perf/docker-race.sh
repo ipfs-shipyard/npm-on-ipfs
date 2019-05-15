@@ -26,7 +26,7 @@ then
   echo "found ipfs-npm Docker image"
 else
   echo "building docker image for ipfs-npm, this will take a moment"
-  docker build -t $IPFS_NPM_IMAGE ../../
+  docker build -t $IPFS_NPM_IMAGE $(dirname "$0")/../../
 fi
 
 echo ""

@@ -35,4 +35,4 @@ time docker run --rm --net=host $IPFS_NPM_IMAGE ipfs-npm install -g $MODULE
 
 echo ""
 echo "---- npm flavour ----"
-time docker run $REFERENCE_IMAGE npm install -g $MODULE
+time docker run --rm --net=host $REFERENCE_IMAGE npm install -g $MODULE

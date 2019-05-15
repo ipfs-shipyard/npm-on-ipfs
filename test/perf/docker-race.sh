@@ -17,6 +17,7 @@
 #
 #    docker image rm ipfs-npm -f
 #
+set -eu
 MODULE=${1:-iim}
 IPFS_NPM_IMAGE=ipfs-npm
 REFERENCE_IMAGE=node:10.15.3

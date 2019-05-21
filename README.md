@@ -24,15 +24,6 @@ The result is npm-on-ipfs: a module that wraps your package manager of choice (n
  - If enough dependencies are hosted on your local network (think enterprise or community development settings), that network can operate **offline-first**: Take your team on a remote mountain retreat and hack away!
 
 ## Install & use
-### Check your js-ipfs version
-
-This module depends on features in [v0.34.0](https://github.com/ipfs/js-ipfs/releases/tag/v0.34.0) release of [js-ipfs](https://github.com/ipfs/js-ipfs), so please ensure you are running at least that version:
-
-```console
-$ npm install -g ipfs@latest
-```
-
-### Install npm-on-ipfs
 
 ```console
 $ npm i ipfs-npm -g

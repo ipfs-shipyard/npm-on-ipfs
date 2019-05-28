@@ -37,7 +37,7 @@ const startServer = (config, ipfs) => {
 
   app.locals.ipfs = ipfs
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const callback = once((error) => {
       if (error) {
         reject(error)

@@ -31,22 +31,16 @@ const startIpfs = async (config) => {
       repoPath: config.ipfs.repo
     })
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        const initalise = promisify(node.init.bind(node))
-        const start = promisify(node.start.bind(node))
+    const initalise = promisify(node.init.bind(node))
+    const start = promisify(node.start.bind(node))
 
-        if (!node.initialized) {
-          await initalise()
-        }
+    if (!node.initialized) {
+      await initalise()
+    }
 
-        await start()
+    await start()
 
-        resolve(node)
-      } catch (error) {
-        reject(error)
-      }
-    })
+    return node
   } else if (config.ipfs.node === 'disposable') {
     console.info('👿 Spawning an in-process disposable IPFS node') // eslint-disable-line no-console
 

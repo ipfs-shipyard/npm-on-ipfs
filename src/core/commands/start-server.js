@@ -9,20 +9,21 @@ const favicon = require('ipfs-registry-mirror-common/handlers/favicon')
 const root = require('../handlers/root')
 const tarball = require('../handlers/tarball')
 const manifest = require('../handlers/manifest')
+const getIpfs = require('../middlewares/getIpfs')
 
-const startServer = (config, ipfs) => {
+const startServer = (config) => {
   const app = express()
 
   app.use(requestLog)
 
-  app.get('/favicon.ico', favicon(config, ipfs, app))
-  app.get('/favicon.png', favicon(config, ipfs, app))
+  app.get('/favicon.ico', favicon(config, app))
+  app.get('/favicon.png', favicon(config, app))
 
-  app.get('/', root(config, ipfs, app))
+  app.get('/', getIpfs(config), root(config, app))
 
   // intercept requests for tarballs and manifests
-  app.get('/*.tgz', tarball(config, ipfs, app))
-  app.get('/*', manifest(config, ipfs, app))
+  app.get('/*.tgz', getIpfs(config), tarball(config, app))
+  app.get('/*', getIpfs(config), manifest(config, app))
 
   // everything else should just proxy for the registry
   const registry = proxy(config.registry, {
@@ -34,8 +35,6 @@ const startServer = (config, ipfs) => {
   app.delete('/*', registry)
 
   app.use(errorLog)
-
-  app.locals.ipfs = ipfs
 
   return new Promise((resolve, reject) => {
     const callback = once((error) => {

@@ -5,7 +5,7 @@ const path = require('path')
 const loadTarball = require('ipfs-registry-mirror-common/utils/load-tarball')
 const lol = require('ipfs-registry-mirror-common/utils/error-message')
 
-module.exports = (config, ipfs, app) => {
+module.exports = (config, app) => {
   return async (request, response, next) => {
     log(`Requested ${request.path}`)
 
@@ -13,8 +13,10 @@ module.exports = (config, ipfs, app) => {
 
     log(`Loading ${file}`)
 
+    const ipfs = response.locals.ipfs
+
     try {
-      const readStream = await loadTarball(config, ipfs, file)
+      const readStream = await loadTarball(config, ipfs.api, file)
 
       readStream.on('error', (error) => {
         log(`Error loading ${file} - ${error}`)

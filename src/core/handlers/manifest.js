@@ -22,7 +22,7 @@ const replaceTarballUrls = (pkg, config) => {
   return pkg
 }
 
-module.exports = (config, ipfs, app) => {
+module.exports = (config, app) => {
   return async (request, response, next) => {
     log(`Requested ${request.path}`)
 
@@ -30,8 +30,10 @@ module.exports = (config, ipfs, app) => {
 
     log(`Loading manifest for ${moduleName}`)
 
+    const ipfs = response.locals.ipfs
+
     try {
-      const manifest = await loadManifest(config, ipfs, moduleName)
+      const manifest = await loadManifest(config, ipfs.api, moduleName)
 
       // because we start the server on a random high port, the previously stored
       // manifests may have port numbers from the last time we ran, so overwrite

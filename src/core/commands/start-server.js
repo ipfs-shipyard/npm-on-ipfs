@@ -9,7 +9,7 @@ const favicon = require('ipfs-registry-mirror-common/handlers/favicon')
 const root = require('../handlers/root')
 const tarball = require('../handlers/tarball')
 const manifest = require('../handlers/manifest')
-const getIpfs = require('../middlewares/getIpfs')
+const getIpfs = require('../middleware/get-ipfs')
 
 const startServer = (config) => {
   const app = express()

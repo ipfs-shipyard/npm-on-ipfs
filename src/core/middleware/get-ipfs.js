@@ -19,7 +19,7 @@ process.on('SIGTERM', cleanUp)
 process.on('SIGINT', cleanUp)
 
 module.exports = (options) => {
-  return async (req, res, next) => {
+  return (req, res, next) => {
     if (req.app.locals.ipfs) {
       return next()
     }

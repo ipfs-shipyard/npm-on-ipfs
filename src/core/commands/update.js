@@ -7,7 +7,7 @@ const timeout = require('ipfs-registry-mirror-common/utils/timeout-promise')
 
 const cleanUpOps = []
 
-const cleanUp = async () => {
+const cleanUp = () => {
   Promise.all(
     cleanUpOps.map(op => op())
   )

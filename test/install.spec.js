@@ -44,7 +44,7 @@ describe('install', function () {
       buffer.append(data.toString())
     })
 
-    installer.on('close', async (code) => {
+    installer.on('close', (code) => {
       buffer.flush()
 
       if (code === 0) {

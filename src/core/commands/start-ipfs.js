@@ -21,7 +21,7 @@ const spawn = (createArgs, spawnArgs = { init: true }) => {
 
 const startIpfs = async (config) => {
   if (config.ipfs.node === 'proc') {
-    console.info(`👿 Spawning an in-process IPFS node using repo at ${config.ipfs.repo}`) // eslint-disable-line no-console
+    console.info(`😈 Spawning an in-process IPFS node using repo at ${config.ipfs.repo}`) // eslint-disable-line no-console
 
     const node = await spawn({
       type: 'proc',
@@ -31,38 +31,32 @@ const startIpfs = async (config) => {
       repoPath: config.ipfs.repo
     })
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        const initalise = promisify(node.init.bind(node))
-        const start = promisify(node.start.bind(node))
+    const initalise = promisify(node.init.bind(node))
+    const start = promisify(node.start.bind(node))
 
-        if (!node.initialized) {
-          await initalise()
-        }
+    if (!node.initialized) {
+      await initalise()
+    }
 
-        await start()
+    await start()
 
-        resolve(node)
-      } catch (error) {
-        reject(error)
-      }
-    })
+    return node
   } else if (config.ipfs.node === 'disposable') {
-    console.info('👿 Spawning an in-process disposable IPFS node') // eslint-disable-line no-console
+    console.info('😈 Spawning an in-process disposable IPFS node') // eslint-disable-line no-console
 
     return spawn({
       type: 'proc',
       exec: require('ipfs')
     })
   } else if (config.ipfs.node === 'js') {
-    console.info('👿 Spawning a js-IPFS node') // eslint-disable-line no-console
+    console.info('😈 Spawning a js-IPFS node') // eslint-disable-line no-console
 
     return spawn({
       type: 'js',
       exec: await which('jsipfs')
     })
   } else if (config.ipfs.node === 'go') {
-    console.info('👿 Spawning a go-IPFS node') // eslint-disable-line no-console
+    console.info('😈 Spawning a go-IPFS node') // eslint-disable-line no-console
 
     return spawn({
       type: 'go',
@@ -70,7 +64,7 @@ const startIpfs = async (config) => {
     })
   }
 
-  console.info(`👿 Connecting to a remote IPFS node at ${config.ipfs.node}`) // eslint-disable-line no-console
+  console.info(`😈 Connecting to a remote IPFS node at ${config.ipfs.node}`) // eslint-disable-line no-console
 
   return {
     api: new IpfsApi(config.ipfs.node),

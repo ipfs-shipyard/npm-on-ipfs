@@ -13,7 +13,7 @@ module.exports = (config, app) => {
 
     log(`Loading ${file}`)
 
-    const ipfs = response.locals.ipfs
+    const ipfs = await request.app.locals.ipfs
 
     try {
       const readStream = await loadTarball(config, ipfs.api, file)

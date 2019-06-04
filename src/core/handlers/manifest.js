@@ -30,7 +30,7 @@ module.exports = (config, app) => {
 
     log(`Loading manifest for ${moduleName}`)
 
-    const ipfs = response.locals.ipfs
+    const ipfs = await request.app.locals.ipfs
 
     try {
       const manifest = await loadManifest(config, ipfs.api, moduleName)

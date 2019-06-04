@@ -3,7 +3,7 @@
 const pkg = require('../../../package.json')
 
 module.exports = () => {
-  return async (request, response, next) => {
+  return (request, response, next) => {
     const info = {
       name: pkg.name,
       version: pkg.version

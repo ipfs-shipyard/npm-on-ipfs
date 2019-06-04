@@ -8,7 +8,7 @@ const which = require('which-promise')
 
 const cleanUpOps = []
 
-const cleanUp = async () => {
+const cleanUp = () => {
   Promise.all(
     cleanUpOps.map(op => op())
   )

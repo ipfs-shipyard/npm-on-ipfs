@@ -27,7 +27,7 @@ const replaceRegistryPath = (dependencies, registry) => {
     })
 }
 
-module.exports = async (options) => {
+module.exports = (options) => {
   if (options.packageManager === 'npm') {
     const lockfilePath = path.join(process.cwd(), 'package-lock.json')
 

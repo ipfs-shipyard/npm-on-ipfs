@@ -1,3 +1,22 @@
+<a name="0.16.3"></a>
+## [0.16.3](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.16.2...v0.16.3) (2019-06-06)
+
+
+### Bug Fixes
+
+* do not stop external IPFS node ([#99](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/99)) ([40c12a6](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/40c12a6))
+* dont spawn node for local ops ([#110](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/110)) ([36f4e8f](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/36f4e8f))
+* only spawn node once ([#111](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/111)) ([8741a66](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/8741a66))
+* remove redundant ipfs configing code ([55978ab](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/55978ab))
+* tests by adding go-ipfs to PATH ([#100](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/100)) ([7489c94](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/7489c94))
+
+
+### Features
+
+* support config files ([#102](https://github.com/ipfs-shipyard/npm-on-ipfs/issues/102)) ([877840b](https://github.com/ipfs-shipyard/npm-on-ipfs/commit/877840b))
+
+
+
 <a name="0.16.2"></a>
 ## [0.16.2](https://github.com/ipfs-shipyard/npm-on-ipfs/compare/v0.16.1...v0.16.2) (2019-01-18)
 

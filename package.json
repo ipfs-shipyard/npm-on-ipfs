@@ -1,6 +1,6 @@
 {
   "name": "ipfs-npm",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Install your npm dependencies using IPFS and the distributed web! :D",
   "leadMaintainer": "Alex Potsides <alex.potsides@protocol.ai>",
   "main": "src/cli/bin.js",
@@ -63,8 +63,12 @@
   },
   "contributors": [
     "Alan Shaw <alan.shaw@protocol.ai>",
+    "Andrew Nesbitt <andrewnez@gmail.com>",
     "Danny Arnold <despair.blue@gmail.com>",
     "David Dias <daviddias.p@gmail.com>",
+    "Diogo Silva <fsdiogo@gmail.com>",
+    "Henrique Dias <hacdias@gmail.com>",
+    "Jessica Schilling <jessica@protocol.ai>",
     "Lars-Magnus Skog <ralphtheninja@riseup.net>",
     "Mateusz Naściszewski <matin1111@wp.pl>",
     "achingbrain <alex@achingbrain.net>",

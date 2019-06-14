@@ -42,7 +42,7 @@
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.1",
     "ipfs": "^0.36.3",
-    "ipfs-http-client": "^32.0.1",
+    "ipfs-provider": "^0.2.1",
     "ipfs-registry-mirror-common": "^1.0.13",
     "ipfsd-ctl": "~0.42.2",
     "once": "^1.4.0",

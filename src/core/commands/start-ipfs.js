@@ -1,7 +1,7 @@
 'use strict'
 
-const IpfsApi = require('ipfs-http-client')
 const ipfsdCtrl = require('ipfsd-ctl')
+const getIpfs = require('ipfs-provider')
 const which = require('which-promise')
 const promisify = require('util').promisify
 const request = require('ipfs-registry-mirror-common/utils/retry-request')
@@ -36,6 +36,26 @@ const spawn = (createArgs, spawnArgs = { init: true }) => {
 }
 
 const startIpfs = async (config) => {
+  if (!config.ipfs.disableProviders) {
+    console.info('🔎 Searching for a running node') // eslint-disable-line no-console
+
+    try {
+      const provider = await getIpfs({
+        tryWebExt: false,
+        tryWindow: false
+      })
+
+      console.info(`😈 Connecting to an ${provider.provider} node`) // eslint-disable-line no-console
+
+      return {
+        api: provider.ipfs,
+        stop: (cb) => cb()
+      }
+    } catch (e) {
+      console.info('💥 Couldn\'t find an available node') // eslint-disable-line no-console
+    }
+  }
+
   if (config.ipfs.node === 'proc') {
     console.info(`😈 Spawning an in-process IPFS node using repo at ${config.ipfs.repo}`) // eslint-disable-line no-console
 
@@ -82,8 +102,14 @@ const startIpfs = async (config) => {
 
   console.info(`😈 Connecting to a remote IPFS node at ${config.ipfs.node}`) // eslint-disable-line no-console
 
+  const provider = await getIpfs({
+    tryWebExt: false,
+    tryWindow: false,
+    apiAddress: config.ipfs.node
+  })
+
   return {
-    api: new IpfsApi(config.ipfs.node),
+    api: provider.ipfs,
     stop: (cb) => cb()
   }
 }

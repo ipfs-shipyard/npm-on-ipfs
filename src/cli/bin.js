@@ -46,6 +46,11 @@ yargs.command('$0', 'Installs your js dependencies using IPFS', (yargs) => { // 
       describe: 'Which mfs prefix to use',
       default: '/npm-registry'
     })
+    .option('ipfs-disable-providers', {
+      describe: 'Whether to disable the search for running nodes',
+      type: 'boolean',
+      default: false
+    })
     .option('ipfs-node', {
       describe: '"proc" to start an in-process IPFS node, "disposable" to start an in-process disposable node, "go" or "js" to spawn an IPFS node as a separate process or a multiaddr that resolves to a running node',
       default: 'proc'

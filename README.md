@@ -20,7 +20,7 @@ As the largest software registry in the world, [npm](https://www.npmjs.com) is a
 The result is npm-on-ipfs: a module that wraps your package manager of choice (npm or yarn) in configuration to use [IPFS](https://ipfs.io/), not HTTP, to retrieve your dependencies from the central npm registry. It's still a work in progress, but we think you'll find it useful and awesome for the following reasons:
 
  - Having dependencies on the distributed web makes development **more available** because multiple nodes supplying tarballs means no panic if a single source goes dark
- - It can also be **faster and cheaper** — if dependencies are already being hosted on your local network, this means lower bandwidth cost and higher speed 
+ - It can also be **faster and cheaper** — if dependencies are already being hosted on your local network, this means lower bandwidth cost and higher speed
  - If enough dependencies are hosted on your local network (think enterprise or community development settings), that network can operate **offline-first**: Take your team on a remote mountain retreat and hack away!
 
 ## Install & use
@@ -85,6 +85,8 @@ Options:
                                 timing out                       [default: 5000]
   --ipfs-mfs-prefix             Which mfs prefix to use
                                                       [default: "/npm-registry"]
+  --ipfs-disable-providers      Wether to disable the search for running nodes
+                                                                [default: false]
   --ipfs-node                   "proc" to start an in-process IPFS node,
                                 "disposable" to start an in-process disposable
                                 node, "go" or "js" to spawn an IPFS node as a

@@ -15,6 +15,7 @@ module.exports = (overrides = {}) => {
     ipfs: {
       host: option(process.env.IPFS_HOST, overrides.ipfsHost),
       port: option(Number(process.env.IPFS_PORT), overrides.ipfsPort),
+      disableProviders: option(process.env.IPFS_DISABLE_PROVIDERS, overrides.ipfsDisableProviders),
       node: option(process.env.IPFS_NODE, overrides.ipfsNode),
       prefix: option(process.env.IPFS_MFS_PREFIX, overrides.ipfsMfsPrefix),
       flush: option(process.env.IPFS_FLUSH, overrides.ipfsFlush),
